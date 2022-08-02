@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { TablePageComponent } from './pages/table-page/table-page.component';
 import { TableNewEntryPageComponent } from './pages/table-new-entry-page/table-new-entry-page.component';
+import {ButtonModule} from 'primeng/button';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import { TableNewEntryPageComponent } from './pages/table-new-entry-page/table-n
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
