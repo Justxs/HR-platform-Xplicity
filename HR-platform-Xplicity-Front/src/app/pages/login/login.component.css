@@ -1,0 +1,23 @@
+.center{
+    display:flex;
+    flex-direction: column;
+}
+.center-box{
+    margin-top: 100px;
+    padding: 40px;
+    background-color: rgb(238, 238, 238);
+    width: 300px;
+    border: none;
+    border-radius: 5px;
+    margin: auto;
+    text-align: center;
+}
+
+.button-split{
+    margin: 12px;
+}
+
+.logo{
+    margin: auto;
+    padding: 20px;
+}
