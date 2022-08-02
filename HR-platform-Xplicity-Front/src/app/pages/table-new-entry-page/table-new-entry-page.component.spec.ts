@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableNewEntryPageComponent } from './table-new-entry-page.component';
 
+
 describe('TableNewEntryPageComponent', () => {
   let component: TableNewEntryPageComponent;
   let fixture: ComponentFixture<TableNewEntryPageComponent>;

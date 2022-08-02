@@ -1,1 +1,37 @@
-<p>table-new-entry-page works!</p>
+
+<div class="center" header="Pridėti naują kandidatą">
+    <h1>Pridėti naują kandidatą</h1>
+    <input type="text" class="p-inputtext-lg" placeholder="Vardas" pInputText />
+    <br>
+    <br>
+    <input type="text" class="p-inputtext-lg" placeholder="Pavardė" pInputText />
+    <br>
+    <br>
+    <input type="text" class="p-inputtext-lg" placeholder="LinkedIn link" pInputText />
+    <br>
+    <br>
+    <textarea rows="5" cols="23" class="p-inputtext-lg" placeholder="Komentaras" pInputTextarea></textarea>
+    <br>
+    <br>
+    <p-calendar [readonlyInput]="true" [showIcon]="true" placeholder="Kada reikia susisiekti"></p-calendar>
+    <br>
+    <br>
+    <p-calendar selectionMode="multiple" [readonlyInput]="true" [showIcon]="true" placeholder="Kada buvo susisiekta"></p-calendar>
+    <br>
+    <br>
+    <div class="field-checkbox">
+        <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+        <label> Atviras pasiūlymams</label>
+    </div>
+    <br>
+    <br>
+    <p-multiSelect [options]="technologies" [(ngModel)]="selectedTechnologies" defaultLabel="Select technologies" display="chip"  required #techInput="ngModel"></p-multiSelect>
+    <div *ngIf="techInput.invalid && (techInput.dirty || techInput.touched)" class="error">
+        <p *ngIf="techInput.errors?.['required']">Product name cannot be empty.</p>
+    </div>
+
+    <br>
+    <br>
+    <button pButton type="button" label="Išsaugoti"></button>
+
+</div>
