@@ -10,7 +10,7 @@ export class CandidateService {
   public getCandidate() : Candidate[] {
     let candidate = new Candidate();
     candidate.DateOfFutureCall = "test";
-    candidate.DateOfPastCall = "test";
+    candidate.DatesOfPastCalls = "test";
     candidate.FirstName = "test";
     candidate.LastName = "test";
     candidate.LinkedIn = "test";
@@ -24,6 +24,5 @@ export class CandidateService {
     candidates.push(candidate);
     candidates.push(candidate);
     return candidates;
-
   }
 }

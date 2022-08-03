@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Candidate } from 'src/app/Models/candidate';
 
 @Component({
   selector: 'app-table-new-entry-page',
@@ -8,12 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TableNewEntryPageComponent implements OnInit {
 
-
-
-  date1?: Date;
-  available: boolean = false;
   technologies:string[];
-  selectedTechnologies?: any[];
+
+  addButtonClick = new EventEmitter<Candidate>();
+  candidate: Candidate = new Candidate();
+  
 
   constructor() {
     this.technologies = [
@@ -22,7 +23,18 @@ export class TableNewEntryPageComponent implements OnInit {
   ];
    }
 
+   onSubmit(form: NgForm): void {
+      form.resetForm();
+   }
+
   ngOnInit(): void {
+
   }
+
+  onAddButtonClick(): void { 
+    this.addButtonClick.emit(this.candidate);
+    console.log(this.candidate);
+
+   }
 
 }

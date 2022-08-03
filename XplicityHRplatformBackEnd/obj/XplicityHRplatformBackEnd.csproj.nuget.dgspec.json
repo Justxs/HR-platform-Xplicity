@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\prana\\OneDrive\\Documents\\GitHub\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj": {}
+    "C:\\Users\\jonas\\GitRepos\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\prana\\OneDrive\\Documents\\GitHub\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj": {
+    "C:\\Users\\jonas\\GitRepos\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\prana\\OneDrive\\Documents\\GitHub\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj",
+        "projectUniqueName": "C:\\Users\\jonas\\GitRepos\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj",
         "projectName": "XplicityHRplatformBackEnd",
-        "projectPath": "C:\\Users\\prana\\OneDrive\\Documents\\GitHub\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj",
-        "packagesPath": "C:\\Users\\prana\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\prana\\OneDrive\\Documents\\GitHub\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\obj\\",
+        "projectPath": "C:\\Users\\jonas\\GitRepos\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\XplicityHRplatformBackEnd.csproj",
+        "packagesPath": "C:\\Users\\jonas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jonas\\GitRepos\\HR-platform-Xplicity\\XplicityHRplatformBackEnd\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\prana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jonas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

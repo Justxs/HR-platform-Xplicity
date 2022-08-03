@@ -1,10 +1,11 @@
 export class Candidate{
-    DateOfPastCall = ""; // add model for technology? make it as an array?
-    FirstName = "";
-    LastName = "";
-    LinkedIn = "";
-    Comment = "";
-    Technologies = ""; // add model for technology? make it as an array?
-    DateOfFutureCall = "";
-    OpenForSuggestions?: boolean;
+    Id?: number;
+    FirstName: string = "";
+    LastName: string = "";
+    LinkedIn: string = "";
+    Comment: string= "";
+    Technologies: string = ""; // add model for technology? make it as an array?
+    DatesOfPastCalls: string = ""; 
+    DateOfFutureCall: string = "";
+    OpenForSuggestions: boolean = false;
 }
