@@ -35,9 +35,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-.editorconfig
-.cache
-.props
+*.editorconfig
+*.cache
+*.props
 
 
 ## Ignore Visual Studio temporary files, build results, and
