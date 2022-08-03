@@ -16,7 +16,7 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
-
+import {TableModule} from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -37,7 +37,8 @@ import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-pa
     BrowserAnimationsModule,
     CheckboxModule,
     InputTextareaModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

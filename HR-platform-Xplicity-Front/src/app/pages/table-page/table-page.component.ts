@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Candidate } from '../../Models/candidate';
+import { CandidateService } from '../../Services/candidate.service';
 
 @Component({
   selector: 'app-table-page',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table-page.component.css']
 })
 export class TablePageComponent implements OnInit {
-
-  constructor() { }
+  candidates: Candidate[] = [];
+  constructor(private candidateService: CandidateService ) { }
 
   ngOnInit(): void {
+    this.candidates = this.candidateService.getCandidate();
+    console.log(this.candidates);
   }
 
 }
