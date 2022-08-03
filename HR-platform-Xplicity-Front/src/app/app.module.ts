@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; 
@@ -38,7 +39,8 @@ import {TableModule} from 'primeng/table';
     CheckboxModule,
     InputTextareaModule,
     MultiSelectModule,
-    TableModule
+    TableModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
