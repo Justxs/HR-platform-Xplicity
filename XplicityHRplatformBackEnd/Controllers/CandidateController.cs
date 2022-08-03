@@ -14,11 +14,5 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
 
-        [HttpPost(Name = "PostNewCandidate")]
-        public IEnumerable<WeatherFort> Get()
-        {
-           
-        }
-
     }
 }
