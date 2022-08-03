@@ -15,6 +15,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CheckboxModule} from 'primeng/checkbox';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
     AppComponent,
     LoginComponent,
     TablePageComponent,
-    TableNewEntryPageComponent
+    TableNewEntryPageComponent,
+    ResetPasswordPageComponent
   ],
   imports: [
     BrowserModule,
