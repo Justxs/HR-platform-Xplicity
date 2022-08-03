@@ -444,3 +444,6 @@ HR-platform-Xplicity-Front/.angular/cache/14.1.0/angular-webpack/79f3379c588a4ab
 *.old
 *.vsidx
 *.pdb
+XplicityHRplatformBackEnd/.vs/XplicityHRplatformBackEnd/DesignTimeBuild/.dtbcache.v2
+XplicityHRplatformBackEnd/.vs/XplicityHRplatformBackEnd/v17/.futdcache.v1
+XplicityHRplatformBackEnd/.vs/XplicityHRplatformBackEnd/v17/.suo
