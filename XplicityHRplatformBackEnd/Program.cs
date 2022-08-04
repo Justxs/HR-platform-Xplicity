@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using XplicityHRplatformBackEnd.DB;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+
+builder.Services.AddDbContext<HRplatformDbContext>
+    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
 var app = builder.Build();
 
