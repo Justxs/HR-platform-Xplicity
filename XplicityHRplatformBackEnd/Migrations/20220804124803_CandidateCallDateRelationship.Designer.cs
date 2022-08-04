@@ -12,8 +12,8 @@ using XplicityHRplatformBackEnd.DB;
 namespace XplicityHRplatformBackEnd.Migrations
 {
     [DbContext(typeof(HRplatformDbContext))]
-    [Migration("20220804104145_identity")]
-    partial class identity
+    [Migration("20220804124803_CandidateCallDateRelationship")]
+    partial class CandidateCallDateRelationship
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,36 @@ namespace XplicityHRplatformBackEnd.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CallDateCandidate", b =>
+                {
+                    b.Property<int>("CallDatesid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CandidatesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CallDatesid", "CandidatesId");
+
+                    b.HasIndex("CandidatesId");
+
+                    b.ToTable("CallDateCandidate");
+                });
+
+            modelBuilder.Entity("CandidateTechnology", b =>
+                {
+                    b.Property<int>("CandidatesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnologiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CandidatesId", "TechnologiesId");
+
+                    b.HasIndex("TechnologiesId");
+
+                    b.ToTable("CandidateTechnology");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -157,6 +187,23 @@ namespace XplicityHRplatformBackEnd.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CallDate", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Calldates");
+                });
+
             modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Candidate", b =>
                 {
                     b.Property<int>("Id")
@@ -170,10 +217,6 @@ namespace XplicityHRplatformBackEnd.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DateOfFutureCall")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DateOfPastCalls")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -192,13 +235,26 @@ namespace XplicityHRplatformBackEnd.Migrations
                     b.Property<bool>("OpenForSuggestions")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Technologies")
+                    b.HasKey("Id");
+
+                    b.ToTable("Candidates");
+                });
+
+            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Technology", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("candidates");
+                    b.ToTable("Technologies");
                 });
 
             modelBuilder.Entity("XplicityHRplatformBackEnd.Models.User", b =>
@@ -269,6 +325,36 @@ namespace XplicityHRplatformBackEnd.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("CallDateCandidate", b =>
+                {
+                    b.HasOne("XplicityHRplatformBackEnd.Models.CallDate", null)
+                        .WithMany()
+                        .HasForeignKey("CallDatesid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XplicityHRplatformBackEnd.Models.Candidate", null)
+                        .WithMany()
+                        .HasForeignKey("CandidatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CandidateTechnology", b =>
+                {
+                    b.HasOne("XplicityHRplatformBackEnd.Models.Candidate", null)
+                        .WithMany()
+                        .HasForeignKey("CandidatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XplicityHRplatformBackEnd.Models.Technology", null)
+                        .WithMany()
+                        .HasForeignKey("TechnologiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

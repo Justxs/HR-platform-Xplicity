@@ -1,4 +1,5 @@
    <div class="center" >
+     <div class=""></div>
         <h1>Pridėti naują kandidatą</h1>
         <input type="text" class="p-inputtext-lg" name="name" placeholder="Vardas" [(ngModel)]="candidate.firstName" #nameInput="ngModel" pInputText />
         <div *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)" class="error">
