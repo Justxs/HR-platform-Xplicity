@@ -5,7 +5,7 @@ export class Candidate{
     linkedIn: string = "";
     comment: string = "";
     technologies: string = ""; // add model for technology? make it as an array?
-    dateOfPastCalls: string = ""; 
-    dateOfFutureCall: string = "";
+    datesOfPastCalls: Date[] = []; 
+    dateOfFutureCall?: Date;
     openForSuggestions: boolean = false;
 }

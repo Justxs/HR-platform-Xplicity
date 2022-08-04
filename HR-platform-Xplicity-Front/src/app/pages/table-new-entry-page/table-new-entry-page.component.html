@@ -1,14 +1,7 @@
-<<<<<<< Updated upstream
-<!--
-<form #newCandidateForm="ngForm" class="candidate-input-form" name="new-candidate-form" (ngSubmit)="onSubmit(newCandidateForm)">
-    <div class="center" header="Pridėti naują kandidatą">
-=======
-<h1>Veikia</h1>
 
 <form class="candidate-input-form" name="new-candidate-form" >
-    <h1>hi</h1>
+
     <div class="center" >
->>>>>>> Stashed changes
         <h1>Pridėti naują kandidatą</h1>
         <input type="text" class="p-inputtext-lg" name="name" placeholder="Vardas" [(ngModel)]="candidate.firstName" #nameInput="ngModel" pInputText />
         <div *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)" class="error">
@@ -58,11 +51,7 @@
         </div>
         <br>
         <br>
-<<<<<<< Updated upstream
-        <button pButton type="button" (click)="onAddButtonClick()" [disabled]="newCandidateForm.invalid" label="Pridėti"></button>
-=======
-        <button pButton type="button" (click)="createCandidate(candidate)" *ngIf="!candidate.Id" label="Pridėti"></button>
->>>>>>> Stashed changes
+        <button pButton type="button" (click)="createCandidate(candidate)" *ngIf="!candidate.id" label="Pridėti"></button>
 
     </div>
-</form> -->
+</form> 

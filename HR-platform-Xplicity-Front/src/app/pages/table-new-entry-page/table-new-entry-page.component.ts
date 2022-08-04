@@ -22,17 +22,11 @@ export class TableNewEntryPageComponent implements OnInit {
   ];
    }
 
-<<<<<<< Updated upstream
-  ngOnInit(): void {
-
-  }
-=======
    onSubmit(form: NgForm): void {
       //form.resetForm();
    }
 
   ngOnInit(): void {}
->>>>>>> Stashed changes
 
   createCandidate(candidate: Candidate) {
     this.candidateService.createCandidate(candidate)
