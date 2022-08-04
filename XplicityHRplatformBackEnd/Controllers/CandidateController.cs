@@ -10,17 +10,18 @@ namespace XplicityHRplatformBackEnd.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Candidate>>> GetCandidates()
         {
+            string[] arr = {"C#"};
             return new List<Candidate>
             {
                 new Candidate
-                {
+                { 
                     Id = 1,
                     FirstName = "my Name",
                     LastName = "my LastName",
                     LinkedIn = "this is LinkedIn",
                     Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
+                    Technologies = arr,
+                    DatesOfPastCalls = {},
                     DateOfFutureCall = "another future date",
                     OpenForSuggestions = true
                 },
@@ -31,10 +32,10 @@ namespace XplicityHRplatformBackEnd.Controllers
                     LastName = "my LastName",
                     LinkedIn = "this is LinkedIn",
                     Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
+                    Technologies = {},
+                    DatesOfPastCalls = {},
                     DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
+                    OpenForSuggestions = false
                 }
             };
         }

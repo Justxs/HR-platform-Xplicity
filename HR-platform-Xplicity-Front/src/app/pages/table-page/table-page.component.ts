@@ -1,3 +1,4 @@
+import { Technology } from './../../Models/technologies';
 import { Component, OnInit } from '@angular/core';
 import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
@@ -8,8 +9,8 @@ import { CandidateService } from '../../Services/candidate.service';
   styleUrls: ['./table-page.component.css']
 })
 export class TablePageComponent implements OnInit {
-  candidates: any[] = [];
-  firstname: any;
+  candidates: Candidate[] = [];
+  technologies: Technology[] = [];
   constructor(private candidateService: CandidateService ) { }
 
   ngOnInit(): void {
@@ -17,9 +18,12 @@ export class TablePageComponent implements OnInit {
     .subscribe(
       items => {
         this.candidates = items;
-        console.log(this.candidates);
-        this.firstname = items[0].firstName;
       });
+    this.technologies = [
+      {tittle: "C#"},
+      {tittle: "C"},
+      {tittle: "C++"}
+    ]
   }
 
 }

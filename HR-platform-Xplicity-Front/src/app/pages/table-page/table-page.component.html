@@ -8,13 +8,46 @@
     <ng-template  pTemplate="header">
         <tr>
             <th>Kada buvo paskutini kartą susisiekta?</th>
-            <th>Vardas</th>
-            <th>Pavardė</th>
+            <th>
+                Vardas
+                <p-columnFilter type="text" field="firstName" display="menu" placeholder="Vardas"
+                [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"></p-columnFilter>
+            </th>
+            <th>
+                Pavardė
+                <p-columnFilter type="text" field="lastName" display="menu" placeholder="Pavardė"
+                [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"></p-columnFilter>
+            </th>
             <th>LinkedIn nuoroda</th>
             <th>Komentaras</th>
-            <th>Technologijos</th>
+            <th>
+                Technologijos
+                <p-columnFilter field="technologies" matchMode="in"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                    <ng-template pTemplate="header">
+                        <div style="padding: 10px; font-weight: bold;">
+                            Technologijos
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <p-multiSelect [ngModel]="value" [options]="technologies" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
+                            <ng-template let-option pTemplate="item">
+                                <div>
+                                    <span >{{option.tittle}}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
             <th>Kada reikia susisiekti?</th>
-            <th>Atviras pasiūlymams?</th>
+            <th style="width: 8rem">
+                <div >
+                    Atviras pasiūlymams? 
+                    <div style="padding: 5px;">
+                        <p-columnFilter type="boolean" field="openForSuggestions"></p-columnFilter>
+                    </div>
+                </div>
+            </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-candidate>
@@ -26,13 +59,14 @@
             <td>{{candidate.comment}}</td>
             <td>{{candidate.technologies}}</td>
             <td>{{candidate.dateOfFutureCall}}</td>
-            <td>{{candidate.openForSuggestions}}</td>
+            <td style="width: 8rem" class="text-center">
+                <i class="pi" [ngClass]="{'true-icon pi-check-circle': candidate.openForSuggestions, 'false-icon pi-times-circle': !candidate.openForSuggestions}"></i>
+            </td>
         </tr>
     </ng-template>
-    <ng-template pTemplate="paginatorleft">
-        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-    </ng-template>
-    <ng-template pTemplate="paginatorright">
-        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7"><h1>Nėra duomenų</h1></td>
+        </tr>
     </ng-template>
 </p-table>
