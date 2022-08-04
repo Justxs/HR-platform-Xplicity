@@ -8,21 +8,18 @@ import { CandidateService } from '../../Services/candidate.service';
   styleUrls: ['./table-page.component.css']
 })
 export class TablePageComponent implements OnInit {
-  candidates: Candidate[] = [];
-  errorMessage?: string;
+  candidates: any[] = [];
+  firstname: any;
   constructor(private candidateService: CandidateService ) { }
 
   ngOnInit(): void {
-    this.candidateService.getCandidate().subscribe({
-        next: candidates => {
-          this.candidates = candidates;
-        },
-        error: error => {
-          console.error(error);
-          this.errorMessage = error.message;
-        }
+    this.candidateService.getCandidate()
+    .subscribe(
+      items => {
+        this.candidates = items;
+        console.log(this.candidates);
+        this.firstname = items[0].firstName;
       });
-    
   }
 
 }
