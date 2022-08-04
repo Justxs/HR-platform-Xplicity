@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using XplicityHRplatformBackEnd.DB;
 
@@ -15,6 +16,13 @@ builder.Services.AddDbContext<HRplatformDbContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
 var app = builder.Build();
+
+void CondifureServices(IServiceCollection services)
+{
+    services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<HRplatformDbContext>();
+
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -13,7 +13,7 @@ namespace XplicityHRplatformBackEnd.Controllers
                 {
                     new User
                     {
-                        Id= 1,
+                        //Id= 1,
                         Email = "admin@admin.lt",
                         Password = "admin"
                     }
