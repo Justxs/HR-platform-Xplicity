@@ -76,5 +76,22 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
 
+
+        [HttpPost]
+        public async Task<ActionResult<List<Candidate>>> CreateCandidate(Candidate newCandidate)
+        {
+            Console.WriteLine(newCandidate.Id);
+            Console.WriteLine(newCandidate.Comment);
+            Console.WriteLine(newCandidate.FirstName);
+            Console.WriteLine(newCandidate.LastName);
+            Console.WriteLine(newCandidate.DateOfFutureCall);
+            Console.WriteLine(newCandidate.DateOfPastCalls);
+            Console.WriteLine(newCandidate.Comment);
+            Console.WriteLine(newCandidate.LinkedIn);
+
+            return Ok();
+        }
+
+
     }
 }
