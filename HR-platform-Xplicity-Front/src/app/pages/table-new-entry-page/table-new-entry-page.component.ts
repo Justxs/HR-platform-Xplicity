@@ -10,13 +10,10 @@ import { CandidateService } from 'src/app/Services/candidate.service';
 ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() candidate?: Candidate;
+  @Input()candidate!: Candidate;
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies:string[];
-
-  //addButtonClick = new EventEmitter<Candidate>();
-  
 
   constructor(private candidateService: CandidateService) {
     this.technologies = [
@@ -25,18 +22,21 @@ export class TableNewEntryPageComponent implements OnInit {
   ];
    }
 
+<<<<<<< Updated upstream
   ngOnInit(): void {
 
   }
+=======
+   onSubmit(form: NgForm): void {
+      //form.resetForm();
+   }
+
+  ngOnInit(): void {}
+>>>>>>> Stashed changes
 
   createCandidate(candidate: Candidate) {
     this.candidateService.createCandidate(candidate)
     .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
   }
-
-  //onAddButtonClick(): void { 
-  //  this.addButtonClick.emit(this.candidate);
-  //  console.log(this.candidate);
-  // }
 
 }
