@@ -9,11 +9,20 @@ import { CandidateService } from '../../Services/candidate.service';
 })
 export class TablePageComponent implements OnInit {
   candidates: Candidate[] = [];
+  errorMessage?: string;
   constructor(private candidateService: CandidateService ) { }
 
   ngOnInit(): void {
-    this.candidates = this.candidateService.getCandidate();
-    console.log(this.candidates);
+    this.candidateService.getCandidate().subscribe({
+        next: candidates => {
+          this.candidates = candidates;
+        },
+        error: error => {
+          console.error(error);
+          this.errorMessage = error.message;
+        }
+      });
+    
   }
 
 }

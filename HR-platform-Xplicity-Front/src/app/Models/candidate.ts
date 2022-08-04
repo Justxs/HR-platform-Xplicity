@@ -3,7 +3,7 @@ export class Candidate{
     FirstName: string = "";
     LastName: string = "";
     LinkedIn: string = "";
-    Comment: string= "";
+    Comment: string = "";
     Technologies: string = ""; // add model for technology? make it as an array?
     DatesOfPastCalls: string = ""; 
     DateOfFutureCall: string = "";

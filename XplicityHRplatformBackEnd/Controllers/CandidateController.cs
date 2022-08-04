@@ -7,11 +7,24 @@ namespace XplicityHRplatformBackEnd.Controllers
     [ApiController]
     public class CandidateController : ControllerBase
     {
-        private readonly ILogger<CandidateController> _logger;
-        
-        public CandidateController(ILogger<CandidateController> logger)
+        [HttpGet]
+        public async Task<ActionResult<List<Candidate>>> GetCandidates()
         {
-            _logger = logger;
+            return new List<Candidate>
+            {
+                new Candidate
+                {
+                    Id = 1,
+                    FirstName = "my Name",
+                    LastName = "my LastName",
+                    LinkedIn = "this is LinkedIn",
+                    Comment = "this is a Comment",
+                    Technologies = "C#",
+                    DateOfPastCalls = "random date",
+                    DateOfFutureCall = "another future date",
+                    OpenForSuggestions = true
+                }
+            };
         }
 
 
