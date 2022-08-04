@@ -1,7 +1,4 @@
-
-<form class="candidate-input-form" name="new-candidate-form" >
-
-    <div class="center" >
+   <div class="center" >
         <h1>Pridėti naują kandidatą</h1>
         <input type="text" class="p-inputtext-lg" name="name" placeholder="Vardas" [(ngModel)]="candidate.firstName" #nameInput="ngModel" pInputText />
         <div *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)" class="error">
@@ -20,6 +17,7 @@
             <p *ngIf="linkedInInput.errors?.['required']">Įveskite galimą kandidato linkedIn nuorodą.</p>
         </div>
         <br>
+        
         <br>
         <textarea rows="5" cols="23" class="p-inputtext-lg" name="comment" placeholder="Komentaras" [(ngModel)]="candidate.comment" #commentInput="ngModel" pInputTextarea></textarea>
         <div *ngIf="commentInput.invalid && (commentInput.dirty || commentInput.touched)" class="error">
@@ -27,7 +25,7 @@
         </div>
         <br>
         <br>
-        <p-calendar [readonlyInput]="true" [showIcon]="true" name="contactDate" placeholder="Kada reikia susisiekti" [(ngModel)]="candidate.dateOfFutureCall" #contactInput="ngModel"></p-calendar>
+        <p-calendar [readonlyInput]="true" [showIcon]="true" name="contactDate" placeholder="Kada reikia susisiekti" [(ngModel)]="value" #contactInput="ngModel"></p-calendar>
         <div *ngIf="contactInput.invalid && (contactInput.dirty || contactInput.touched)" class="error">
             <p *ngIf="contactInput.errors?.['required']">Privaloma pasirinkti susisiekimo datą.</p>
         </div>
@@ -51,7 +49,6 @@
         </div>
         <br>
         <br>
-        <button pButton type="button" (click)="createCandidate(candidate)" *ngIf="!candidate.id" label="Pridėti"></button>
+        <button pButton type="button" (click)="createCandidate(candidate)" *ngIf="!candidate.id"  label="Pridėti"></button>
 
     </div>
-</form> 

@@ -12,66 +12,66 @@ namespace XplicityHRplatformBackEnd.Controllers
         {
             return new List<Candidate>
             {
-                new Candidate
-                {
-                    Id = 1,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                }
+                //snew Candidate
+                //s{
+                //s    Id = 1,
+                //s    FirstName = "my Name",
+                //s    LastName = "my LastName",
+                //s    LinkedIn = "this is LinkedIn",
+                //s    Comment = "this is a Comment",
+                //s    Technologies = {"C#" },
+                //s    DatesOfPastCalls = {"random date" },
+                //s    DateOfFutureCall = "another future date",
+                //s    OpenForSuggestions = true
+                //s},
+                //snew Candidate
+                //s{
+                //s    Id = 2,
+                //s    FirstName = "my Name",
+                //s    LastName = "my LastName",
+                //s    LinkedIn = "this is LinkedIn",
+                //s    Comment = "this is a Comment",
+                //s    Technologies = "C#",
+                //s    DateOfPastCalls = "random date",
+                //s    DateOfFutureCall = "another future date",
+                //s    OpenForSuggestions = true
+                //s},
+                //snew Candidate
+                //s{
+                //s    Id = 2,
+                //s    FirstName = "my Name",
+                //s    LastName = "my LastName",
+                //s    LinkedIn = "this is LinkedIn",
+                //s    Comment = "this is a Comment",
+                //s    Technologies = "C#",
+                //s    DateOfPastCalls = "random date",
+                //s    DateOfFutureCall = "another future date",
+                //s    OpenForSuggestions = true
+                //s},
+                //snew Candidate
+                //s{
+                //s    Id = 2,
+                //s    FirstName = "my Name",
+                //s    LastName = "my LastName",
+                //s    LinkedIn = "this is LinkedIn",
+                //s    Comment = "this is a Comment",
+                //s    Technologies = "C#",
+                //s    DateOfPastCalls = "random date",
+                //s    DateOfFutureCall = "another future date",
+                //s    OpenForSuggestions = true
+                //s},
+                //snew Candidate
+                //s{
+                //s    Id = 2,
+                //s    FirstName = "my Name",
+                //s    LastName = "my LastName",
+                //s    LinkedIn = "this is LinkedIn",
+                //s    Comment = "this is a Comment",
+                //s    Technologies = "C#",
+                //s    DateOfPastCalls = "random date",
+                //s    DateOfFutureCall = "another future date",
+                //s    OpenForSuggestions = true
+                //s}
             };
         }
 
@@ -85,8 +85,11 @@ namespace XplicityHRplatformBackEnd.Controllers
             Console.WriteLine(newCandidate.FirstName);
             Console.WriteLine(newCandidate.LastName);
             Console.WriteLine(newCandidate.DateOfFutureCall);
-            Console.WriteLine(newCandidate.DateOfPastCalls);
+            Console.WriteLine(newCandidate.DatesOfPastCalls[0]);
+            Console.WriteLine(newCandidate.DatesOfPastCalls[1]);    
             Console.WriteLine(newCandidate.Comment);
+            Console.WriteLine(newCandidate.Technologies[0]);
+            Console.WriteLine(newCandidate.Technologies[1]);
             Console.WriteLine(newCandidate.LinkedIn);
 
             return Ok();

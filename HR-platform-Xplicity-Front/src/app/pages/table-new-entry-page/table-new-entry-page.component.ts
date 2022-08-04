@@ -10,10 +10,12 @@ import { CandidateService } from 'src/app/Services/candidate.service';
 ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input()candidate!: Candidate;
+  @Input()candidate: Candidate = new Candidate;
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies:string[];
+  value!: Date;
+
 
   constructor(private candidateService: CandidateService) {
     this.technologies = [
