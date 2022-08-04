@@ -25,11 +25,6 @@ export class TableNewEntryPageComponent implements OnInit {
   ];
    }
 
-   onSubmit(form: NgForm): void {
-      form.resetForm();
-      this.createCandidate(this.candidate)
-   }
-
   ngOnInit(): void {
 
   }

@@ -1,3 +1,4 @@
+<!--
 <form #newCandidateForm="ngForm" class="candidate-input-form" name="new-candidate-form" (ngSubmit)="onSubmit(newCandidateForm)">
     <div class="center" header="Pridėti naują kandidatą">
         <h1>Pridėti naują kandidatą</h1>
@@ -31,7 +32,7 @@
         </div>
         <br>
         <br>
-        <p-calendar selectionMode="multiple" [readonlyInput]="true" [showIcon]="true" name="contactedDates" [(ngModel)]="candidate.dateOfPastCalls"
+        <p-calendar selectionMode="multiple" [readonlyInput]="true" [showIcon]="true" name="contactedDates" [(ngModel)]="candidate.datesOfPastCalls"
             placeholder="Kada buvo susisiekta"></p-calendar>
         <br>
         <br>
@@ -49,7 +50,7 @@
         </div>
         <br>
         <br>
-        <button pButton type="button" (click)="createCandidate(candidate)" [disabled]="newCandidateForm.invalid" label="Pridėti"></button>
+        <button pButton type="button" (click)="onAddButtonClick()" [disabled]="newCandidateForm.invalid" label="Pridėti"></button>
 
     </div>
-</form>
+</form> -->

@@ -1,5 +1,5 @@
 export class Candidate{
-    Id?: number;
+    id?: number;
     firstName: string = "";
     lastName: string = "";
     linkedIn: string = "";
