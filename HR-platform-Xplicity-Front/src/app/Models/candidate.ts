@@ -1,13 +1,15 @@
+import { Technology } from "./technology";
+
 export class Candidate {
-    id?: number;
-    firstName: string = "";
-    lastName: string = "";
-    linkedIn: string = "";
-    comment: string = "";
-    technologies: string = ""; // add model for technology? make it as an array?
-    datesOfPastCalls: Date[] = [];
-    dateOfFutureCall?: Date;
-    openForSuggestions: boolean = false;
+    id: number;
+    firstName: string;
+    lastName: string;
+    linkedIn: string;
+    comment: string;
+    technologies: Technology[];
+    datesOfPastCalls: Date[];
+    dateOfFutureCall: Date;
+    openForSuggestions: boolean;
 
     constructor() {
         this.id = 0;
@@ -15,7 +17,7 @@ export class Candidate {
         this.lastName = "";
         this.linkedIn = "";
         this.comment= "";
-        this.technologies = "";
+        this.technologies = [];
         this.datesOfPastCalls = [];
         this.dateOfFutureCall = new Date();
         this.openForSuggestions = false;

@@ -1,4 +1,4 @@
-import { Technology } from './../../Models/technologies';
+import { Technology } from '../../Models/technology';
 import { Component, OnInit } from '@angular/core';
 import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
@@ -20,10 +20,10 @@ export class TablePageComponent implements OnInit {
         this.candidates = items;
       });
     this.technologies = [
-      {tittle: "C#"},
-      {tittle: "C"},
-      {tittle: "C++"}
-    ]
+      {title: "C#"},
+      {title: "C"},
+      {title: "C++"}
+    ];
   }
 
 }

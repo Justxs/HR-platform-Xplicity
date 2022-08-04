@@ -16,13 +16,10 @@ export class CandidateService {
 
   public createCandidate(candidate: Candidate): Observable<Candidate[]> {
     return this.http.post<Candidate[]>(this.candidateApi, candidate);
-
   }
   
 
   public getCandidate() : Observable<Candidate[]> {
-
     return this.http.get<Candidate[]>(this.candidateApi);
-
   }
 }

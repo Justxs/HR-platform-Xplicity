@@ -1,4 +1,4 @@
-   <div class="center" >
+   <div class="center-box" >
      <div class=""></div>
         <h1>Pridėti naują kandidatą</h1>
         <input type="text" class="p-inputtext-lg" name="name" placeholder="Vardas" [(ngModel)]="candidate.firstName" #nameInput="ngModel" pInputText />
@@ -43,7 +43,7 @@
         </div>
         <br>
         <br>
-        <p-multiSelect [options]="technologies" [(ngModel)]="candidate.technologies" defaultLabel="Select technologies"
+        <p-multiSelect [options]="technologies" optionLabel="title" [(ngModel)]="candidate.technologies" defaultLabel="Select technologies"
             display="chip" required #techInput="ngModel"></p-multiSelect>
         <div *ngIf="techInput.invalid && (techInput.dirty || techInput.touched)" class="error">
             <p *ngIf="techInput.errors?.['required']">Pasirinkite bent vieną technologiją, kurią gali naudoti kandidatas.</p>
