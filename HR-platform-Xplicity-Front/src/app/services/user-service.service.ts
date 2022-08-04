@@ -18,11 +18,11 @@ export class UserServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts(): Observable<User[]> {
+  getUser(): Observable<User[]> {
     return this.http.get<User[]>(this.userApi);
   }
 
-  addProduct(user: User): Observable<User> {
-    return this.http.post<User>(this.userApi, user, this.httpOptions);
-  }
+  // addProduct(user: User): Observable<User> {
+  //   return this.http.post<User>(this.userApi, user, this.httpOptions);
+  // }
 }
