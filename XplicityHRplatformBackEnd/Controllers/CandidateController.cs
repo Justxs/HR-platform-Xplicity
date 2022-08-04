@@ -27,43 +27,7 @@ namespace XplicityHRplatformBackEnd.Controllers
                 new Candidate
                 {
                     Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
-                    LastName = "my LastName",
-                    LinkedIn = "this is LinkedIn",
-                    Comment = "this is a Comment",
-                    Technologies = "C#",
-                    DateOfPastCalls = "random date",
-                    DateOfFutureCall = "another future date",
-                    OpenForSuggestions = true
-                },
-                new Candidate
-                {
-                    Id = 2,
-                    FirstName = "my Name",
+                    FirstName = "my Nameeee",
                     LastName = "my LastName",
                     LinkedIn = "this is LinkedIn",
                     Comment = "this is a Comment",
