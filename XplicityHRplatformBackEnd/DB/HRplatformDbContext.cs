@@ -14,6 +14,7 @@ namespace XplicityHRplatformBackEnd.DB
         public DbSet<Technology> Technologies { get; set; }
         public DbSet<CallDate> Calldates { get; set; }
         public DbSet<CandidateCallDate> CandidateCalldates { get; set; }
+        public DbSet<CandidateTechnology> CandidateTechnologies { get; set; }
 
         private readonly IConfiguration _configuration;
 

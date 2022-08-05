@@ -19,35 +19,27 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Technology>>> GetAllTechnologies()
+        public async Task<List<Technology>> GetAllTechnologies()
         {
-            return await _dataUtilities.GetAll();
-        }
-
-        [Route("{technologyId}")]
-        [HttpGet]
-        public async Task<Technology> GetTechnologyAsync(Guid technologyId)
-        {
-            return await _dataUtilities.GetById(_dbContext.Technologies, technologyId);
+            return await _dataUtilities.GetAll(_dbContext.Technologies);
         }
 
         [HttpPost]
 
-        public async Task<ActionResult<Guid>> CreateTechnology([FromBody] CreateTechnologyDto request)
+        public async Task<StatusCodeResult> CreateTechnology([FromBody] Technology request)
         {
-
+            if (request == null) return Ok();
             var tech = await _dbContext.Technologies.Where(t => t.Title == request.Title).FirstOrDefaultAsync();
             if (tech != null)
             {
-                return tech.Id;
+                return Ok();
             }
 
-            var newTechnology = new Technology
+            if (await _dataUtilities.AddEntry(_dbContext.Technologies, request) != null)
             {
-                Title = request.Title,
-            };
-
-            return await _dataUtilities.AddEntry(_dbContext.Technologies, newTechnology);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

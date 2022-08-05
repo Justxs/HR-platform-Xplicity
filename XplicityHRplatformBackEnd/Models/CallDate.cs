@@ -5,6 +5,6 @@ namespace XplicityHRplatformBackEnd.Models
     public class CallDate : BaseEntity
     {
 
-        public string date { set; get; } = string.Empty;
+        public string DateOfCall { set; get; } = string.Empty;
     }
 }

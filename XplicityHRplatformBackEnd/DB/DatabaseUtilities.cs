@@ -7,8 +7,6 @@ namespace XplicityHRplatformBackEnd.DB
     public class DatabaseUtilities
     {
         private readonly HRplatformDbContext _dbContext;
-
-
         public DatabaseUtilities(HRplatformDbContext context)
         {
             _dbContext = context;
@@ -23,15 +21,9 @@ namespace XplicityHRplatformBackEnd.DB
             var entry = await dbSet.FindAsync(id);
             return entry;
         }
-
-        internal Task<ActionResult<List<Technology>>> GetAll()
+        public async Task<List<T>> GetAll<T>(DbSet<T> dbSet) where T : BaseEntity
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<T[]> GetAll<T>(DbSet<T> dbSet) where T : BaseEntity
-        {
-            var allEntries = await dbSet.ToArrayAsync();
+            var allEntries = await dbSet.ToListAsync();
             return allEntries;
         }
 

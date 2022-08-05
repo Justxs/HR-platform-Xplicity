@@ -12,8 +12,8 @@ using XplicityHRplatformBackEnd.DB;
 namespace XplicityHRplatformBackEnd.Migrations
 {
     [DbContext(typeof(HRplatformDbContext))]
-    [Migration("20220805083431_CandidateTechnology")]
-    partial class CandidateTechnology
+    [Migration("20220805164207_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,32 +159,34 @@ namespace XplicityHRplatformBackEnd.Migrations
 
             modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CallDate", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("date")
+                    b.Property<string>("DateOfCall")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Calldates");
                 });
 
             modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Candidate", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DateOfFutureCall")
                         .IsRequired()
@@ -232,11 +234,12 @@ namespace XplicityHRplatformBackEnd.Migrations
 
             modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Technology", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()

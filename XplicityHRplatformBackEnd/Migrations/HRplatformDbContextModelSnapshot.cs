@@ -164,7 +164,7 @@ namespace XplicityHRplatformBackEnd.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("date")
+                    b.Property<string>("DateOfCall")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -228,6 +228,26 @@ namespace XplicityHRplatformBackEnd.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CandidateCalldates");
+                });
+
+            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CandidateTechnology", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TechnologyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CandidateTechnologies");
                 });
 
             modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Technology", b =>
