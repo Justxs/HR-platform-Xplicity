@@ -18,6 +18,7 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import {TableModule} from 'primeng/table';
+import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {TableModule} from 'primeng/table';
     LoginComponent,
     TablePageComponent,
     TableNewEntryPageComponent,
-    ResetPasswordPageComponent
+    ResetPasswordPageComponent,
+    NewTechnologyComponent
   ],
   imports: [
     BrowserModule,

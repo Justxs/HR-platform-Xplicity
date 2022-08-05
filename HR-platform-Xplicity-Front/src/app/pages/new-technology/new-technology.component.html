@@ -1,0 +1,17 @@
+
+<div class="center">
+    <img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="">
+
+    <div class="center-box">
+            <input [(ngModel)]="newTechnology.title"  pInputText class="p-inputtext-sm" placeholder="technology title" required #techInput="ngModel">  
+            <div *ngIf="techInput.invalid && (techInput.dirty || techInput.touched)" class="error">
+                <p *ngIf="techInput.errors?.['required']">Įveskite galimą technologijos pavadinimą.</p>
+            </div>
+        <br>
+        <br>
+        <button pButton type="button" (click)="createTechnology(newTechnology)" *ngIf="!newTechnology.id"  label="Pridėti"></button>
+    
+    </div>
+</div>
+
+
