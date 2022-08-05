@@ -12,6 +12,9 @@ import { TechnologyService } from '../../Services/technology.service';
 export class TablePageComponent implements OnInit {
   candidates: Candidate[] = [];
   technologies: Technology[] = [];
+  candidateDialog: boolean = false;
+  submitted: boolean = false;
+
   constructor(private candidateService: CandidateService, private technologyService: TechnologyService) { }
 
   ngOnInit(): void {
@@ -26,7 +29,12 @@ export class TablePageComponent implements OnInit {
         items => {
           this.technologies = items;
         });
+        
   }
+  openNew() {
+    this.submitted = false;
+    this.candidateDialog = true;
+}
   
 
 }

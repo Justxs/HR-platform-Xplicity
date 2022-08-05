@@ -21,6 +21,9 @@ import {TableModule} from 'primeng/table';
 import {ToolbarModule} from 'primeng/toolbar';
 import {FileUploadModule} from 'primeng/fileupload';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
+import {DialogModule} from 'primeng/dialog';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +48,9 @@ import { NewTechnologyComponent } from './pages/new-technology/new-technology.co
     TableModule,
     HttpClientModule,
     ToolbarModule,
-    FileUploadModule
+    FileUploadModule,
+    DialogModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,8 +1,9 @@
+<img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="Xplicity logo">
 <h1 style="text-align: center;">Kandidatų duombazė</h1>
 <div class="center-box"style="padding: 2%;">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="{}"></button>
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
@@ -85,3 +86,8 @@
     </ng-template>
 </p-table>
 </div>
+<p-dialog [(visible)]="candidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        
+    </ng-template>
+</p-dialog>
