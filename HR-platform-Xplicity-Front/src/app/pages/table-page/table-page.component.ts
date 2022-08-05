@@ -2,6 +2,7 @@ import { Technology } from '../../Models/technology';
 import { Component, OnInit } from '@angular/core';
 import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
+import { TechnologyService } from '../../Services/technology.service';
 
 @Component({
   selector: 'app-table-page',
@@ -11,21 +12,20 @@ import { CandidateService } from '../../Services/candidate.service';
 export class TablePageComponent implements OnInit {
   candidates: Candidate[] = [];
   technologies: Technology[] = [];
-  constructor(private candidateService: CandidateService ) { }
+  constructor(private candidateService: CandidateService, private technologyService: TechnologyService) { }
 
   ngOnInit(): void {
     this.candidateService.getCandidate()
-    .subscribe(
-      items => {
-        this.candidates = items;
-      });
+      .subscribe(
+        items => {
+          this.candidates = items;
+        });
 
-    //hardcoded for now need API for getting technologies
-    this.technologies = [
-      {title: "C#"},
-      {title: "C"},
-      {title: "C++"}
-    ];
+    this.technologyService.getTechnologies()
+      .subscribe(
+        items => {
+          this.technologies = items;
+        });
   }
   
 
