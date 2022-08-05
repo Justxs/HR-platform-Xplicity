@@ -1,0 +1,25 @@
+.center{
+    display:flex;
+    flex-direction: column;
+}
+.center-box{
+    margin-top: 100px;
+    padding: 40px;
+    background-color: rgb(236, 236, 236);
+    width: 300px;
+    border: none;
+    border-radius: 5px;
+    margin: auto;
+    text-align: center;
+    box-shadow: -1px 5px 15px 5px rgba(0,0,0,0.07);
+}
+
+.button-split{
+    margin: 12px;
+}
+
+.logo{
+    margin: auto;
+    padding-top: 80px;
+    padding-bottom: 40px;
+}

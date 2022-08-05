@@ -14,8 +14,5 @@ namespace XplicityHRplatformBackEnd.Models
         public string DateOfFutureCall { get; set; } = string.Empty;
         public bool OpenForSuggestions { get; set; } = false;
 
-        public List<Technology> Technologies { get; set; }
-        public List<CallDate> CallDates { get; set; }
-
     }
 }

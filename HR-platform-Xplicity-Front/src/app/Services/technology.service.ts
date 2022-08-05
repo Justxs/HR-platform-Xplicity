@@ -14,7 +14,7 @@ export class TechnologyService {
 
   constructor(private http: HttpClient) { }
 
-  public createCandidate(technology: Technology): Observable<Technology[]> {
+  public createTechnology(technology: Technology): Observable<Technology[]> {
     return this.http.post<Technology[]>(this.technologyApi, technology);
   }
   
@@ -22,4 +22,6 @@ export class TechnologyService {
   public getTechnologies() : Observable<Technology[]> {
     return this.http.get<Technology[]>(this.technologyApi);
   }
+
+  
 }

@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,13 +20,15 @@ import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-pa
 import {TableModule} from 'primeng/table';
 import {ToolbarModule} from 'primeng/toolbar';
 import {FileUploadModule} from 'primeng/fileupload';
+import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TablePageComponent,
     TableNewEntryPageComponent,
-    ResetPasswordPageComponent
+    ResetPasswordPageComponent,
+    NewTechnologyComponent
   ],
   imports: [
     BrowserModule,
