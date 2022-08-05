@@ -2,10 +2,8 @@
 
 namespace XplicityHRplatformBackEnd.Models
 {
-    public class Candidate
+    public class Candidate : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string LinkedIn { get; set; } = string.Empty;
