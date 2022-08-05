@@ -19,11 +19,14 @@ export class TablePageComponent implements OnInit {
       items => {
         this.candidates = items;
       });
+
+    //hardcoded for now need API for getting technologies
     this.technologies = [
       {title: "C#"},
       {title: "C"},
       {title: "C++"}
     ];
   }
+  
 
 }

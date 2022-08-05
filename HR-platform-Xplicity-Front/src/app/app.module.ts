@@ -18,7 +18,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import {TableModule} from 'primeng/table';
-
+import {ToolbarModule} from 'primeng/toolbar';
+import {FileUploadModule} from 'primeng/fileupload';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,9 @@ import {TableModule} from 'primeng/table';
     InputTextareaModule,
     MultiSelectModule,
     TableModule,
-    HttpClientModule
+    HttpClientModule,
+    ToolbarModule,
+    FileUploadModule
   ],
   providers: [],
   bootstrap: [AppComponent]

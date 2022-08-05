@@ -1,10 +1,19 @@
+<h1 style="text-align: center;">Kandidatų duombazė</h1>
+<div class="center-box"style="padding: 2%;">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="{}"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+        </ng-template>
+    </p-toolbar>
 
-<h1>table-page works!</h1>
-<p-table [value]="candidates" styleClass="p-datatable-sm" styleClass="p-datatable-striped" 
-  [paginator]="true" 
-  [rows]="10" [showCurrentPageReport]="true" 
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-  [rowsPerPageOptions]="[10,25,50]">
+    <p-table [value]="candidates" styleClass="p-datatable-sm" styleClass="p-datatable-striped" 
+    [paginator]="true" 
+    [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+    [rowsPerPageOptions]="[10,25,50]">
     <ng-template  pTemplate="header">
         <tr>
             <th>Kada buvo paskutini kartą susisiekta?</th>
@@ -29,10 +38,10 @@
                         </div>
                     </ng-template>
                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                        <p-multiSelect [ngModel]="value" [options]="technologies" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
+                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)" optionLabel="name">
                             <ng-template let-option pTemplate="item">
                                 <div>
-                                    <span >{{option.tittle}}</span>
+                                    <span >{{option.technologies.title}}</span>
                                 </div>
                             </ng-template>
                         </p-multiSelect>
@@ -48,25 +57,31 @@
                     </div>
                 </div>
             </th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-candidate>
         <tr>
-            <td>{{candidate.dateOfPastCalls}}</td>
+            <td>{{candidate.datesOfPastCallsDisplay}}</td>
             <td>{{candidate.firstName}}</td>
             <td>{{candidate.lastName}}</td>
             <td>{{candidate.linkedIn}}</td>
             <td>{{candidate.comment}}</td>
-            <td>{{candidate.technologies}}</td>
+            <td>{{candidate.technologyDisplay}}</td>
             <td>{{candidate.dateOfFutureCall}}</td>
-            <td style="width: 8rem" class="text-center">
+            <td style="width: 8rem">
                 <i class="pi" [ngClass]="{'true-icon pi-check-circle': candidate.openForSuggestions, 'false-icon pi-times-circle': !candidate.openForSuggestions}"></i>
+            </td>
+            <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="{}"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="{}"></button>
             </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="7"><h1>Nėra duomenų</h1></td>
+            <td colspan="9"><h1 style="text-align: Center;">Nėra duomenų :(</h1></td>
         </tr>
     </ng-template>
 </p-table>
+</div>
