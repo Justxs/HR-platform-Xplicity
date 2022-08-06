@@ -1,18 +1,18 @@
 <div class="center">
     <img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="">
     <form class="form-signin" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+
         <div class="center-box">
             <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password</div>
             <br>
-            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required autofocus>  
+            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>  
             <br>
             <br>
             <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Password" required>  
             <br>
             <br>
-            <p-button type="submit" class="button-split" label="Login" styleClass="p-button-sm"></p-button>
-            <a routerLink="/register"><p-button class="button-split" label="Register" styleClass="p-button-sm"></p-button></a>
+            <p-button type="submit" class="button-split" label="Submit" styleClass="p-button-sm"></p-button>
+            <a routerLink=""><p-button class="button-split" label="back" styleClass="p-button-sm"></p-button></a>
         </div>
     </form>
 </div>
-

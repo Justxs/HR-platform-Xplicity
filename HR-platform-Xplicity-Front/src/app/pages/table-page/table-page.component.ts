@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table-page',
@@ -15,7 +16,7 @@ export class TablePageComponent implements OnInit {
   candidateDialog: boolean = false;
   submitted: boolean = false;
 
-  constructor(private candidateService: CandidateService, private technologyService: TechnologyService) { }
+  constructor(private router: Router, private candidateService: CandidateService, private technologyService: TechnologyService) { }
 
   ngOnInit(): void {
     this.candidateService.getCandidate()
@@ -35,6 +36,10 @@ export class TablePageComponent implements OnInit {
     this.submitted = false;
     this.candidateDialog = true;
 }
-  
+//added a logout button for table page
+  logOut(){
+    localStorage.removeItem("Jwt");
+    this.router.navigate([""])
+  }
 
 }

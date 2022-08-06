@@ -1,7 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; 
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +24,11 @@ import {FileUploadModule} from 'primeng/fileupload';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 import {DialogModule} from 'primeng/dialog';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+
+export function tokenGetter(){
+  return localStorage.getItem("Jwt")
+}
 
 @NgModule({
   declarations: [
@@ -31,7 +37,8 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
     TablePageComponent,
     TableNewEntryPageComponent,
     ResetPasswordPageComponent,
-    NewTechnologyComponent
+    NewTechnologyComponent,
+    RegisterPageComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +57,12 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
     ToolbarModule,
     FileUploadModule,
     DialogModule,
-
+    JwtModule.forRoot({
+      config: {
+        tokenGetter : tokenGetter,
+        allowedDomains: ["localhost:7241"]
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

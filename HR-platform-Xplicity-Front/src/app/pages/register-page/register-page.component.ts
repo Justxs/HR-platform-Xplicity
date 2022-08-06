@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register-page',
+  templateUrl: './register-page.component.html',
+  styleUrls: ['./register-page.component.css']
 })
-export class LoginComponent {
-  
-invalidLogin: boolean | undefined;
+export class RegisterPageComponent {
+
+  invalidLogin: boolean | undefined;
 
 constructor(private router: Router, private http: HttpClient){}
 
@@ -19,7 +19,7 @@ login(form: NgForm){
     'email': form.value.email,
     'password': form.value.password
   }
-  this.http.post("https://localhost:7241/api/auth/login", credentials)
+  this.http.post("https://localhost:7241/api/auth/register", credentials)
     .subscribe(response =>{
       const token = (<any>response).token;
       localStorage.setItem("Jwt", token);
