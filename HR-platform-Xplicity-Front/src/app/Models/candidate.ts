@@ -1,4 +1,5 @@
-import { Technology } from "./technology";
+import { Technology } from './technology';
+import { CallDate } from './callDate';
 
 export class Candidate {
     id: number;
@@ -7,9 +8,12 @@ export class Candidate {
     linkedIn: string;
     comment: string;
     technologies: Technology[];
-    datesOfPastCalls: Date[];
+    callDates: CallDate[];
     dateOfFutureCall: Date;
     openForSuggestions: boolean;
+
+    technologyDisplay: string = "";
+    datesOfPastCallsDisplay: string = "";
 
     constructor() {
         this.id = 0;
@@ -18,8 +22,9 @@ export class Candidate {
         this.linkedIn = "";
         this.comment= "";
         this.technologies = [];
-        this.datesOfPastCalls = [];
+        this.callDates = [];
         this.dateOfFutureCall = new Date();
         this.openForSuggestions = false;
     }
+    
 }

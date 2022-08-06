@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +18,11 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import {TableModule} from 'primeng/table';
+import {ToolbarModule} from 'primeng/toolbar';
+import {FileUploadModule} from 'primeng/fileupload';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
+import {DialogModule} from 'primeng/dialog';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,11 @@ import { NewTechnologyComponent } from './pages/new-technology/new-technology.co
     InputTextareaModule,
     MultiSelectModule,
     TableModule,
-    HttpClientModule
+    HttpClientModule,
+    ToolbarModule,
+    FileUploadModule,
+    DialogModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

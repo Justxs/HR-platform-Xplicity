@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Candidate } from '../Models/candidate';
+import { CallDate } from '../Models/callDate';
 
 
 @Injectable({
@@ -17,9 +18,17 @@ export class CandidateService {
   public createCandidate(candidate: Candidate): Observable<Candidate[]> {
     return this.http.post<Candidate[]>(this.candidateApi, candidate);
   }
-  
+  public initCandidateTech(Candidates: Candidate[]){
+    Candidates.forEach(candidate => {
+      candidate.technologyDisplay = candidate.technologies.map(t => t.title).join(", ");
+      candidate.datesOfPastCallsDisplay = candidate.callDates.map(t => t.date).join("; ");
+    })
+  }
 
   public getCandidate() : Observable<Candidate[]> {
-    return this.http.get<Candidate[]>(this.candidateApi);
+    return this.http.get<Candidate[]>(this.candidateApi).pipe(
+      tap(candidates => this.initCandidateTech(candidates))
+    );
   }
+
 }

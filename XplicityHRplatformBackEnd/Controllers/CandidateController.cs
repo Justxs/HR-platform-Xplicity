@@ -22,7 +22,6 @@ namespace XplicityHRplatformBackEnd.Controllers
         [HttpGet]
         public IEnumerable<CandidateDto> Get()
         {
- 
             var response = _dbContext.Candidates.ToList();
             var candidates = new List<CandidateDto>();
             foreach (var candidate in response)
