@@ -9,50 +9,37 @@ namespace XplicityHRplatformBackEnd.Controllers
     [ApiController]
     public class TechnologyController : ControllerBase
     {
-        private readonly HRplatformDbContext _context;
-        public TechnologyController(HRplatformDbContext context)
+        private readonly DatabaseUtilities _dataUtilities;
+        private readonly HRplatformDbContext _dbContext;
+
+        public TechnologyController(DatabaseUtilities context, HRplatformDbContext dbContext)
         {
-            _context = context;
+            _dataUtilities = context;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Technology>>> GetAllTechnologies()
+        public async Task<List<Technology>> GetAllTechnologies()
         {
-            return await _context.Technologies.ToListAsync();
-        }
-
-        [Route("{technologyId}")]
-        [HttpGet]
-        public async Task<List<Technology>> GetTechnologyAsync(int technologyId)
-        {
-            var technologies = await _context.Technologies
-                .Where(t => t.Id == technologyId)
-                .ToListAsync();
-
-            return technologies;
+            return await _dataUtilities.GetAll(_dbContext.Technologies);
         }
 
         [HttpPost]
 
-        public async Task<List<Technology>> CreateTechnology([FromBody] CreateTechnologyDto request)
+        public async Task<StatusCodeResult> CreateTechnology([FromBody] Technology request)
         {
-            var tech = await _context.Technologies.Where(t => t.Title == request.Title).FirstOrDefaultAsync();
+            if (request == null) return Ok();
+            var tech = await _dbContext.Technologies.Where(t => t.Title == request.Title).FirstOrDefaultAsync();
             if (tech != null)
-                return await GetTechnologyAsync(tech.Id);
-
-            var newTechnology = new Technology
             {
-                Title = request.Title,
-            };
+                return Ok();
+            }
 
-            _context.Technologies.Add(newTechnology);
-            await _context.SaveChangesAsync();
-        
-            var newTechnologyId = (await _context.Technologies.Where(t => t.Title == request.Title).FirstOrDefaultAsync()).Id;
-        
-            return await GetTechnologyAsync(newTechnologyId);
+            if (await _dataUtilities.AddEntry(_dbContext.Technologies, request) != null)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
-
-
     }
 }

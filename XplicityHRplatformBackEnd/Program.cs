@@ -12,17 +12,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-builder.Services.AddDbContext<HRplatformDbContext>
-    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
-var app = builder.Build();
+builder.Services.AddScoped<DatabaseUtilities>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+        .AddEntityFrameworkStores<HRplatformDbContext>();
+builder.Services.AddMvc();
+builder.Services.AddDbContext<HRplatformDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
 void CondifureServices(IServiceCollection services)
 {
+    services.AddMvc();
     services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<HRplatformDbContext>();
-
 }
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -38,3 +41,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static void ApplyMigrations(IHost host)
+{
+    using var scope = host.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var databaseUtilities = services.GetRequiredService<DatabaseUtilities>();
+    databaseUtilities.EnsureDatabaseCreated().Wait();
+}
