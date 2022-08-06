@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using XplicityHRplatformBackEnd.DB;
 using XplicityHRplatformBackEnd.Models;
 
@@ -19,61 +20,98 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Candidate> Get()
+        public IEnumerable<CandidateDto> Get()
         {
-            var TechnologyIds = _dbContext.CandidateTechnologies.Select(c => c.CandidateId).ToList();
-            var response = _dbContext.Candidates.Where(c => TechnologyIds.Contains(c.Id)).ToList();
-            return response;
+ 
+            var response = _dbContext.Candidates.ToList();
+            var candidates = new List<CandidateDto>();
+            foreach (var candidate in response)
+            {
+                List<Guid> technologyIds =_dbContext.CandidateTechnologies
+                    .Where(t => t.CandidateId == candidate.Id)
+                    .Select(t => t.TechnologyId)
+                    .ToList();
+                var technologies = new List<string>();
+                foreach (var technologyId in technologyIds)
+                {
+                      var technology = _dbContext.Technologies
+                     .Where(t => t.Id == technologyId)
+                     .Select(te => te.Title)
+                     .FirstOrDefault();
+                    technologies.Add(technology);
+                }
+
+                List<Guid> CallDateIds = _dbContext.CandidateCalldates
+                    .Where(t => t.CandidateId == candidate.Id)
+                    .Select(t => t.CallDateId)
+                    .ToList();
+                var callDates = new List<string>();
+                foreach (var callDateId in CallDateIds)
+                {
+                    var callDate = _dbContext.Calldates
+                   .Where(c => c.Id == callDateId)
+                   .Select(c => c.DateOfCall)
+                   .FirstOrDefault();
+                    callDates.Add(callDate);
+                }
+                var newCandidate = new CandidateDto()
+                {
+                    FirstName = candidate.FirstName,
+                    LastName = candidate.LastName,
+                    LinkedIn = candidate.LinkedIn,
+                    Comment = candidate.Comment,
+                    OpenForSuggestions = candidate.OpenForSuggestions,
+                    DateOfFutureCall = candidate.DateOfFutureCall,
+                    DatesOfPastCalls = callDates.ToArray(),
+                    Technologies = technologies.ToArray()
+                };
+                candidates.Add(newCandidate);
+            }
+            return candidates;
         }
     
         [HttpPost]
-        public async Task<ActionResult> AddCandidate([FromBody] CandidateDto candidate)
+        public async Task<StatusCodeResult> AddCandidate([FromBody] CandidateDto request)
         {
-            var character = await _context.Characters
-                .Where(c => c.Id == request.CharacterId)
-                .Include(c => c.Skills)
-                .FirstOrDefaultAsync();
-
             var newCandidate = new Candidate
             {
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                LinkedIn = candidate.LinkedIn,
-                Comment = candidate.Comment,
-                OpenForSuggestions = candidate.OpenForSuggestions,
-                DateOfFutureCall = candidate.DateOfFutureCall,
-
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                LinkedIn = request.LinkedIn,
+                Comment = request.Comment,
+                OpenForSuggestions = request.OpenForSuggestions,
+                DateOfFutureCall = request.DateOfFutureCall,
             };
+            Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
 
-            _context.Characters.Add(newCharacter);
-            await _context.SaveChangesAsync();
+            foreach (string date in request.DatesOfPastCalls)
+            {
+                var callDate = await _dbContext.Calldates
+                    .Where(c => c.DateOfCall == date)
+                    .SingleOrDefaultAsync();
+                if (callDate != null)
+                {
+                    CandidateCallDate candidateCall1 = new CandidateCallDate() { CallDateId = callDate.Id, CandidateId = newCandidateId };
+                    Guid candidateCalldateId1 = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall1);
+                    continue;
+                }
+                var newCallDate = new CallDate() { DateOfCall = date };
+                Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, newCallDate);
 
-            return await Get(newCharacter.UserId);
+                CandidateCallDate candidateCall = new CandidateCallDate() { CallDateId = newId, CandidateId = newCandidateId};
+                Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
+            }
 
+            var technologies = new List<Technology>();
+            foreach (string tech in request.Technologies)
+            {
+                Technology technology = _dbContext.Technologies
+                    .Where(t => t.Title == tech)
+                    .SingleOrDefault();
+                CandidateTechnology candidateTechnology = new CandidateTechnology() { TechnologyId = technology.Id, CandidateId = newCandidateId };
+                Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateTechnologies, candidateTechnology);
+            }
+            return Ok();
         }
-        [HttpPost("addCity")]
-        public async Task<ActionResult<Character>> AddCharacterSkill(AddCharacterSkillDto request)
-        {
-            var character = await _context.Characters
-                .Where(c => c.Id == request.CharacterId)
-                .Include(c => c.Skills)
-                .FirstOrDefaultAsync();
-            if (character == null)
-                return NotFound();
-
-            var skill = await _context.Skills.FindAsync(request.SkillId);
-            if (skill == null)
-                return NotFound();
-
-            character.Skills.Add(skill);
-            await _context.SaveChangesAsync();
-
-            return character;
-        }
-
-
-
-
-
     }
 }

@@ -2,7 +2,7 @@
 {
     public class CandidateCallDate : BaseEntity
     {
-        public Guid CAndidateId { get; set; }
+        public Guid CandidateId { get; set; }
         public Guid CallDateId { get; set; }
 
     }

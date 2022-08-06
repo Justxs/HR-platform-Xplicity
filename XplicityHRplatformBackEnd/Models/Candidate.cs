@@ -11,8 +11,6 @@ namespace XplicityHRplatformBackEnd.Models
         public string Comment { get; set; } = string.Empty;  
         public string DateOfFutureCall { get; set; } = string.Empty;
         public bool OpenForSuggestions { get; set; } = false;
-        [JsonIgnore]
-        //public List<CallDate> CAget; set; }
 
     }
 }
