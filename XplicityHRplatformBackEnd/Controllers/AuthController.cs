@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +14,6 @@ namespace XplicityHRplatformBackEnd.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-         private IConfiguration _config;
         private readonly HRplatformDbContext _dbContext;
 
         public AuthController(HRplatformDbContext dbContext)
@@ -33,24 +33,12 @@ namespace XplicityHRplatformBackEnd.Controllers
             }
             if (user != null)
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"));
-                var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha512);
-
-                var tokenOptions = new JwtSecurityToken(
-                    issuer: "https://localhost:7241",
-                    audience: "https://localhost:7241",
-                    claims: new List<Claim>(),
-                    expires: DateTime.Now.AddMinutes(120),
-                    signingCredentials: signingCredentials
-                    );
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(GenerateJWT(user));
                 return Ok(new { Token = tokenString });
             }
 
             return Unauthorized();
         }
-
         [HttpPost, Route("register")]
         public IActionResult Register([FromBody] User userRegister)
         {
@@ -66,24 +54,30 @@ namespace XplicityHRplatformBackEnd.Controllers
                 };
                 _dbContext.users.Add(user);
                 _dbContext.SaveChanges();
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"));
-                var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha512);
 
-                var tokenOptions = new JwtSecurityToken(
-                    issuer: "https://localhost:7241",
-                    audience: "https://localhost:7241",
-                    claims: new List<Claim>(),
-                    expires: DateTime.Now.AddMinutes(120),
-                    signingCredentials: signingCredentials
-                    );
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(GenerateJWT(user));
                 return Ok(new { Token = tokenString });
             }
             else
             {
                 return BadRequest("User already exists");
             }
+        }
+
+        private JwtSecurityToken GenerateJWT(User login)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"));
+            var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha512);
+
+            var tokenOptions = new JwtSecurityToken(
+                issuer: "https://localhost:7241",
+                audience: "https://localhost:7241",
+                claims: new List<Claim>(),
+                expires: DateTime.Now.AddMinutes(120),
+                signingCredentials: signingCredentials
+                );
+
+            return tokenOptions;
         }
 
         private User AuthenticateUser(User login)
