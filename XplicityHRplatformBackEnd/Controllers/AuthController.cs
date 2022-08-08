@@ -64,6 +64,25 @@ namespace XplicityHRplatformBackEnd.Controllers
             }
         }
 
+        [HttpDelete, Route("delete")]
+        public IActionResult Delete([FromBody] User user)
+        {
+            var userExist = _dbContext.users.Any(x => x.Email == user.Email);
+            if (!userExist)
+            {
+                return BadRequest("User does not exists");
+            }
+            if (userExist)
+            {
+                _dbContext.users.Remove(user);
+                _dbContext.SaveChanges();
+                return Ok("User removed");
+            }
+            return Unauthorized();
+        }
+
+
+
         private JwtSecurityToken GenerateJWT(User login)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"));

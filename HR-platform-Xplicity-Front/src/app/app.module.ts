@@ -23,6 +23,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 import {DialogModule} from 'primeng/dialog';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import {MenubarModule} from 'primeng/menubar';
 
 export function tokenGetter() {
   return localStorage.getItem("Jwt")
@@ -55,7 +56,7 @@ export function tokenGetter() {
     ToolbarModule,
     FileUploadModule,
     DialogModule,
-    ConfirmDialogModule,
+    MenubarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
