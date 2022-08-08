@@ -1,13 +1,13 @@
 <img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="Xplicity logo">
 <h1 style="text-align: center;">Kandidatų duombazė</h1>
 <div class="center-box"style="padding: 2%;">
-    <p-toolbar styleClass="mb-4">
+    <p-toolbar>
         <ng-template pTemplate="left">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-            <button pButton pRipple label="Logout" class="mr-2 inline-block" (click)="logOut()"></button>
+            <button style="margin-left: 10px;" pButton pRipple label="Logout" class="mr-2 inline-block" (click)="logOut()"></button>
         </ng-template>
     </p-toolbar>
 
