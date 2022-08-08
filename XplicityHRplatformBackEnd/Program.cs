@@ -1,8 +1,10 @@
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using XplicityHRplatformBackEnd.DB;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+
 
 builder.Services.AddScoped<DatabaseUtilities>();
 builder.Services.AddMvc();
@@ -44,6 +47,10 @@ void CondifureServices(IServiceCollection services)
 
     services.AddMvc();
 }
+
+builder.Services.AddDbContext<HRplatformDbContext>
+    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

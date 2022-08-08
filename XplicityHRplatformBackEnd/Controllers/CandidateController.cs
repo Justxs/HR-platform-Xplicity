@@ -68,7 +68,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             }
             return candidates;
         }
-    
+
         [HttpPost]
         public async Task<StatusCodeResult> AddCandidate([FromBody] CandidateDto request)
         {

@@ -4,6 +4,7 @@ using XplicityHRplatformBackEnd.Models;
 
 namespace XplicityHRplatformBackEnd.DB
 {
+
     public class HRplatformDbContext : IdentityDbContext<User>
     {
         //public HRplatformDbContext(DbContextOptions<HRplatformDbContext> options) : base(options) { }
