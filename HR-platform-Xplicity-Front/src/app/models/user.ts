@@ -1,5 +1,10 @@
 export class User {
-    id: number = 0;
-    email: string = '';
-    password: string = '';
+    email: string;
+    password: string;
+
+    constructor()
+    {
+        this.email = "";
+        this.password = "";
+    }
 }

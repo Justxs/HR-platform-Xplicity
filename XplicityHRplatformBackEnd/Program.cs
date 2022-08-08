@@ -1,3 +1,9 @@
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using XplicityHRplatformBackEnd.DB;
 
@@ -11,6 +17,37 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
+
+builder.Services.AddScoped<DatabaseUtilities>();
+builder.Services.AddMvc();
+builder.Services.AddDbContext<HRplatformDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
+
+void CondifureServices(IServiceCollection services)
+{
+
+    services.AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = "https://localhost:7241",
+            ValidAudience = "https://localhost:7241",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"))
+        };
+    });
+
+    services.AddMvc();
+}
+
 builder.Services.AddDbContext<HRplatformDbContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
@@ -23,10 +60,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true));
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+static void ApplyMigrations(IHost host)
+{
+    using var scope = host.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var databaseUtilities = services.GetRequiredService<DatabaseUtilities>();
+    databaseUtilities.EnsureDatabaseCreated().Wait();
+}

@@ -1,28 +1,94 @@
+<img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="Xplicity logo">
+<h1 style="text-align: center;">Kandidatų duombazė</h1>
+<div class="center-box"style="padding: 2%;">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+            <button pButton pRipple label="Logout" class="mr-2 inline-block" (click)="logOut()"></button>
+        </ng-template>
+    </p-toolbar>
 
-<h1>table-page works!</h1>
-<p-table [value]="candidates" styleClass="p-datatable-gridlines">
+    <p-table [value]="candidates" styleClass="p-datatable-sm" styleClass="p-datatable-striped" 
+    [paginator]="true" 
+    [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+    [rowsPerPageOptions]="[10,25,50]">
     <ng-template  pTemplate="header">
         <tr>
             <th>Kada buvo paskutini kartą susisiekta?</th>
-            <th>Vardas</th>
-            <th>Pavardė</th>
+            <th>
+                Vardas
+                <p-columnFilter type="text" field="firstName" display="menu" placeholder="Vardas"
+                [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"></p-columnFilter>
+            </th>
+            <th>
+                Pavardė
+                <p-columnFilter type="text" field="lastName" display="menu" placeholder="Pavardė"
+                [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"></p-columnFilter>
+            </th>
             <th>LinkedIn nuoroda</th>
             <th>Komentaras</th>
-            <th>Technologijos</th>
+            <th>
+                Technologijos
+                <p-columnFilter field="technologies" matchMode="in"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                    <ng-template pTemplate="header">
+                        <div style="padding: 10px; font-weight: bold;">
+                            Technologijos
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)" optionLabel="name">
+                            <ng-template let-option pTemplate="item">
+                                <div>
+                                    <span >{{option.technologies.title}}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
             <th>Kada reikia susisiekti?</th>
-            <th>Atviras pasiūlymams?</th>
+            <th style="width: 8rem">
+                <div >
+                    Atviras pasiūlymams? 
+                    <div style="padding: 5px;">
+                        <p-columnFilter type="boolean" field="openForSuggestions"></p-columnFilter>
+                    </div>
+                </div>
+            </th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-candidate>
         <tr>
-            <td>{{candidate.dateOfPastCalls}}</td>
+            <td>{{candidate.datesOfPastCallsDisplay}}</td>
             <td>{{candidate.firstName}}</td>
             <td>{{candidate.lastName}}</td>
             <td>{{candidate.linkedIn}}</td>
             <td>{{candidate.comment}}</td>
-            <td>{{candidate.technologies}}</td>
+            <td>{{candidate.technologyDisplay}}</td>
             <td>{{candidate.dateOfFutureCall}}</td>
-            <td>{{candidate.openForSuggestions}}</td>
+            <td style="width: 8rem">
+                <i class="pi" [ngClass]="{'true-icon pi-check-circle': candidate.openForSuggestions, 'false-icon pi-times-circle': !candidate.openForSuggestions}"></i>
+            </td>
+            <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="{}"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="{}"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="9"><h1 style="text-align: Center;">Nėra duomenų :(</h1></td>
         </tr>
     </ng-template>
 </p-table>
+</div>
+<p-dialog [(visible)]="candidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        
+    </ng-template>
+</p-dialog>

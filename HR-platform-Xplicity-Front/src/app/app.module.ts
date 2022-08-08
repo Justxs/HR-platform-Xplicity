@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; 
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +19,16 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import {TableModule} from 'primeng/table';
+import {ToolbarModule} from 'primeng/toolbar';
+import {FileUploadModule} from 'primeng/fileupload';
+import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
+import {DialogModule} from 'primeng/dialog';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+
+export function tokenGetter(){
+  return localStorage.getItem("Jwt")
+}
 
 @NgModule({
   declarations: [
@@ -25,7 +36,9 @@ import {TableModule} from 'primeng/table';
     LoginComponent,
     TablePageComponent,
     TableNewEntryPageComponent,
-    ResetPasswordPageComponent
+    ResetPasswordPageComponent,
+    NewTechnologyComponent,
+    RegisterPageComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +53,16 @@ import {TableModule} from 'primeng/table';
     InputTextareaModule,
     MultiSelectModule,
     TableModule,
-    HttpClientModule
+    HttpClientModule,
+    ToolbarModule,
+    FileUploadModule,
+    DialogModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter : tokenGetter,
+        allowedDomains: ["localhost:7241"]
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
