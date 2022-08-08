@@ -30,12 +30,12 @@ namespace XplicityHRplatformBackEnd.Controllers
                     .Where(t => t.CandidateId == candidate.Id)
                     .Select(t => t.TechnologyId)
                     .ToList();
-                var technologies = new List<string>();
+                var technologies = new List<Technology>();
                 foreach (var technologyId in technologyIds)
                 {
                       var technology = _dbContext.Technologies
                      .Where(t => t.Id == technologyId)
-                     .Select(te => te.Title)
+                     .Select(te => te)
                      .FirstOrDefault();
                     technologies.Add(technology);
                 }
@@ -44,12 +44,12 @@ namespace XplicityHRplatformBackEnd.Controllers
                     .Where(t => t.CandidateId == candidate.Id)
                     .Select(t => t.CallDateId)
                     .ToList();
-                var callDates = new List<string>();
+                var callDates = new List<CallDate>();
                 foreach (var callDateId in CallDateIds)
                 {
                     var callDate = _dbContext.Calldates
                    .Where(c => c.Id == callDateId)
-                   .Select(c => c.DateOfCall)
+                   .Select(c => c)
                    .FirstOrDefault();
                     callDates.Add(callDate);
                 }
@@ -79,14 +79,14 @@ namespace XplicityHRplatformBackEnd.Controllers
                 LinkedIn = request.LinkedIn,
                 Comment = request.Comment,
                 OpenForSuggestions = request.OpenForSuggestions,
-                DateOfFutureCall = request.DateOfFutureCall,
+                DateOfFutureCall = request.DateOfFutureCall
             };
             Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
 
-            foreach (string date in request.DatesOfPastCalls)
+            foreach (CallDate date in request.DatesOfPastCalls)
             {
                 var callDate = await _dbContext.Calldates
-                    .Where(c => c.DateOfCall == date)
+                    .Where(c => c.DateOfCall == date.DateOfCall)
                     .SingleOrDefaultAsync();
                 if (callDate != null)
                 {
@@ -94,20 +94,17 @@ namespace XplicityHRplatformBackEnd.Controllers
                     Guid candidateCalldateId1 = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall1);
                     continue;
                 }
-                var newCallDate = new CallDate() { DateOfCall = date };
-                Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, newCallDate);
+               
+                Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, date);
 
                 CandidateCallDate candidateCall = new CandidateCallDate() { CallDateId = newId, CandidateId = newCandidateId};
                 Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
             }
 
             var technologies = new List<Technology>();
-            foreach (string tech in request.Technologies)
+            foreach (Technology tech in request.Technologies)
             {
-                Technology technology = _dbContext.Technologies
-                    .Where(t => t.Title == tech)
-                    .SingleOrDefault();
-                CandidateTechnology candidateTechnology = new CandidateTechnology() { TechnologyId = technology.Id, CandidateId = newCandidateId };
+                CandidateTechnology candidateTechnology = new CandidateTechnology() { TechnologyId = tech.Id, CandidateId = newCandidateId };
                 Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateTechnologies, candidateTechnology);
             }
             return Ok();

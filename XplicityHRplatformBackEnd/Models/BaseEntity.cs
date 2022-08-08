@@ -7,7 +7,7 @@ namespace XplicityHRplatformBackEnd.Models
 	public abstract class BaseEntity
 	{
 		[Key]
-		[JsonIgnore]
+		//[JsonIgnore]
 		public Guid Id { get; set; }
 
 		[JsonIgnore]

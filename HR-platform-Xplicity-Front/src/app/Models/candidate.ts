@@ -8,12 +8,12 @@ export class Candidate {
     linkedIn: string;
     comment: string;
     technologies: Technology[];
-    callDates: CallDate[];
+    pastCallDates: CallDate[];
     dateOfFutureCall: Date;
     openForSuggestions: boolean;
 
-    technologyDisplay: string = "";
-    datesOfPastCallsDisplay: string = "";
+    technologyDisplay?: string;
+    datesOfPastCallsDisplay?: string;
 
     constructor() {
         this.id = 0;
@@ -22,7 +22,7 @@ export class Candidate {
         this.linkedIn = "";
         this.comment= "";
         this.technologies = [];
-        this.callDates = [];
+        this.pastCallDates = [];
         this.dateOfFutureCall = new Date();
         this.openForSuggestions = false;
     }

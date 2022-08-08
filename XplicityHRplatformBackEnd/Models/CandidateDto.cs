@@ -8,9 +8,9 @@ namespace XplicityHRplatformBackEnd.Models
         public string LastName { get; set; } = string.Empty;
         public string LinkedIn { get; set; } = string.Empty;
         public string Comment { get; set; } = string.Empty;
-        public string[] DatesOfPastCalls { get; set; } = new string[] { };
-        public string[] Technologies { get; set; } = new string[] { };
-        public string DateOfFutureCall { get; set; } = string.Empty;
+        public CallDate[] DatesOfPastCalls { get; set; } = new CallDate[] { };
+        public Technology[] Technologies { get; set; } = new Technology[] { };
+        public string DateOfFutureCall { get; set; } = String.Empty;
         public bool OpenForSuggestions { get; set; } = false;
     }
 }

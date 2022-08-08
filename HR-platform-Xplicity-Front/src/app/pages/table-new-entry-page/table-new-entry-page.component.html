@@ -26,14 +26,14 @@
         </div>
     </div>
     <div class="margin">
-        <p-calendar [readonlyInput]="true" [showIcon]="true" name="contactDate" placeholder="Kada reikia susisiekti" [(ngModel)]="value" #contactInput="ngModel"></p-calendar>
+        <p-calendar [readonlyInput]="true" [showIcon]="true" name="contactDate" placeholder="Kada reikia susisiekti" [(ngModel)]="candidate.dateOfFutureCall" #contactInput="ngModel"></p-calendar>
         <div *ngIf="contactInput.invalid && (contactInput.dirty || contactInput.touched)" class="error">
             <p *ngIf="contactInput.errors?.['required']">Privaloma pasirinkti susisiekimo datą.</p>
         </div>
         <div class="margin">
         <p-calendar selectionMode="multiple" [readonlyInput]="true" [showIcon]="true" 
         name="contactedDates" 
-        [(ngModel)]="candidate.callDates"
+        [(ngModel)]="dates"
         placeholder="Kada buvo susisiekta"></p-calendar>
     </div>
         <div class="field-checkbox">

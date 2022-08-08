@@ -20,8 +20,8 @@ export class CandidateService {
   }
   public initCandidateTech(Candidates: Candidate[]){
     Candidates.forEach(candidate => {
-      candidate.technologyDisplay = candidate.technologies.map(t => t.title).join(", ");
-      candidate.datesOfPastCallsDisplay = candidate.callDates.map(t => t.date).join("; ");
+      candidate.technologyDisplay = candidate.technologies.map(t => t).join(", ");
+      candidate.datesOfPastCallsDisplay = candidate.pastCallDates.map(t => t.dateOfCall).join("; ");
     })
   }
 
