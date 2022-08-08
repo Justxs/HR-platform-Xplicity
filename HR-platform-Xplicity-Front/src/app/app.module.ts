@@ -8,24 +8,23 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { TablePageComponent } from './pages/table-page/table-page.component';
 import { TableNewEntryPageComponent } from './pages/table-new-entry-page/table-new-entry-page.component';
-import {ButtonModule} from "primeng/button";
-import {CalendarModule} from 'primeng/calendar';
-import {InputTextModule} from 'primeng/inputtext';
-import {InputMaskModule} from 'primeng/inputmask';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {CheckboxModule} from 'primeng/checkbox';
-import {InputTextareaModule} from 'primeng/inputtextarea';
-import {MultiSelectModule} from 'primeng/multiselect';
+import { ButtonModule } from "primeng/button";
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
-import {TableModule} from 'primeng/table';
-import {ToolbarModule} from 'primeng/toolbar';
-import {FileUploadModule} from 'primeng/fileupload';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { FileUploadModule } from 'primeng/fileupload';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 import {DialogModule} from 'primeng/dialog';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 
-export function tokenGetter(){
+export function tokenGetter() {
   return localStorage.getItem("Jwt")
 }
 
@@ -56,6 +55,7 @@ export function tokenGetter(){
     ToolbarModule,
     FileUploadModule,
     DialogModule,
+    ConfirmDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

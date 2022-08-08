@@ -14,7 +14,7 @@ export class RegisterPageComponent {
 
 constructor(private router: Router, private http: HttpClient){}
 
-login(form: NgForm){
+register(form: NgForm){
   const credentials = {
     'email': form.value.email,
     'password': form.value.password

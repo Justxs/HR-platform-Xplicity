@@ -1,7 +1,6 @@
 <div class="center">
     <img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="">
-    <form class="form-signin" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
-
+    <form class="form-signin" #registerForm="ngForm" (ngSubmit)="register(registerForm)">
         <div class="center-box">
             <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password</div>
             <br>

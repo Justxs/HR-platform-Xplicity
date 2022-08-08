@@ -6,6 +6,9 @@ import { Technology } from 'src/app/Models/technology';
 import { CandidateService } from 'src/app/Services/candidate.service';
 import { TechnologyService } from 'src/app/Services/technology.service';
 
+
+type NewType = Candidate;
+
 @Component({
   selector: 'app-table-new-entry-page',
   templateUrl: './table-new-entry-page.component.html',
@@ -13,7 +16,7 @@ import { TechnologyService } from 'src/app/Services/technology.service';
   ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() candidate: Candidate = new Candidate;
+  @Input() candidate: NewType = new Candidate;
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies: Technology[] = [];
@@ -29,7 +32,7 @@ export class TableNewEntryPageComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    //form.resetForm();
+    // form.resetForm();
   }
 
   ngOnInit(): void { }
