@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace XplicityHRplatformBackEnd.Migrations
 {
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,9 +28,10 @@ namespace XplicityHRplatformBackEnd.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -49,37 +50,75 @@ namespace XplicityHRplatformBackEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "candidates",
+                name: "Calldates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateOfCall = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Calldates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CandidateCalldates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CallDateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CandidateCalldates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Candidates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LinkedIn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Technologies = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfPastCalls = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfFutureCall = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OpenForSuggestions = table.Column<bool>(type: "bit", nullable: false)
+                    OpenForSuggestions = table.Column<bool>(type: "bit", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_candidates", x => x.Id);
+                    table.PrimaryKey("PK_Candidates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "users",
+                name: "CandidateTechnologies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TechnologyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.Id);
+                    table.PrimaryKey("PK_CandidateTechnologies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Technologies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Technologies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -246,10 +285,19 @@ namespace XplicityHRplatformBackEnd.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "candidates");
+                name: "Calldates");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "CandidateCalldates");
+
+            migrationBuilder.DropTable(
+                name: "Candidates");
+
+            migrationBuilder.DropTable(
+                name: "CandidateTechnologies");
+
+            migrationBuilder.DropTable(
+                name: "Technologies");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

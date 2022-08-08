@@ -12,8 +12,8 @@ using XplicityHRplatformBackEnd.DB;
 namespace XplicityHRplatformBackEnd.Migrations
 {
     [DbContext(typeof(HRplatformDbContext))]
-    [Migration("20220806162807_newMigration")]
-    partial class newMigration
+    [Migration("20220808075036_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
