@@ -7,7 +7,6 @@ import { TablePageComponent } from './pages/table-page/table-page.component';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
-import { AuthGuard } from './guards/auth-guard.service';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},

@@ -253,268 +253,270 @@ namespace XplicityHRplatformBackEnd.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DateOfFutureCall")
+                    b.Property<string>("DateOfFutureCall");
 
-            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Candidate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Candidate", b =>
+                        {
+                            b.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("Comment")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DateOfFutureCall")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("DateOfFutureCall")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DateOfPastCalls")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("DateOfPastCalls")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("LastName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LinkedIn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("LinkedIn")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("OpenForSuggestions")
-                        .HasColumnType("bit");
+                            b.Property<bool>("OpenForSuggestions")
+                                .HasColumnType("bit");
 
 
-                    b.HasKey("Id");
+                            b.HasKey("Id");
 
-                    b.ToTable("Candidates");
-                });
+                            b.ToTable("Candidates");
+                        });
 
-            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CandidateCallDate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CandidateCallDate", b =>
+                        {
+                            b.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CallDateId")
-                        .HasColumnType("uniqueidentifier");
+                            b.Property<Guid>("CallDateId")
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CandidateId")
-                        .HasColumnType("uniqueidentifier");
+                            b.Property<Guid>("CandidateId")
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                            b.Property<DateTime>("Date")
+                                .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                            b.HasKey("Id");
 
-                    b.ToTable("CandidateCalldates");
-                });
+                            b.ToTable("CandidateCalldates");
+                        });
 
-            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CandidateTechnology", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    modelBuilder.Entity("XplicityHRplatformBackEnd.Models.CandidateTechnology", b =>
+                        {
+                            b.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CandidateId")
-                        .HasColumnType("uniqueidentifier");
+                            b.Property<Guid>("CandidateId")
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                            b.Property<DateTime>("Date")
+                                .HasColumnType("datetime2");
 
-                    b.Property<Guid>("TechnologyId")
-                        .HasColumnType("uniqueidentifier");
+                            b.Property<Guid>("TechnologyId")
+                                .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                            b.HasKey("Id");
 
-                    b.ToTable("CandidateTechnologies");
-                });
+                            b.ToTable("CandidateTechnologies");
+                        });
 
-            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Technology", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    modelBuilder.Entity("XplicityHRplatformBackEnd.Models.Technology", b =>
+                        {
+                            b.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                            b.Property<DateTime>("Date")
+                                .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
+                            b.Property<string>("Title");
 
-                    b.Property<string>("Technologies")
+                            b.Property<string>("Technologies")
 
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                            b.HasKey("Id");
 
-                    b.ToTable("Technologies");
+                            b.ToTable("Technologies");
 
-                    b.ToTable("candidates");
+                            b.ToTable("candidates");
 
-                });
+                        });
 
-            modelBuilder.Entity("XplicityHRplatformBackEnd.Models.User", b =>
-                {
+                    modelBuilder.Entity("XplicityHRplatformBackEnd.Models.User", b =>
+                        {
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                            b.Property<string>("Id")
+                                .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                            b.Property<int>("AccessFailedCount")
+                                .HasColumnType("int");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("ConcurrencyStamp")
+                                .IsConcurrencyToken()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                            b.Property<string>("Email")
+                                .IsRequired()
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                            b.Property<bool>("EmailConfirmed")
+                                .HasColumnType("bit");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                            b.Property<bool>("LockoutEnabled")
+                                .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                            b.Property<DateTimeOffset?>("LockoutEnd")
+                                .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                            b.Property<string>("NormalizedEmail")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                            b.Property<string>("NormalizedUserName")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("Email")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("Password")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("PasswordHash")
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("PhoneNumber")
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                            b.Property<bool>("PhoneNumberConfirmed")
+                                .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("SecurityStamp")
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                            b.Property<bool>("TwoFactorEnabled")
+                                .HasColumnType("bit");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                            b.Property<string>("UserName")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                            b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                            b.HasIndex("NormalizedEmail")
+                                .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                            b.HasIndex("NormalizedUserName")
+                                .IsUnique()
+                                .HasDatabaseName("UserNameIndex")
+                                .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                            b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasKey("Id");
+                            b.HasKey("Id");
 
-                    b.ToTable("users");
+                            b.ToTable("users");
 
-                });
+                        });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                        {
+                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                                .WithMany()
+                                .HasForeignKey("RoleId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
+                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                        {
 
-                    b.HasOne("XplicityHRplatformBackEnd.Models.User", null)
+                            b.HasOne("XplicityHRplatformBackEnd.Models.User", null);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
 
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
+                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                        {
 
-                    b.HasOne("XplicityHRplatformBackEnd.Models.User", null)
+                            b.HasOne("XplicityHRplatformBackEnd.Models.User", null);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
 
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
+                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                        {
+                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                                .WithMany()
+                                .HasForeignKey("RoleId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("XplicityHRplatformBackEnd.Models.User", null)
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                            b.HasOne("XplicityHRplatformBackEnd.Models.User", null);
 
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-                    b.HasOne("XplicityHRplatformBackEnd.Models.User", null)
+                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                        {
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                            b.HasOne("XplicityHRplatformBackEnd.Models.User", null);
 
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 #pragma warning restore 612, 618
+                });
         }
     }
 }
