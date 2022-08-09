@@ -83,7 +83,6 @@ logout(){
 }
 
 myUploader(event: any){
-  /* wire up file reader */
   const target: DataTransfer = <DataTransfer>(event);
   const reader: FileReader = new FileReader();
   reader.onload = (e: any) => {
@@ -94,9 +93,19 @@ myUploader(event: any){
     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
     this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-    console.log(this.data);
+    let json: Candidate[] = [];
+    this.data.forEach( function (value) {
+      if(value[1] == null){
+        return;
+      }
+      json.push(formatJson(value));
+    });
+    json.splice(0, 1);
+    console.log(JSON.stringify(json));
+    
   };
   reader.readAsBinaryString(target.files[0]);
+  
 };
 
 
@@ -130,5 +139,22 @@ delete(form: NgForm){
       }
   })
 }
-  
 }
+
+function formatJson(value: any): Candidate{
+  let JsonCandidate = new Candidate();
+  JsonCandidate.pastCallDates = [{dateOfCall: value[0]}];
+  JsonCandidate.firstName = value[1];
+  JsonCandidate.lastName = value[2];
+  JsonCandidate.linkedIn = value[3];
+  JsonCandidate.comment = value[4];
+  JsonCandidate.technologies = [{title: value[5]}];
+  JsonCandidate.dateOfFutureCall = value[6];
+  if(value[7] == "v"){
+    JsonCandidate.openForSuggestions = true;
+  }else{
+    JsonCandidate.openForSuggestions = false;
+  }
+  return JsonCandidate;
+}
+

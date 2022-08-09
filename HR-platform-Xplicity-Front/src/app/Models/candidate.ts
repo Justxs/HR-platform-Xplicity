@@ -2,7 +2,7 @@ import { Technology } from './technology';
 import { CallDate } from './callDate';
 
 export class Candidate {
-    id: number;
+    id?: number;
     firstName: string;
     lastName: string;
     linkedIn: string;
@@ -16,7 +16,6 @@ export class Candidate {
     datesOfPastCallsDisplay?: string;
 
     constructor() {
-        this.id = 0;
         this.firstName = "";
         this.lastName = "";
         this.linkedIn = "";
