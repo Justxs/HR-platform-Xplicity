@@ -86,7 +86,6 @@ namespace XplicityHRplatformBackEnd.Controllers
                 Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
             }
 
-            var technologies = new List<Technology>();
             foreach (Technology tech in request.Technologies)
             {
                 CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = newCandidateId };
@@ -95,17 +94,92 @@ namespace XplicityHRplatformBackEnd.Controllers
             return Ok();
         }
 
-        //[httpput]
-        //public async task<statuscoderesult> updatecandidate([frombody] candidatedto request)
-        //{
-        //    candidate updatedcandidate = new candidate(request);
+        [HttpPut]
+        public async Task<StatusCodeResult> UpdateCandidate([FromBody] CandidateDto request)
+        {
+            Candidate updatedCandidate = new (request);
+            var candidateCallDates = await _dbContext.CandidateCalldates
+                .Where(cc => cc.CandidateId == request.Id)
+                .ToListAsync();
+            candidateCallDates.ForEach(cc =>
+            {
+                _dbContext.CandidateCalldates.Remove(cc);
+            });
 
-        //    await _dbcontext.candidatetechnologies
-        //        .where(ct => ct.candidateid == updatedcandidate.id)
-        //        .tolistasync();
+            var candidateTechnologies = _dbContext.CandidateTechnologies
+                .Where(ct => ct.CandidateId == request.Id)
+                .ToList();
+            candidateTechnologies.ForEach(ct =>
+            {
+                _dbContext.CandidateTechnologies.Remove(ct);
+            });
 
-        //    await _datautilities.updateentry(_dbcontext.candidatetechnologies, request.technologies);
-        //}
+            _dbContext.Candidates.Update(updatedCandidate);
+
+            foreach (CallDate date in request.PastCallDates)
+            {
+                var callDate = await _dbContext.Calldates
+                    .Where(c => c.DateOfCall == date.DateOfCall)
+                    .SingleOrDefaultAsync();
+                if (callDate != null)
+                { 
+                    CandidateCallDate candidateCallDate = new() { CallDateId = callDate.Id, CandidateId = updatedCandidate.Id };
+                    await _dbContext.CandidateCalldates.AddAsync(candidateCallDate);
+                    continue;
+                }
+
+                await _dbContext.Calldates.AddAsync(date);
+                var newCallDateId = date.Id;
+
+                CandidateCallDate candidateCall = new() { CallDateId = newCallDateId, CandidateId = updatedCandidate.Id };
+                await _dbContext.CandidateCalldates.AddAsync(candidateCall);
+            }
+
+            foreach (Technology tech in request.Technologies)
+            {
+                CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = updatedCandidate.Id };
+                await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology);
+            }
+            
+
+            var saved = false;
+            while (!saved)
+            {
+                try
+                {
+                    // Attempt to save changes to the database
+                    await _dbContext.SaveChangesAsync();
+                    saved = true;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    foreach (var entry in ex.Entries)
+                    {
+                        if (entry.Entity is Candidate)
+                        {
+                            var proposedValues = entry.CurrentValues;
+                            var databaseValues = entry.GetDatabaseValues();
+
+                            foreach (var property in proposedValues.Properties)
+                            {
+                                var proposedValue = proposedValues[property];
+                                var databaseValue = databaseValues[property];
+                            }
+
+                            // Refresh original values to bypass next concurrency check
+                            entry.OriginalValues.SetValues(proposedValues);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException(
+                                "Don't know how to handle concurrency conflicts for "
+                                + entry.Metadata.Name);
+                        }
+                    }
+                }
+            }
+            return Ok();
+        }
 
 
         [HttpDelete]
@@ -113,23 +187,61 @@ namespace XplicityHRplatformBackEnd.Controllers
         public async Task<StatusCodeResult> DeleteCandidate([FromRoute] Guid IdToRemove)
         {
             Candidate candidate = new() { Id = IdToRemove };
-            var candidateCallDates = _dbContext.CandidateCalldates
-                .Where(cc => cc.CandidateId == IdToRemove).ToList();
-
-            candidateCallDates.ForEach(cc =>
+           
+            var candidateCallDates = await _dbContext.CandidateCalldates
+                .Where(cc => cc.CandidateId == IdToRemove)
+                .ToListAsync();
+            candidateCallDates.ForEach( cc =>
             {
-                var success = _dataUtilities.RemoveEntry(_dbContext.CandidateCalldates, cc, true);
+                _dbContext.CandidateCalldates.Remove(cc);
             });
 
             var candidateTechnologies = _dbContext.CandidateTechnologies
-                .Where(ct => ct.CandidateId == IdToRemove).ToList();
-
+                .Where(ct => ct.CandidateId == IdToRemove)
+                .ToList();
             candidateTechnologies.ForEach( ct =>
             {
-                var success = _dataUtilities.RemoveEntry(_dbContext.CandidateTechnologies, ct, true);
+                _dbContext.CandidateTechnologies.Remove(ct);
             });
 
-            var success = await _dataUtilities.RemoveEntry(_dbContext.Candidates, candidate, true);
+            _dbContext.Candidates.Remove(candidate);
+
+            var saved = false;
+            while (!saved)
+            {
+                try
+                {
+                    // Attempt to save changes to the database
+                    await _dbContext.SaveChangesAsync();
+                    saved = true;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    foreach (var entry in ex.Entries)
+                    {
+                        if (entry.Entity is Candidate)
+                        {
+                            var proposedValues = entry.CurrentValues;
+                            var databaseValues = entry.GetDatabaseValues();
+
+                            foreach (var property in proposedValues.Properties)
+                            {
+                                var proposedValue = proposedValues[property];
+                                var databaseValue = databaseValues[property];
+                            }
+
+                            // Refresh original values to bypass next concurrency check
+                            entry.OriginalValues.SetValues(proposedValues);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException(
+                                "Don't know how to handle concurrency conflicts for "
+                                + entry.Metadata.Name);
+                        }
+                    }
+                }
+            }
             return Ok();
         }
     }

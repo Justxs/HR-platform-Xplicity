@@ -62,7 +62,7 @@ export class TablePageComponent implements OnInit {
   }
 
 
-  openNew() {
+openNew() {
     this.submitted = false;
     this.candidateDialog = true;
 }

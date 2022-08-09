@@ -49,10 +49,10 @@ namespace XplicityHRplatformBackEnd.DB
                 var entry = dbSet.Find(entryData.Id);
                 if (entry == null)
                     return false;
-                dbSet.Remove(entry);
-                return await _dbContext.SaveChangesAsync() > 0;
             }
-            return false;
+            dbSet.Remove(entryData);
+            var changes =  await _dbContext.SaveChangesAsync();
+            return changes > 0;
         }
     }
 }
