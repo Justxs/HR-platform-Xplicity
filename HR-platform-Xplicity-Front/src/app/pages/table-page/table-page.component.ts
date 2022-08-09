@@ -1,5 +1,5 @@
 import { Technology } from '../../Models/technology';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
@@ -20,6 +20,7 @@ import { HttpClient } from '@angular/common/http';
 
 })
 export class TablePageComponent implements OnInit {
+  @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
   candidates: Candidate[] = [];
   technologies: Technology[] = [];
   candidateDialog: boolean = false;
@@ -47,6 +48,13 @@ export class TablePageComponent implements OnInit {
         });
         
   }
+  
+  deleteCandidate(candidate: Candidate) {
+    this.candidateService.deleteCandidate(candidate)
+    .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+  }
+
+
   openNew() {
     this.submitted = false;
     this.candidateDialog = true;

@@ -20,51 +20,42 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<CandidateDto> Get()
+        public async Task<IEnumerable<CandidateDto>> Get()
         {
-            var response = _dbContext.Candidates.ToList();
+            var response = await _dbContext.Candidates.ToListAsync();
             var candidates = new List<CandidateDto>();
             foreach (var candidate in response)
             {
-                List<Guid> technologyIds =_dbContext.CandidateTechnologies
+                List<Guid> technologyIds = await _dbContext.CandidateTechnologies
                     .Where(t => t.CandidateId == candidate.Id)
                     .Select(t => t.TechnologyId)
-                    .ToList();
+                    .ToListAsync();
                 var technologies = new List<Technology>();
                 foreach (var technologyId in technologyIds)
                 {
-                      var technology = _dbContext.Technologies
+                      var technology = await _dbContext.Technologies
                      .Where(t => t.Id == technologyId)
                      .Select(te => te)
-                     .FirstOrDefault();
+                     .FirstOrDefaultAsync();
                     technologies.Add(technology);
                 }
 
-                List<Guid> CallDateIds = _dbContext.CandidateCalldates
+                List<Guid> CallDateIds = await _dbContext.CandidateCalldates
                     .Where(t => t.CandidateId == candidate.Id)
                     .Select(t => t.CallDateId)
-                    .ToList();
+                    .ToListAsync();
                 var callDates = new List<CallDate>();
                 foreach (var callDateId in CallDateIds)
                 {
-                    var callDate = _dbContext.Calldates
+                    var callDate = await _dbContext.Calldates
                    .Where(c => c.Id == callDateId)
                    .Select(c => c)
-                   .FirstOrDefault();
+                   .FirstOrDefaultAsync();
                     callDates.Add(callDate);
                 }
-                var newCandidate = new CandidateDto()
-                {
-                    Id = candidate.Id,
-                    FirstName = candidate.FirstName,
-                    LastName = candidate.LastName,
-                    LinkedIn = candidate.LinkedIn,
-                    Comment = candidate.Comment,
-                    OpenForSuggestions = candidate.OpenForSuggestions,
-                    DateOfFutureCall = candidate.DateOfFutureCall,
-                    PastCallDates = callDates.ToArray(),
-                    Technologies = technologies.ToArray()
-                };
+
+                var newCandidate = new CandidateDto(callDates, technologies, candidate);
+
                 candidates.Add(newCandidate);
             }
             return candidates;
@@ -73,15 +64,8 @@ namespace XplicityHRplatformBackEnd.Controllers
         [HttpPost]
         public async Task<StatusCodeResult> AddCandidate([FromBody] CandidateDto request)
         {
-            var newCandidate = new Candidate
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                LinkedIn = request.LinkedIn,
-                Comment = request.Comment,
-                OpenForSuggestions = request.OpenForSuggestions,
-                DateOfFutureCall = request.DateOfFutureCall
-            };
+            var newCandidate = new Candidate(request);
+
             Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
 
             foreach (CallDate date in request.PastCallDates)
@@ -91,23 +75,61 @@ namespace XplicityHRplatformBackEnd.Controllers
                     .SingleOrDefaultAsync();
                 if (callDate != null)
                 {
-                    CandidateCallDate candidateCall1 = new CandidateCallDate() { CallDateId = callDate.Id, CandidateId = newCandidateId };
+                    CandidateCallDate candidateCall1 = new() { CallDateId = callDate.Id, CandidateId = newCandidateId };
                     Guid candidateCalldateId1 = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall1);
                     continue;
                 }
                
                 Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, date);
 
-                CandidateCallDate candidateCall = new CandidateCallDate() { CallDateId = newId, CandidateId = newCandidateId};
+                CandidateCallDate candidateCall = new() { CallDateId = newId, CandidateId = newCandidateId};
                 Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
             }
 
             var technologies = new List<Technology>();
             foreach (Technology tech in request.Technologies)
             {
-                CandidateTechnology candidateTechnology = new CandidateTechnology() { TechnologyId = tech.Id, CandidateId = newCandidateId };
+                CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = newCandidateId };
                 Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateTechnologies, candidateTechnology);
             }
+            return Ok();
+        }
+
+        //[httpput]
+        //public async task<statuscoderesult> updatecandidate([frombody] candidatedto request)
+        //{
+        //    candidate updatedcandidate = new candidate(request);
+
+        //    await _dbcontext.candidatetechnologies
+        //        .where(ct => ct.candidateid == updatedcandidate.id)
+        //        .tolistasync();
+
+        //    await _datautilities.updateentry(_dbcontext.candidatetechnologies, request.technologies);
+        //}
+
+
+        [HttpDelete]
+        [Route("{IdToRemove}")]
+        public async Task<StatusCodeResult> DeleteCandidate([FromRoute] Guid IdToRemove)
+        {
+            Candidate candidate = new() { Id = IdToRemove };
+            var candidateCallDates = await _dbContext.CandidateCalldates
+                .Where(cc => cc.CandidateId == IdToRemove)
+                .ToListAsync();
+            candidateCallDates.ForEach(async cc =>
+            {
+                var success = await _dataUtilities.RemoveEntry(_dbContext.CandidateCalldates, cc, true);
+            });
+
+            var candidateTechnologies = _dbContext.CandidateTechnologies
+                .Where(ct => ct.CandidateId == IdToRemove)
+                .ToList();
+            candidateTechnologies.ForEach(async ct =>
+            {
+                var success = await _dataUtilities.RemoveEntry(_dbContext.CandidateTechnologies, ct, true);
+            });
+
+            var success = await _dataUtilities.RemoveEntry(_dbContext.Candidates, candidate, true);
             return Ok();
         }
     }

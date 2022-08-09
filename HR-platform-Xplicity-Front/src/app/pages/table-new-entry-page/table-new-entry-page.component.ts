@@ -27,15 +27,17 @@ export class TableNewEntryPageComponent implements OnInit {
   constructor(
     private candidateService: CandidateService,
     private technologyService: TechnologyService) {
-    this.technologyService.getTechnologies()
-      .subscribe(items => { this.technologies = items; });
+   
   }
 
   onSubmit(form: NgForm): void {
     // form.resetForm();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.technologyService.getTechnologies()
+    .subscribe(items => { this.technologies = items; });
+  }
 
   createCandidate(candidate: Candidate) {
     this.dates.forEach(date => {

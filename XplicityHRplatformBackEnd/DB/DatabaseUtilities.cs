@@ -35,5 +35,24 @@ namespace XplicityHRplatformBackEnd.DB
             return entryId;
         }
 
+        public async Task<bool> UpdateEntry<T>(DbSet<T> dbSet, T entryData) where T : BaseEntity
+        {
+            dbSet.Update(entryData);
+            var changes = await _dbContext.SaveChangesAsync();
+            return changes > 0;
+        }
+
+        public async Task<bool> RemoveEntry<T>(DbSet<T> dbSet, T entryData, bool checkIfExists) where T : BaseEntity
+        {
+            if (checkIfExists)
+            {
+                var entry = dbSet.Find(entryData.Id);
+                if (entry == null)
+                    return false;
+                dbSet.Remove(entry);
+                return await _dbContext.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
     }
 }

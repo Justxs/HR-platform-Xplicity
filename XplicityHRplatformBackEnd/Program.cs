@@ -47,6 +47,7 @@ void CondifureServices(IServiceCollection services)
     services.AddMvc();
 }
 
+
 builder.Services.AddDbContext<HRplatformDbContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 

@@ -18,9 +18,13 @@ export class CandidateService {
   public createCandidate(candidate: Candidate): Observable<Candidate[]> {
     return this.http.post<Candidate[]>(this.candidateApi, candidate);
   }
+  public deleteCandidate(candidate: Candidate): Observable<Candidate[]> {
+    return this.http.delete<Candidate[]>(`${this.candidateApi}/${candidate.id}`);
+  }
+
   public initCandidateTech(Candidates: Candidate[]){
     Candidates.forEach(candidate => {
-      candidate.technologyDisplay = candidate.technologies.map(t => t).join(", ");
+      candidate.technologyDisplay = candidate.technologies.map(t => t.title).join(", ");
       candidate.datesOfPastCallsDisplay = candidate.pastCallDates.map(t => t.dateOfCall).join("; ");
     })
   }
