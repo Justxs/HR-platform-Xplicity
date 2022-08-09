@@ -8,18 +8,19 @@
         <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Logout" (click)="logout()"  ></button>
     </ng-template>
 </p-menubar>
-
+<p-toast></p-toast>
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
-            <p-fileUpload mode="basic" accept=".xlsx" [maxFileSize]="1000000" label="Import" chooseLabel="Import" ></p-fileUpload>
+            <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
+            accept=".xlsx" [maxFileSize]="1000000" (uploadHandler)="myUploader($event)"></p-fileUpload>
         </ng-template>
     </p-toolbar>
 
-    <p-table [value]="candidates" styleClass="p-datatable-sm" styleClass="p-datatable-striped" 
+    <p-table [value]="candidates"
     [paginator]="true" 
     [rows]="10" [showCurrentPageReport]="true" 
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 

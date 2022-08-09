@@ -24,6 +24,7 @@ import { NewTechnologyComponent } from './pages/new-technology/new-technology.co
 import {DialogModule} from 'primeng/dialog';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import {MenubarModule} from 'primeng/menubar';
+import { ToastModule } from 'primeng/toast';
 
 export function tokenGetter() {
   return localStorage.getItem("Jwt")
@@ -57,6 +58,7 @@ export function tokenGetter() {
     FileUploadModule,
     DialogModule,
     MenubarModule,
+    ToastModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -11,6 +11,10 @@ import {MenuItem} from 'primeng/api';
 import {ConfirmationService, ConfirmEventType, MessageService} from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import * as XLSX from 'XLSX';
+import {ToastModule} from 'primeng/toast';
+
+type AOA = any[][];
 
 @Component({
   selector: 'app-table-page',
@@ -19,6 +23,7 @@ import { HttpClient } from '@angular/common/http';
   providers: [ConfirmationService,MessageService]
 
 })
+
 export class TablePageComponent implements OnInit {
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
   candidates: Candidate[] = [];
@@ -28,6 +33,8 @@ export class TablePageComponent implements OnInit {
   newUserDialog: boolean = false;
   deleteDialog: boolean = false;
   status: string = "";
+  
+  data: AOA = [[]];
 
   invalidLogin: boolean | undefined;
 
@@ -75,6 +82,24 @@ logout(){
   this.router.navigate([""])
 }
 
+myUploader(event: any){
+  /* wire up file reader */
+  const target: DataTransfer = <DataTransfer>(event);
+  const reader: FileReader = new FileReader();
+  reader.onload = (e: any) => {
+    const bstr: string = e.target.result;
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+    this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+    console.log(this.data);
+  };
+  reader.readAsBinaryString(target.files[0]);
+};
+
+
 register(form: NgForm){
   const credentials = {
     'email': form.value.email,
@@ -105,4 +130,5 @@ delete(form: NgForm){
       }
   })
 }
+  
 }

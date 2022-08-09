@@ -113,20 +113,20 @@ namespace XplicityHRplatformBackEnd.Controllers
         public async Task<StatusCodeResult> DeleteCandidate([FromRoute] Guid IdToRemove)
         {
             Candidate candidate = new() { Id = IdToRemove };
-            var candidateCallDates = await _dbContext.CandidateCalldates
-                .Where(cc => cc.CandidateId == IdToRemove)
-                .ToListAsync();
-            candidateCallDates.ForEach(async cc =>
+            var candidateCallDates = _dbContext.CandidateCalldates
+                .Where(cc => cc.CandidateId == IdToRemove).ToList();
+
+            candidateCallDates.ForEach(cc =>
             {
-                var success = await _dataUtilities.RemoveEntry(_dbContext.CandidateCalldates, cc, true);
+                var success = _dataUtilities.RemoveEntry(_dbContext.CandidateCalldates, cc, true);
             });
 
             var candidateTechnologies = _dbContext.CandidateTechnologies
-                .Where(ct => ct.CandidateId == IdToRemove)
-                .ToList();
-            candidateTechnologies.ForEach(async ct =>
+                .Where(ct => ct.CandidateId == IdToRemove).ToList();
+
+            candidateTechnologies.ForEach( ct =>
             {
-                var success = await _dataUtilities.RemoveEntry(_dbContext.CandidateTechnologies, ct, true);
+                var success = _dataUtilities.RemoveEntry(_dbContext.CandidateTechnologies, ct, true);
             });
 
             var success = await _dataUtilities.RemoveEntry(_dbContext.Candidates, candidate, true);
