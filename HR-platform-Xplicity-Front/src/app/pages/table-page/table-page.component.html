@@ -1,22 +1,21 @@
 <p-menubar>
-
     <ng-template pTemplate="start">
-        <img src="/assets/pictures/xpl_rgb-normal2x.png" height="40" class="mr-2">
+        <img style="margin: 10px;" src="/assets/pictures/xpl_rgb-normal2x.png" height="40" class="mr-2">
     </ng-template>
     <ng-template pTemplate="end">
-        <button pButton pRipple label="Create new user" icon="pi pi-user-plus" (click)="createNewUser()"></button>
-        <button pButton pRipple label="Delete existing user" icon="pi pi-user-plus" (click)="deleteUser()"></button>
-        <button (click)="logout()" pButton icon="pi pi-power-off" label="Logout"></button>
+        <button class="addnew" style="margin: 10px;" pButton pRipple label="Create new user" icon="pi pi-user-plus" (click)="createNewUser()"></button>
+        <button class="logout" style="margin: 10px;" pButton pRipple label="Delete existing user" icon="pi pi-user-plus" (click)="deleteUser()"></button>
+        <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Logout" (click)="logout()"  ></button>
     </ng-template>
 </p-menubar>
 
 <div class="center-box"style="padding: 1%;">
-    <p-toolbar styleClass="mb-4">
+    <p-toolbar>
         <ng-template pTemplate="left">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
-            <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" ></p-fileUpload>
+            <p-fileUpload mode="basic" accept=".xlsx" [maxFileSize]="1000000" label="Import" chooseLabel="Import" ></p-fileUpload>
         </ng-template>
     </p-toolbar>
 
