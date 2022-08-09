@@ -55,13 +55,14 @@ namespace XplicityHRplatformBackEnd.Controllers
                 }
                 var newCandidate = new CandidateDto()
                 {
+                    Id = candidate.Id,
                     FirstName = candidate.FirstName,
                     LastName = candidate.LastName,
                     LinkedIn = candidate.LinkedIn,
                     Comment = candidate.Comment,
                     OpenForSuggestions = candidate.OpenForSuggestions,
                     DateOfFutureCall = candidate.DateOfFutureCall,
-                    DatesOfPastCalls = callDates.ToArray(),
+                    PastCallDates = callDates.ToArray(),
                     Technologies = technologies.ToArray()
                 };
                 candidates.Add(newCandidate);
@@ -83,7 +84,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             };
             Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
 
-            foreach (CallDate date in request.DatesOfPastCalls)
+            foreach (CallDate date in request.PastCallDates)
             {
                 var callDate = await _dbContext.Calldates
                     .Where(c => c.DateOfCall == date.DateOfCall)
