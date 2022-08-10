@@ -12,8 +12,8 @@ using XplicityHRplatformBackEnd.DB;
 namespace XplicityHRplatformBackEnd.Migrations
 {
     [DbContext(typeof(HRplatformDbContext))]
-    [Migration("20220808075036_Initial")]
-    partial class Initial
+    [Migration("20220810115903_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -283,7 +283,6 @@ namespace XplicityHRplatformBackEnd.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -303,10 +302,6 @@ namespace XplicityHRplatformBackEnd.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");

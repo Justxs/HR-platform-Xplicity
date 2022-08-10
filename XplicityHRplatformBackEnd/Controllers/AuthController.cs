@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,70 +16,63 @@ namespace XplicityHRplatformBackEnd.Controllers
     public class AuthController : ControllerBase
     {
         private readonly HRplatformDbContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public AuthController(HRplatformDbContext dbContext)
+        public AuthController(HRplatformDbContext dbContext, UserManager<User> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+        }
+
+        [HttpPost, Route("create")]
+        public async Task<IActionResult> Register([FromBody] UserCreateDto userCreate)
+        {
+            var user = new User
+            {
+                UserName = userCreate.Email,
+                Email = userCreate.Email
+            };
+            var result =  await _userManager.CreateAsync(user, userCreate.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Password has to contain alphanumeric symbols");
+
+            }
+            else
+            {
+                return Ok("user created");
+            }
+          
         }
 
 
         [HttpPost, Route("login")]
-        public IActionResult Login([FromBody] User userLogin)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userLogin)
         {
-            var user = AuthenticateUser(userLogin);
+            var user = await _userManager.FindByEmailAsync(userLogin.Email);
+            var passwordCorrect = await _userManager.CheckPasswordAsync(user, userLogin.Password);
 
-            if (user == null)
+            if (!passwordCorrect)
             {
-                return BadRequest("Invalid user request"); 
+                return BadRequest("Wrong password");
             }
-            if (user != null)
+            if (passwordCorrect)
             {
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(GenerateJWT(user));
                 return Ok(new { Token = tokenString });
             }
-
             return Unauthorized();
         }
-        [HttpPost, Route("register")]
-        public IActionResult Register([FromBody] User userRegister)
+
+
+
+
+        [HttpDelete, Route("{{id}}/delete")]
+        public async Task<IActionResult> Delete(string id)
         {
-            var userExist = _dbContext.users.Any(x => x.Email == userRegister.Email);
-
-            if (!userExist)
-            {
-                var user = new User
-                {
-                    UserName = userRegister.Email,
-                    Password = BCrypt.Net.BCrypt.HashPassword(userRegister.Password),
-                    Email = userRegister.Email
-                };
-                _dbContext.users.Add(user);
-                _dbContext.SaveChanges();
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(GenerateJWT(user));
-                return Ok(new { Token = tokenString });
-            }
-            else
-            {
-                return BadRequest("User already exists");
-            }
-        }
-
-        [HttpDelete, Route("delete")]
-        public IActionResult Delete([FromBody] User user)
-        {
-            var userExist = _dbContext.users.Any(x => x.Email == user.Email);
-            if (!userExist)
-            {
-                return BadRequest("User does not exists");
-            }
-            if (userExist)
-            {
-                _dbContext.users.Remove(user);
-                _dbContext.SaveChanges();
-                return Ok("User removed");
-            }
-            return Unauthorized();
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user);
+            return Ok("user deleted");
         }
 
 
@@ -99,20 +93,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             return tokenOptions;
         }
 
-        private User AuthenticateUser(User login)
-        {
-            var user = _dbContext.users.Where(x => x.Email == login.Email).FirstOrDefault();
-
-            if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
-            {
-                user = new User { UserName = user.Email, Email = user.Email };
-                return user;
-            }
-            else
-            {
-                return null;
-            }
-
-        }
     }
 }
+
+

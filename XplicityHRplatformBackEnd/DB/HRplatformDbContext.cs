@@ -8,7 +8,7 @@ namespace XplicityHRplatformBackEnd.DB
     {
         //public HRplatformDbContext(DbContextOptions<HRplatformDbContext> options) : base(options) { }
 
-        public DbSet<User> users { get; set; }
+        //public DbSet<User> users { get; set; }
 
         public DbSet<Candidate> Candidates { get; set; }
         public DbSet<Technology> Technologies { get; set; }

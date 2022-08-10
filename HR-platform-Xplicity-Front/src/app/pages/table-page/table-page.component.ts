@@ -13,6 +13,7 @@ import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import {ToastModule} from 'primeng/toast';
+import { from } from 'rxjs';
 
 type AOA = any[][];
 
@@ -109,17 +110,18 @@ myUploader(event: any){
 };
 
 
-register(form: NgForm){
+create(form: NgForm){
   const credentials = {
     'email': form.value.email,
-    'password': form.value.password
+    'password': form.value.password,
   }
-  this.http.post("https://localhost:7241/api/auth/register", credentials)
+  this.http.post("https://localhost:7241/api/auth/create", credentials)
     .subscribe(response =>{
       const token = (<any>response).token;
       localStorage.setItem("Jwt", token);
       this.invalidLogin = false;
       this.router.navigate(["/table"])
+      console.log()
     }, err => {
       this.invalidLogin = true;
     })
