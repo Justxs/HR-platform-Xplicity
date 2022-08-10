@@ -4,6 +4,7 @@ import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
 import { Router } from '@angular/router';
+import { CallDate } from 'src/app/Models/callDate';
 
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
@@ -36,11 +37,15 @@ export class TablePageComponent implements OnInit {
   status: string = "";
 
   data: AOA = [[]];
-
+  dates: string[] = [];
   invalidLogin: boolean | undefined;
 
-  constructor(private router: Router, private candidateService: CandidateService, private technologyService: TechnologyService,
-    private confirmationService: ConfirmationService, private http: HttpClient) { }
+  constructor(private router: Router, 
+    private candidateService: CandidateService, 
+    private technologyService: TechnologyService,
+    private confirmationService: ConfirmationService, 
+    private http: HttpClient, 
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.candidateService.getCandidate()
@@ -63,6 +68,11 @@ export class TablePageComponent implements OnInit {
     window.location.reload();
   }
 
+  createCandidate(candidates: Candidate[]) {
+    this.candidateService.createCandidate(candidates)
+      .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      //window.location.reload();
+  }
 
   openNewCandidateForm() {
     this.submitted = false;
@@ -99,6 +109,7 @@ export class TablePageComponent implements OnInit {
   //     const wsname: string = wb.SheetNames[0];
   //     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
+
   //     this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
   //     let json: Candidate[] = [];
   //     this.data.forEach(function (value) {
@@ -130,7 +141,7 @@ export class TablePageComponent implements OnInit {
         this.invalidLogin = true;
       })
   }
-
+  
   delete(form: NgForm) {
     const credentials = {
       'email': form.value.email
@@ -145,5 +156,26 @@ export class TablePageComponent implements OnInit {
         }
       })
   }
+
 }
+function formatJson(value: any): Candidate{
+  let JsonCandidate = new Candidate();
+  JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
+  JsonCandidate.firstName = value[1];
+  JsonCandidate.lastName = value[2];
+  JsonCandidate.linkedIn = value[3];
+  JsonCandidate.comment = value[4];
+  JsonCandidate.technologies = [{title: value[5]}];
+  JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
+  if(value[7] == "v"){
+    JsonCandidate.openForSuggestions = true;
+  } else{
+    JsonCandidate.openForSuggestions = false;
+  }
+  return JsonCandidate;
+}
+function getJsDateFromExcel(excelDate: any) {
+	return new Date((excelDate - (25567 + 1))*86400*1000);
+}
+
 
