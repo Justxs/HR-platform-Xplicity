@@ -5,9 +5,8 @@ import { Candidate } from 'src/app/Models/candidate';
 import { Technology } from 'src/app/Models/technology';
 import { CandidateService } from 'src/app/Services/candidate.service';
 import { TechnologyService } from 'src/app/Services/technology.service';
-
-
-type NewType = Candidate;
+import * as moment from 'moment';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-table-new-entry-page',
@@ -16,22 +15,25 @@ type NewType = Candidate;
   ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() candidate: NewType = new Candidate;
+  @Input() 
+  candidate: Candidate = new Candidate;
+  update: boolean = false;
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies: Technology[] = [];
-  //value!: Date;
+  candidateTechnologies: [] = []
 
   dates: string[] = [];
 
   constructor(
     private candidateService: CandidateService,
-    private technologyService: TechnologyService) {
-   
-  }
+    private technologyService: TechnologyService,
+    private messageService: MessageService) {}
 
-  onSubmit(form: NgForm): void {
-    // form.resetForm();
+  onSubmit(form: NgForm, candidate:Candidate): void {
+    this.createCandidate(candidate);
+
+    //form.resetForm();
   }
 
   ngOnInit(): void { 
@@ -41,11 +43,21 @@ export class TableNewEntryPageComponent implements OnInit {
 
   createCandidate(candidate: Candidate) {
     this.dates.forEach(date => {
+      date = moment(date).format('YYYY-MM-DD');
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
-    this.candidateService.createCandidate(candidate)
+    var candidates: Candidate[] = [];
+    if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
+      this.showError();
+      return;
+    }
+    candidates.push(candidate);
+    this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      window.location.reload();
   }
-
+  showError() {
+    this.messageService.add({severity:'error', summary: 'Klaida', detail: 'Ne visi privalomi laukai užpildyti'});
+  }
 }

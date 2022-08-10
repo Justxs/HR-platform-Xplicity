@@ -62,34 +62,16 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<StatusCodeResult> AddCandidate([FromBody] CandidateDto request)
+        public async Task<StatusCodeResult> AddCandidates([FromBody] List<CandidateDto> requests)
         {
-            var newCandidate = new Candidate(request);
-
-            Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
-
-            foreach (CallDate date in request.PastCallDates)
+            foreach (CandidateDto request in requests)
             {
-                var callDate = await _dbContext.Calldates
-                    .Where(c => c.DateOfCall == date.DateOfCall)
-                    .SingleOrDefaultAsync();
-                if (callDate != null)
-                {
-                    CandidateCallDate candidateCall1 = new() { CallDateId = callDate.Id, CandidateId = newCandidateId };
-                    Guid candidateCalldateId1 = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall1);
-                    continue;
-                }
-               
-                Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, date);
+                var newCandidate = new Candidate(request);
 
-                CandidateCallDate candidateCall = new() { CallDateId = newId, CandidateId = newCandidateId};
-                Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
-            }
+                Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
 
-            foreach (Technology tech in request.Technologies)
-            {
-                CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = newCandidateId };
-                Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateTechnologies, candidateTechnology);
+                await AddCallDateRelations(request.PastCallDates, newCandidateId);
+                await AddTechnologyRelations(request.Technologies, newCandidateId);
             }
             return Ok();
         }
@@ -98,86 +80,18 @@ namespace XplicityHRplatformBackEnd.Controllers
         public async Task<StatusCodeResult> UpdateCandidate([FromBody] CandidateDto request)
         {
             Candidate updatedCandidate = new (request);
-            var candidateCallDates = await _dbContext.CandidateCalldates
-                .Where(cc => cc.CandidateId == request.Id)
-                .ToListAsync();
-            candidateCallDates.ForEach(cc =>
+
+            var CallDatesRemoved = await RemoveCallDateRelations(request.Id);
+            var TechnologiesRemoved = await RemoveTechnologyRelations(request.Id);
+
+            if (CallDatesRemoved && TechnologiesRemoved)
             {
-                _dbContext.CandidateCalldates.Remove(cc);
-            });
-
-            var candidateTechnologies = _dbContext.CandidateTechnologies
-                .Where(ct => ct.CandidateId == request.Id)
-                .ToList();
-            candidateTechnologies.ForEach(ct =>
-            {
-                _dbContext.CandidateTechnologies.Remove(ct);
-            });
-
-            _dbContext.Candidates.Update(updatedCandidate);
-
-            foreach (CallDate date in request.PastCallDates)
-            {
-                var callDate = await _dbContext.Calldates
-                    .Where(c => c.DateOfCall == date.DateOfCall)
-                    .SingleOrDefaultAsync();
-                if (callDate != null)
-                { 
-                    CandidateCallDate candidateCallDate = new() { CallDateId = callDate.Id, CandidateId = updatedCandidate.Id };
-                    await _dbContext.CandidateCalldates.AddAsync(candidateCallDate);
-                    continue;
-                }
-
-                await _dbContext.Calldates.AddAsync(date);
-                var newCallDateId = date.Id;
-
-                CandidateCallDate candidateCall = new() { CallDateId = newCallDateId, CandidateId = updatedCandidate.Id };
-                await _dbContext.CandidateCalldates.AddAsync(candidateCall);
+                _dbContext.Candidates.Update(updatedCandidate);
             }
 
-            foreach (Technology tech in request.Technologies)
-            {
-                CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = updatedCandidate.Id };
-                await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology);
-            }
-            
-
-            var saved = false;
-            while (!saved)
-            {
-                try
-                {
-                    // Attempt to save changes to the database
-                    await _dbContext.SaveChangesAsync();
-                    saved = true;
-                }
-                catch (DbUpdateConcurrencyException ex)
-                {
-                    foreach (var entry in ex.Entries)
-                    {
-                        if (entry.Entity is Candidate)
-                        {
-                            var proposedValues = entry.CurrentValues;
-                            var databaseValues = entry.GetDatabaseValues();
-
-                            foreach (var property in proposedValues.Properties)
-                            {
-                                var proposedValue = proposedValues[property];
-                                var databaseValue = databaseValues[property];
-                            }
-
-                            // Refresh original values to bypass next concurrency check
-                            entry.OriginalValues.SetValues(proposedValues);
-                        }
-                        else
-                        {
-                            throw new NotSupportedException(
-                                "Don't know how to handle concurrency conflicts for "
-                                + entry.Metadata.Name);
-                        }
-                    }
-                }
-            }
+            await AddCallDateRelations(request.PastCallDates, request.Id);
+            await AddTechnologyRelations(request.Technologies, request.Id);
+            await SaveToDbAsync();
             return Ok();
         }
 
@@ -187,25 +101,104 @@ namespace XplicityHRplatformBackEnd.Controllers
         public async Task<StatusCodeResult> DeleteCandidate([FromRoute] Guid IdToRemove)
         {
             Candidate candidate = new() { Id = IdToRemove };
-           
-            var candidateCallDates = await _dbContext.CandidateCalldates
-                .Where(cc => cc.CandidateId == IdToRemove)
+
+            var callDatesRemoved = await RemoveCallDateRelations(IdToRemove);
+            var TechnologiesRemoved = await RemoveTechnologyRelations(IdToRemove);
+
+            if (callDatesRemoved && TechnologiesRemoved)
+            {
+                _dbContext.Candidates.Remove(candidate);
+                await SaveToDbAsync();
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        private async Task<bool> AddCallDateRelations (List<CallDate> PastCallDates, Guid CandidateId )
+        {
+            try
+            { 
+                foreach (CallDate date in PastCallDates)
+                {
+                    var callDate = await _dbContext.Calldates
+                        .Where(c => c.DateOfCall == date.DateOfCall)
+                        .SingleOrDefaultAsync();
+                    if (callDate != null)
+                    {
+                        CandidateCallDate candidateCallDate = new() { CallDateId = callDate.Id, CandidateId = CandidateId };
+                        await _dbContext.CandidateCalldates.AddAsync(candidateCallDate);
+                        continue;
+                    }
+
+                    await _dbContext.Calldates.AddAsync(date);
+                    var newCallDateId = date.Id;
+
+                    CandidateCallDate candidateCall = new() { CallDateId = newCallDateId, CandidateId = CandidateId };
+                    await _dbContext.CandidateCalldates.AddAsync(candidateCall);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private async Task<bool> AddTechnologyRelations(List<Technology> Technologies, Guid CandidateId)
+        {
+            try
+            {
+                foreach (Technology tech in Technologies)
+                {
+                    CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = CandidateId };
+                    await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private async Task<bool> RemoveCallDateRelations (Guid candidateId)
+        {
+            try
+            {
+                var candidateCallDates = await _dbContext.CandidateCalldates
+                   .Where(cc => cc.CandidateId == candidateId)
+                   .ToListAsync();
+                candidateCallDates.ForEach(cc =>
+                {
+                    _dbContext.CandidateCalldates.Remove(cc);
+                });
+                return true;
+            } catch
+            {
+                return false;
+            }
+            
+        }
+
+        private async Task<bool> RemoveTechnologyRelations(Guid candidateId)
+        {
+            try
+            {
+                var candidateTechnologies = await _dbContext.CandidateTechnologies
+                .Where(ct => ct.CandidateId == candidateId)
                 .ToListAsync();
-            candidateCallDates.ForEach( cc =>
+                candidateTechnologies.ForEach(ct =>
+                {
+                    _dbContext.CandidateTechnologies.Remove(ct);
+                });
+                return true;
+            }
+            catch
             {
-                _dbContext.CandidateCalldates.Remove(cc);
-            });
+                return false;
+            }
+        }
 
-            var candidateTechnologies = _dbContext.CandidateTechnologies
-                .Where(ct => ct.CandidateId == IdToRemove)
-                .ToList();
-            candidateTechnologies.ForEach( ct =>
-            {
-                _dbContext.CandidateTechnologies.Remove(ct);
-            });
-
-            _dbContext.Candidates.Remove(candidate);
-
+        private async Task<bool> SaveToDbAsync ()
+        {
             var saved = false;
             while (!saved)
             {
@@ -242,7 +235,7 @@ namespace XplicityHRplatformBackEnd.Controllers
                     }
                 }
             }
-            return Ok();
+            return saved;
         }
     }
 }

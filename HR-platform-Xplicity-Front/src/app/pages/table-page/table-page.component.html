@@ -8,11 +8,11 @@
         <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Logout" (click)="logout()"  ></button>
     </ng-template>
 </p-menubar>
-<p-toast></p-toast>
+
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
-            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
@@ -84,7 +84,7 @@
                 <i class="pi" [ngClass]="{'true-icon pi-check-circle': candidate.openForSuggestions, 'false-icon pi-times-circle': !candidate.openForSuggestions}"></i>
             </td>
             <td>
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="{}"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="updateCandidateForm(candidate)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCandidate(candidate)"></button>
                 <button pButton pRipple icon="pi pi-briefcase" class="p-button-rounded p-button-info" (click)="{}"></button>
             </td>
@@ -98,9 +98,15 @@
 </p-table>
 </div>
 
-<p-dialog [(visible)]="candidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="createCandidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        
+        <app-table-new-entry-page></app-table-new-entry-page>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="updateCandidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <app-table-new-entry-page [candidate]="candidateToEdit"></app-table-new-entry-page>
     </ng-template>
 </p-dialog>
 

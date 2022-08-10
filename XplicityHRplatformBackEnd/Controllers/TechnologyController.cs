@@ -25,7 +25,6 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
         [HttpPost]
-
         public async Task<StatusCodeResult> CreateTechnology([FromBody] Technology request)
         {
             if (request == null) return Ok();
@@ -40,6 +39,21 @@ namespace XplicityHRplatformBackEnd.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+        [HttpDelete]
+        [Route("{Id}")]
+        public async Task<StatusCodeResult> DeleteTechnology([FromBody] Guid Id)
+        {
+            var tech = await _dbContext.Technologies.Where(t => t.Id == Id).FirstOrDefaultAsync();
+            try
+            {
+                await _dataUtilities.RemoveEntry(_dbContext.Technologies, tech, true);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }
