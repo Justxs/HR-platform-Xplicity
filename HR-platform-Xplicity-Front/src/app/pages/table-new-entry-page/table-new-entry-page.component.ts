@@ -7,8 +7,6 @@ import { CandidateService } from 'src/app/Services/candidate.service';
 import { TechnologyService } from 'src/app/Services/technology.service';
 
 
-type NewType = Candidate;
-
 @Component({
   selector: 'app-table-new-entry-page',
   templateUrl: './table-new-entry-page.component.html',
@@ -16,11 +14,11 @@ type NewType = Candidate;
   ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() candidate: NewType = new Candidate;
+  @Input() candidate: Candidate = new Candidate;
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies: Technology[] = [];
-  //value!: Date;
+  candidateTechnologies: [] = []
 
   dates: string[] = [];
 
@@ -30,8 +28,10 @@ export class TableNewEntryPageComponent implements OnInit {
    
   }
 
-  onSubmit(form: NgForm): void {
-    // form.resetForm();
+  onSubmit(form: NgForm, candidate:Candidate): void {
+    this.createCandidate(candidate);
+
+    //form.resetForm();
   }
 
   ngOnInit(): void { 
@@ -44,6 +44,9 @@ export class TableNewEntryPageComponent implements OnInit {
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
+
+
+    console.log(candidate.technologies);
     this.candidateService.createCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
   }

@@ -62,34 +62,37 @@ namespace XplicityHRplatformBackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<StatusCodeResult> AddCandidate([FromBody] CandidateDto request)
+        public async Task<StatusCodeResult> AddCandidates([FromBody] List<CandidateDto> requests)
         {
-            var newCandidate = new Candidate(request);
-
-            Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
-
-            foreach (CallDate date in request.PastCallDates)
+            foreach (CandidateDto request in requests)
             {
-                var callDate = await _dbContext.Calldates
-                    .Where(c => c.DateOfCall == date.DateOfCall)
-                    .SingleOrDefaultAsync();
-                if (callDate != null)
+                var newCandidate = new Candidate(request);
+
+                Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
+
+                foreach (CallDate date in request.PastCallDates)
                 {
-                    CandidateCallDate candidateCall1 = new() { CallDateId = callDate.Id, CandidateId = newCandidateId };
-                    Guid candidateCalldateId1 = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall1);
-                    continue;
+                    var callDate = await _dbContext.Calldates
+                        .Where(c => c.DateOfCall == date.DateOfCall)
+                        .SingleOrDefaultAsync();
+                    if (callDate != null)
+                    {
+                        CandidateCallDate candidateCall1 = new() { CallDateId = callDate.Id, CandidateId = newCandidateId };
+                        Guid candidateCalldateId1 = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall1);
+                        continue;
+                    }
+                   
+                    Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, date);
+
+                    CandidateCallDate candidateCall = new() { CallDateId = newId, CandidateId = newCandidateId};
+                    Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
                 }
-               
-                Guid newId = await _dataUtilities.AddEntry(_dbContext.Calldates, date);
 
-                CandidateCallDate candidateCall = new() { CallDateId = newId, CandidateId = newCandidateId};
-                Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateCalldates, candidateCall);
-            }
-
-            foreach (Technology tech in request.Technologies)
-            {
-                CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = newCandidateId };
-                Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateTechnologies, candidateTechnology);
+                foreach (Technology tech in request.Technologies)
+                {
+                    CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = newCandidateId };
+                    Guid candidateCalldateId = await _dataUtilities.AddEntry(_dbContext.CandidateTechnologies, candidateTechnology);
+                }
             }
             return Ok();
         }
