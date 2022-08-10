@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CallDate } from 'src/app/Models/callDate';
 
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -12,7 +12,6 @@ import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import * as moment from 'moment';
 import { ToastModule } from 'primeng/toast';
-import { from } from 'rxjs';
 
 type AOA = any[][];
 
@@ -40,7 +39,8 @@ export class TablePageComponent implements OnInit {
   dates: string[] = [];
   invalidLogin: boolean | undefined;
 
-  constructor(private router: Router, 
+  constructor(private router: Router,
+    private route: ActivatedRoute,
     private candidateService: CandidateService, 
     private technologyService: TechnologyService,
     private confirmationService: ConfirmationService, 
@@ -65,15 +65,21 @@ export class TablePageComponent implements OnInit {
   deleteCandidate(candidate: Candidate) {
     this.candidateService.deleteCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-    window.location.reload();
+      setTimeout(()=>{this.wait()},2000);
+    this.showSuccess("Kandidatas sėkmingai ištrintas");
   }
 
   createCandidate(candidates: Candidate[]) {
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-      window.location.reload();
+    setTimeout(()=>{this.wait()},2000);
+    this.showSuccess("Kandidatas sėkmingas įtrauktas");
   }
-
+  wait(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate(['./'], {relativeTo: this.route});
+  }
   openNewCandidateForm() {
     this.submitted = false;
     this.createCandidateDialog = true;
@@ -113,7 +119,7 @@ export class TablePageComponent implements OnInit {
       this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
       let json: Candidate[] = [];
       this.data.forEach(function (value) {
-        if (value[1] == null || value[2] == null || value[3] == null) {
+        if (value[1] == null || value[2] == null || value[3] == null || value[5] == null) {
           return;
         }
         json.push(formatJson(value));
@@ -156,7 +162,9 @@ export class TablePageComponent implements OnInit {
         }
       })
   }
-
+  showSuccess(message: string) {
+    this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
+  }
 }
 function formatJson(value: any): Candidate{
   let JsonCandidate = new Candidate();
