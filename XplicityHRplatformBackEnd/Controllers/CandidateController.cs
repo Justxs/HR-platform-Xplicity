@@ -152,7 +152,7 @@ namespace XplicityHRplatformBackEnd.Controllers
                         .SingleOrDefaultAsync();
                     if (existingTechnology != null)
                     {
-                        CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = CandidateId };
+                        CandidateTechnology candidateTechnology = new() { TechnologyId = existingTechnology.Id, CandidateId = CandidateId };
                         await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology);
                         continue;
                     }

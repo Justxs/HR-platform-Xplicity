@@ -39,6 +39,8 @@ export class TableNewEntryPageComponent implements OnInit {
   ngOnInit(): void { 
     this.technologyService.getTechnologies()
     .subscribe(items => { this.technologies = items; });
+
+    console.log(this.candidate);
   }
 
   createCandidate(candidate: Candidate) {
@@ -57,7 +59,26 @@ export class TableNewEntryPageComponent implements OnInit {
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       window.location.reload();
   }
+  
+
+  updateCandidate(candidate: Candidate) {
+    this.dates.forEach(date => {
+      date = moment(date).format('YYYY-MM-DD');
+      var callDate = new CallDate(date);
+      candidate.pastCallDates.push(callDate);
+    });
+    if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
+      this.showError();
+      return;
+    }
+
+    this.candidateService.updateCandidate(candidate)
+      .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      window.location.reload();
+  }
   showError() {
     this.messageService.add({severity:'error', summary: 'Klaida', detail: 'Ne visi privalomi laukai užpildyti'});
   }
+
+
 }
