@@ -4,6 +4,7 @@ import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
 import { Router } from '@angular/router';
+import { CallDate } from 'src/app/Models/callDate';
 
 import {ConfirmationService, ConfirmEventType, MessageService} from 'primeng/api';
 import { NgForm } from '@angular/forms';
@@ -33,11 +34,15 @@ export class TablePageComponent implements OnInit {
   status: string = "";
   
   data: AOA = [[]];
-
+  dates: string[] = [];
   invalidLogin: boolean | undefined;
 
-  constructor(private router: Router, private candidateService: CandidateService, private technologyService: TechnologyService,
-    private confirmationService: ConfirmationService, private http: HttpClient) { }
+  constructor(private router: Router, 
+    private candidateService: CandidateService, 
+    private technologyService: TechnologyService,
+    private confirmationService: ConfirmationService, 
+    private http: HttpClient, 
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.candidateService.getCandidate()
@@ -60,6 +65,11 @@ export class TablePageComponent implements OnInit {
     window.location.reload();
   }
 
+  createCandidate(candidates: Candidate[]) {
+    this.candidateService.createCandidate(candidates)
+      .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      //window.location.reload();
+  }
 
   openNew() {
       this.submitted = false;
@@ -80,8 +90,6 @@ export class TablePageComponent implements OnInit {
     localStorage.removeItem("jwt"),
     this.router.navigate([""])
   }
-
-
 
   register(form: NgForm){
     const credentials = {
@@ -127,18 +135,19 @@ export class TablePageComponent implements OnInit {
       this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
       let json: Candidate[] = [];
       this.data.forEach( function (value) {
-        if(value[1] == null){
+        if(value[1] == null || value[2] == null || value[3] == null){
           return;
         }
         json.push(formatJson(value));
       });
       json.splice(0, 1);
-      console.log(JSON.stringify(json));
+      this.createCandidate(json);
       
     };
     reader.readAsBinaryString(target.files[0]);
-    window.location.reload();
+    //window.location.reload();
   };
+
 }
 
 function formatJson(value: any): Candidate{
