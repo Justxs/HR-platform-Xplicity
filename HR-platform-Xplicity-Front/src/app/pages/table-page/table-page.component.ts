@@ -4,7 +4,7 @@ import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
 import { Router } from '@angular/router';
-
+import { DatePipe } from '@angular/common'
 import {MenubarModule} from 'primeng/menubar';
 import {MenuItem} from 'primeng/api';
 
@@ -13,6 +13,7 @@ import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import {ToastModule} from 'primeng/toast';
+import * as moment from 'moment';
 
 type AOA = any[][];
 
@@ -82,31 +83,6 @@ logout(){
   this.router.navigate([""])
 }
 
-myUploader(event: any){
-  const target: DataTransfer = <DataTransfer>(event);
-  const reader: FileReader = new FileReader();
-  reader.onload = (e: any) => {
-    const bstr: string = e.target.result;
-    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-    const wsname: string = wb.SheetNames[0];
-    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-    this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-    let json: Candidate[] = [];
-    this.data.forEach( function (value) {
-      if(value[1] == null){
-        return;
-      }
-      json.push(formatJson(value));
-    });
-    json.splice(0, 1);
-    console.log(JSON.stringify(json));
-    
-  };
-  reader.readAsBinaryString(target.files[0]);
-  
-};
 
 
 register(form: NgForm){
@@ -115,7 +91,7 @@ register(form: NgForm){
     'password': form.value.password
   }
   this.http.post("https://localhost:7241/api/auth/register", credentials)
-    .subscribe(response =>{
+  .subscribe(response =>{
       const token = (<any>response).token;
       localStorage.setItem("Jwt", token);
       this.invalidLogin = false;
@@ -130,26 +106,51 @@ delete(form: NgForm){
     'email': form.value.email
   }
   this.http.delete("https://localhost:7241/api/auth/delete", credentials.email)
-    .subscribe({
-      next: data => {
-          this.status = 'Delete successful';
+  .subscribe({
+    next: data => {
+      this.status = 'Delete successful';
       },
       error: error => {
         this.invalidLogin = true;
       }
-  })
-}
+    })
+  }
+  myUploader(event: any){
+    const target: DataTransfer = <DataTransfer>(event);
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+  
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+  
+      this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      let json: Candidate[] = [];
+      this.data.forEach( function (value) {
+        if(value[1] == null){
+          return;
+        }
+        json.push(formatJson(value));
+      });
+      json.splice(0, 1);
+      console.log(JSON.stringify(json));
+      
+    };
+    reader.readAsBinaryString(target.files[0]);
+    
+  };
 }
 
 function formatJson(value: any): Candidate{
   let JsonCandidate = new Candidate();
-  JsonCandidate.pastCallDates = [{dateOfCall: value[0]}];
+  JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
   JsonCandidate.firstName = value[1];
   JsonCandidate.lastName = value[2];
   JsonCandidate.linkedIn = value[3];
   JsonCandidate.comment = value[4];
   JsonCandidate.technologies = [{title: value[5]}];
-  JsonCandidate.dateOfFutureCall = value[6];
+  JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
   if(value[7] == "v"){
     JsonCandidate.openForSuggestions = true;
   }else{
@@ -157,4 +158,9 @@ function formatJson(value: any): Candidate{
   }
   return JsonCandidate;
 }
+
+function getJsDateFromExcel(excelDate: any) {
+	return new Date((excelDate - (25567 + 1))*86400*1000);
+}
+
 

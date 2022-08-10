@@ -9,7 +9,7 @@ export class Candidate {
     comment: string;
     technologies: Technology[];
     pastCallDates: CallDate[];
-    dateOfFutureCall: Date;
+    dateOfFutureCall: string;
     openForSuggestions: boolean;
 
     technologyDisplay?: string;
@@ -22,7 +22,7 @@ export class Candidate {
         this.comment= "";
         this.technologies = [];
         this.pastCallDates = [];
-        this.dateOfFutureCall = new Date();
+        this.dateOfFutureCall = "";
         this.openForSuggestions = false;
     }
     
