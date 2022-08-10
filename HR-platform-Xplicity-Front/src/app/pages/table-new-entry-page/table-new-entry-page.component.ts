@@ -15,7 +15,9 @@ import {MessageService} from 'primeng/api';
   ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() candidate: Candidate = new Candidate;
+  @Input() 
+  candidate: Candidate = new Candidate;
+  update: boolean = false;
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies: Technology[] = [];
