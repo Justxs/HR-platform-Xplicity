@@ -6,7 +6,7 @@ import { Technology } from 'src/app/Models/technology';
 import { CandidateService } from 'src/app/Services/candidate.service';
 import { TechnologyService } from 'src/app/Services/technology.service';
 import * as moment from 'moment';
-import { Title } from '@angular/platform-browser';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-table-new-entry-page',
@@ -25,9 +25,8 @@ export class TableNewEntryPageComponent implements OnInit {
 
   constructor(
     private candidateService: CandidateService,
-    private technologyService: TechnologyService) {
-   
-  }
+    private technologyService: TechnologyService,
+    private messageService: MessageService) {}
 
   onSubmit(form: NgForm, candidate:Candidate): void {
     this.createCandidate(candidate);
@@ -48,6 +47,7 @@ export class TableNewEntryPageComponent implements OnInit {
     });
     var candidates: Candidate[] = [];
     if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
+      this.showError();
       return;
     }
     candidates.push(candidate);
@@ -55,5 +55,7 @@ export class TableNewEntryPageComponent implements OnInit {
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       window.location.reload();
   }
-
+  showError() {
+    this.messageService.add({severity:'error', summary: 'Klaida', detail: 'Ne visi privalomi laukai užpildyti'});
+  }
 }

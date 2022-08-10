@@ -8,11 +8,11 @@
         <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Logout" (click)="logout()"  ></button>
     </ng-template>
 </p-menubar>
-<p-toast></p-toast>
+
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
-            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
