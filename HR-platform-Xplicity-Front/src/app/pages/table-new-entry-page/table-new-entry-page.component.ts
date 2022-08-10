@@ -52,13 +52,14 @@ export class TableNewEntryPageComponent implements OnInit {
     var candidates: Candidate[] = [];
     candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
     if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
-      this.showError();
+      this.showToast("Ne visi privalomi laukai užpildyti",'error','Klaida');
       return;
     }
     candidates.push(candidate);
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
     setTimeout(()=>{this.wait()},2000);
+    this.showToast("Pavyko pridėti kandidatą", 'success', 'Pavyko');
   }
   
   wait(): void {
@@ -74,17 +75,17 @@ export class TableNewEntryPageComponent implements OnInit {
       candidate.pastCallDates.push(callDate);
     });
     if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
-      this.showError();
+      this.showToast("Ne visi privalomi laukai užpildyti",'error','Klaida');
       return;
     }
-
+    candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
     this.candidateService.updateCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       setTimeout(()=>{this.wait()},2000);
+      this.showToast("Pavyko pakeisti kandidato duomenis", 'success', 'Pavyko');
   }
-  showError() {
-    this.messageService.add({severity:'error', summary: 'Klaida', detail: 'Ne visi privalomi laukai užpildyti'});
+  showToast(message: string, severity: any, summary: any) {
+    this.messageService.add({severity: severity, summary: summary, detail: message});
   }
-
 
 }

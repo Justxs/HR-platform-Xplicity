@@ -38,7 +38,7 @@ export class TablePageComponent implements OnInit {
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
-
+  
   constructor(private router: Router,
     private route: ActivatedRoute,
     private candidateService: CandidateService, 
@@ -66,6 +66,7 @@ export class TablePageComponent implements OnInit {
     this.candidateService.deleteCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       setTimeout(()=>{this.wait()},2000);
+      
     this.showSuccess("Kandidatas sėkmingai ištrintas");
   }
 
