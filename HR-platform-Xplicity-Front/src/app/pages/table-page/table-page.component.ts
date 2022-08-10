@@ -4,16 +4,13 @@ import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
 import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common'
-import {MenubarModule} from 'primeng/menubar';
-import {MenuItem} from 'primeng/api';
 
 import {ConfirmationService, ConfirmEventType, MessageService} from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
-import {ToastModule} from 'primeng/toast';
 import * as moment from 'moment';
+import {ToastModule} from 'primeng/toast';
 
 type AOA = any[][];
 
@@ -60,61 +57,63 @@ export class TablePageComponent implements OnInit {
   deleteCandidate(candidate: Candidate) {
     this.candidateService.deleteCandidate(candidate)
     .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+    window.location.reload();
   }
 
 
-openNew() {
+  openNew() {
+      this.submitted = false;
+      this.candidateDialog = true;
+  }
+
+  createNewUser() {
     this.submitted = false;
-    this.candidateDialog = true;
-}
-
-createNewUser() {
-  this.submitted = false;
-  this.newUserDialog = true;
-}
-
-deleteUser() {
-  this.submitted = false;
-  this.deleteDialog = true;
-}
-
-logout(){
-  localStorage.removeItem("jwt"),
-  this.router.navigate([""])
-}
-
-
-
-register(form: NgForm){
-  const credentials = {
-    'email': form.value.email,
-    'password': form.value.password
+    this.newUserDialog = true;
   }
-  this.http.post("https://localhost:7241/api/auth/register", credentials)
-  .subscribe(response =>{
-      const token = (<any>response).token;
-      localStorage.setItem("Jwt", token);
-      this.invalidLogin = false;
-      this.router.navigate(["/table"])
-    }, err => {
-      this.invalidLogin = true;
-    })
-}
 
-delete(form: NgForm){
-  const credentials = {
-    'email': form.value.email
+  deleteUser() {
+    this.submitted = false;
+    this.deleteDialog = true;
   }
-  this.http.delete("https://localhost:7241/api/auth/delete", credentials.email)
-  .subscribe({
-    next: data => {
-      this.status = 'Delete successful';
-      },
-      error: error => {
+
+  logout(){
+    localStorage.removeItem("jwt"),
+    this.router.navigate([""])
+  }
+
+
+
+  register(form: NgForm){
+    const credentials = {
+      'email': form.value.email,
+      'password': form.value.password
+    }
+    this.http.post("https://localhost:7241/api/auth/register", credentials)
+    .subscribe(response =>{
+        const token = (<any>response).token;
+        localStorage.setItem("Jwt", token);
+        this.invalidLogin = false;
+        this.router.navigate(["/table"])
+      }, err => {
         this.invalidLogin = true;
-      }
-    })
+      })
   }
+
+  delete(form: NgForm){
+    const credentials = {
+      'email': form.value.email
+    }
+    this.http.delete("https://localhost:7241/api/auth/delete", credentials.email)
+    .subscribe({
+      next: data => {
+        this.status = 'Delete successful';
+        },
+        error: error => {
+          this.invalidLogin = true;
+        }
+      })
+  }
+  
   myUploader(event: any){
     const target: DataTransfer = <DataTransfer>(event);
     const reader: FileReader = new FileReader();
@@ -138,7 +137,7 @@ delete(form: NgForm){
       
     };
     reader.readAsBinaryString(target.files[0]);
-    
+    window.location.reload();
   };
 }
 

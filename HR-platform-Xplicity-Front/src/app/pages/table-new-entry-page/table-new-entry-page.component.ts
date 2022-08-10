@@ -5,7 +5,8 @@ import { Candidate } from 'src/app/Models/candidate';
 import { Technology } from 'src/app/Models/technology';
 import { CandidateService } from 'src/app/Services/candidate.service';
 import { TechnologyService } from 'src/app/Services/technology.service';
-
+import * as moment from 'moment';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-table-new-entry-page',
@@ -41,14 +42,18 @@ export class TableNewEntryPageComponent implements OnInit {
 
   createCandidate(candidate: Candidate) {
     this.dates.forEach(date => {
+      date = moment(date).format('YYYY-MM-DD');
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
-
-
-    console.log(candidate.technologies);
-    this.candidateService.createCandidate(candidate)
+    var candidates: Candidate[] = [];
+    if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
+      return;
+    }
+    candidates.push(candidate);
+    this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      window.location.reload();
   }
 
 }

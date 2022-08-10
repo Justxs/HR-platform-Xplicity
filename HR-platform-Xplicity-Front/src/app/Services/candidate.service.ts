@@ -15,7 +15,7 @@ export class CandidateService {
 
   constructor(private http: HttpClient) { }
 
-  public createCandidate(candidate: Candidate): Observable<Candidate[]> {
+  public createCandidate(candidate: Candidate[]): Observable<Candidate[]> {
     return this.http.post<Candidate[]>(this.candidateApi, candidate);
   }
   public deleteCandidate(candidate: Candidate): Observable<Candidate[]> {
