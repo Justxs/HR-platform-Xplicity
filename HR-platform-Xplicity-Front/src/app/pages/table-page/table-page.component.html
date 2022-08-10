@@ -14,10 +14,10 @@
         <ng-template pTemplate="left">
             <button pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
         </ng-template>
-        <ng-template pTemplate="right">
+        <!-- <ng-template pTemplate="right">
             <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
             accept=".xlsx" [maxFileSize]="1000000" (uploadHandler)="myUploader($event)"></p-fileUpload>
-        </ng-template>
+        </ng-template> -->
     </p-toolbar>
 
     <p-table [value]="candidates"

@@ -45,7 +45,6 @@ namespace XplicityHRplatformBackEnd.Controllers
           
         }
 
-
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLogin)
         {
@@ -66,15 +65,13 @@ namespace XplicityHRplatformBackEnd.Controllers
 
 
 
-
         [HttpDelete, Route("{{id}}/delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(user);
+            var userId = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(userId);
             return Ok("user deleted");
         }
-
 
 
         private JwtSecurityToken GenerateJWT(User login)
