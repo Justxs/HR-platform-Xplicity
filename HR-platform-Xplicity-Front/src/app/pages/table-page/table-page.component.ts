@@ -26,8 +26,10 @@ type AOA = any[][];
 export class TablePageComponent implements OnInit {
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
   candidates: Candidate[] = [];
+  candidateToEdit: Candidate = new Candidate();
   technologies: Technology[] = [];
-  candidateDialog: boolean = false;
+  createCandidateDialog: boolean = false;
+  updateCandidateDialog: boolean = false;
   submitted: boolean = false;
   newUserDialog: boolean = false;
   deleteDialog: boolean = false;
@@ -71,9 +73,17 @@ export class TablePageComponent implements OnInit {
       //window.location.reload();
   }
 
-  openNew() {
+  openNewCandidateForm() {
       this.submitted = false;
-      this.candidateDialog = true;
+      this.createCandidateDialog = true;
+  }
+
+  updateCandidateForm(candidate: Candidate) {
+    this.submitted = false;
+    this.updateCandidateDialog = true;
+    if (candidate) {
+      this.candidateToEdit = candidate;
+    }
   }
 
   createNewUser() {

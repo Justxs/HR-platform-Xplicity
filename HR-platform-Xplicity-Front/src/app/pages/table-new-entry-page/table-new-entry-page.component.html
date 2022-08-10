@@ -1,3 +1,4 @@
+
 <p-toast></p-toast>
 <div class="margin">
     <input type="text" class="p-inputtext-lg" name="name" placeholder="Vardas*" [(ngModel)]="candidate.firstName"
@@ -51,7 +52,8 @@
             kandidatas.</p>
     </div>
 </div>
+
 <div class="margin">
     <p>*Privalomi laukai</p>
 </div>
-<button pButton type="button" (click)="createCandidate(candidate)"*ngIf="!candidate.id" label="Pridėti"></button>
+<button pButton type="button" (click)="createCandidate(candidate)" label="Pridėti"></button>
