@@ -111,7 +111,7 @@
 </p-dialog>
 
 <p-dialog [(visible)]="newUserDialog" [style]="{width: '450px'}" header="Create new user" [modal]="true" styleClass="p-fluid">
-    <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+    <form #createForm="ngForm" (ngSubmit)="create(createForm)">
         <div>
             <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password</div>
             <br>
@@ -121,7 +121,7 @@
             <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Password" required>  
             <br>
             <br>
-            <p-button type="submit" class="button-split" label="Register" styleClass="p-button-sm"></p-button>
+            <p-button type="submit" class="button-split" label="Create" styleClass="p-button-sm"></p-button>
         </div>
     </form>
 </p-dialog>

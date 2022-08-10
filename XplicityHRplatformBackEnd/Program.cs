@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using XplicityHRplatformBackEnd.DB;
+using XplicityHRplatformBackEnd.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,35 +22,28 @@ builder.Services.AddScoped<DatabaseUtilities>();
 builder.Services.AddMvc();
 builder.Services.AddDbContext<HRplatformDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
-void CondifureServices(IServiceCollection services)
+builder.Services.AddIdentity<User, IdentityRole>()
+.AddEntityFrameworkStores<HRplatformDbContext>();
+
+builder.Services.AddAuthentication(opt =>
 {
-
-    services.AddAuthentication(opt =>
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
 
-            ValidIssuer = "https://localhost:7241",
-            ValidAudience = "https://localhost:7241",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"))
-        };
-    });
-
-    services.AddMvc();
-}
-
-
-builder.Services.AddDbContext<HRplatformDbContext>
-    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
+        ValidIssuer = "https://localhost:7241",
+        ValidAudience = "https://localhost:7241",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"))
+    };
+});
 
 var app = builder.Build();
 

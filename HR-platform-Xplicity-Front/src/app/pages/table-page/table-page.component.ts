@@ -6,12 +6,13 @@ import { TechnologyService } from '../../Services/technology.service';
 import { Router } from '@angular/router';
 import { CallDate } from 'src/app/Models/callDate';
 
-import {ConfirmationService, ConfirmEventType, MessageService} from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import * as moment from 'moment';
-import {ToastModule} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
+import { from } from 'rxjs';
 
 type AOA = any[][];
 
@@ -19,7 +20,7 @@ type AOA = any[][];
   selector: 'app-table-page',
   templateUrl: './table-page.component.html',
   styleUrls: ['./table-page.component.css'],
-  providers: [ConfirmationService,MessageService]
+  providers: [ConfirmationService, MessageService]
 
 })
 
@@ -34,7 +35,7 @@ export class TablePageComponent implements OnInit {
   newUserDialog: boolean = false;
   deleteDialog: boolean = false;
   status: string = "";
-  
+
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
@@ -58,12 +59,12 @@ export class TablePageComponent implements OnInit {
         items => {
           this.technologies = items;
         });
-        
+
   }
-  
+
   deleteCandidate(candidate: Candidate) {
     this.candidateService.deleteCandidate(candidate)
-    .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
     window.location.reload();
   }
 
@@ -74,16 +75,13 @@ export class TablePageComponent implements OnInit {
   }
 
   openNewCandidateForm() {
-      this.submitted = false;
-      this.createCandidateDialog = true;
+    this.submitted = false;
+    this.createCandidateDialog = true;
   }
 
   updateCandidateForm(candidate: Candidate) {
     this.submitted = false;
     this.updateCandidateDialog = true;
-    if (candidate) {
-      this.candidateToEdit = candidate;
-    }
   }
 
   createNewUser() {
@@ -96,52 +94,21 @@ export class TablePageComponent implements OnInit {
     this.deleteDialog = true;
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem("jwt"),
-    this.router.navigate([""])
+      this.router.navigate([""])
   }
 
-  register(form: NgForm){
-    const credentials = {
-      'email': form.value.email,
-      'password': form.value.password
-    }
-    this.http.post("https://localhost:7241/api/auth/register", credentials)
-    .subscribe(response =>{
-        const token = (<any>response).token;
-        localStorage.setItem("Jwt", token);
-        this.invalidLogin = false;
-        this.router.navigate(["/table"])
-      }, err => {
-        this.invalidLogin = true;
-      })
-  }
-
-  delete(form: NgForm){
-    const credentials = {
-      'email': form.value.email
-    }
-    this.http.delete("https://localhost:7241/api/auth/delete", credentials.email)
-    .subscribe({
-      next: data => {
-        this.status = 'Delete successful';
-        },
-        error: error => {
-          this.invalidLogin = true;
-        }
-      })
-  }
-  
-  myUploader(event: any){
+  myUploader(event: any) {
     const target: DataTransfer = <DataTransfer>(event);
     const reader: FileReader = new FileReader();
     reader.onload = (e: any) => {
       const bstr: string = e.target.result;
       const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-  
+
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-  
+
       this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
       let json: Candidate[] = [];
       this.data.forEach( function (value) {
@@ -157,9 +124,39 @@ export class TablePageComponent implements OnInit {
     reader.readAsBinaryString(target.files[0]);
     //window.location.reload();
   };
+  create(form: NgForm) {
+    const credentials = {
+      'email': form.value.email,
+      'password': form.value.password,
+    }
+    this.http.post("https://localhost:7241/api/auth/create", credentials)
+      .subscribe(response => {
+        const token = (<any>response).token;
+        localStorage.setItem("Jwt", token);
+        this.invalidLogin = false;
+        this.router.navigate(["/table"])
+        console.log()
+      }, err => {
+        this.invalidLogin = true;
+      })
+  }
+  
+  delete(form: NgForm) {
+    const credentials = {
+      'email': form.value.email
+    }
+    this.http.delete("https://localhost:7241/api/auth/delete", credentials.email)
+      .subscribe({
+        next: data => {
+          this.status = 'Delete successful';
+        },
+        error: error => {
+          this.invalidLogin = true;
+        }
+      })
+  }
 
 }
-
 function formatJson(value: any): Candidate{
   let JsonCandidate = new Candidate();
   JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
@@ -171,12 +168,11 @@ function formatJson(value: any): Candidate{
   JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
   if(value[7] == "v"){
     JsonCandidate.openForSuggestions = true;
-  }else{
+  } else{
     JsonCandidate.openForSuggestions = false;
   }
   return JsonCandidate;
 }
-
 function getJsDateFromExcel(excelDate: any) {
 	return new Date((excelDate - (25567 + 1))*86400*1000);
 }
