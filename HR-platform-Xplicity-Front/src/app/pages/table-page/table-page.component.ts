@@ -88,6 +88,7 @@ export class TablePageComponent implements OnInit {
   updateCandidateForm(candidate: Candidate) {
     this.submitted = false;
     this.updateCandidateDialog = true;
+    this.candidateToEdit = candidate;
   }
 
   createNewUser() {
