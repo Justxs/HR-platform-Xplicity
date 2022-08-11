@@ -79,6 +79,10 @@ this.technologyService.getTechnologies()
     setTimeout(()=>{this.wait()},2000);
     this.showMessage("Kandidatas sėkmingas įtrauktas", "success", "pavyko");
   }
+
+  openNewTechnologyForm(){
+    this.createTechnologyDialog = true;
+  }
   wait(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
