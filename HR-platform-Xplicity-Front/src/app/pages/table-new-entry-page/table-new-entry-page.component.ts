@@ -16,9 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() 
-  candidate: Candidate = new Candidate;
-  update: boolean = false;
+  @Input() candidate: Candidate = new Candidate;
+  @Input() existingCandidates: Candidate[] = [];
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies: Technology[] = [];
@@ -44,21 +43,41 @@ export class TableNewEntryPageComponent implements OnInit {
   }
 
   createCandidate(candidate: Candidate) {
-    this.dates.forEach(date => {
-      date = moment(date).format('YYYY-MM-DD');
-      var callDate = new CallDate(date);
-      candidate.pastCallDates.push(callDate);
-    });
-    var candidates: Candidate[] = [];
-    candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
     if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
       this.showToast("Ne visi privalomi laukai užpildyti",'error','Klaida');
       return;
     }
+
+    var exists = false;
+    this.existingCandidates.forEach(c => {
+      if (candidate.firstName == c.firstName
+        && candidate.lastName == c.lastName
+        && candidate.linkedIn == c.linkedIn) {
+          exists = true;
+        }
+    });
+
+    if (exists) {
+      this.showToast('Kandidatas jau egzistuoja', 'error', 'Klaida');
+      return;
+    }
+
+    this.dates.forEach(date => {
+      if(date == null){
+        date = "";
+      }else{
+        date = moment(date).format('YYYY-MM-DD');
+      }
+      var callDate = new CallDate(date);
+      candidate.pastCallDates.push(callDate);
+    });
+
+    var candidates: Candidate[] = [];
+
     candidates.push(candidate);
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-    setTimeout(()=>{this.wait()},2000);
+    setTimeout(()=>{this.wait()},1000);
     this.showToast("Pavyko pridėti kandidatą", 'success', 'Pavyko');
   }
   
@@ -70,7 +89,11 @@ export class TableNewEntryPageComponent implements OnInit {
 
   updateCandidate(candidate: Candidate) {
     this.dates.forEach(date => {
-      date = moment(date).format('YYYY-MM-DD');
+      if(date == null){
+        date = "";
+      }else{
+        date = moment(date).format('YYYY-MM-DD');
+      }
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
@@ -81,7 +104,7 @@ export class TableNewEntryPageComponent implements OnInit {
     candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
     this.candidateService.updateCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-      setTimeout(()=>{this.wait()},2000);
+      setTimeout(()=>{this.wait()},1000);
       this.showToast("Pavyko pakeisti kandidato duomenis", 'success', 'Pavyko');
   }
   showToast(message: string, severity: any, summary: any) {

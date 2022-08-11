@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './pages/login/login.component'
 import { TableNewEntryPageComponent } from './pages/table-new-entry-page/table-new-entry-page.component';
-import { TablePageComponent } from './pages/table-page/table-page.component';
+import TablePageComponent from './pages/table-page/table-page.component';
 import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-password-page.component';
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';

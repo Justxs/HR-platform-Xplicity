@@ -13,7 +13,8 @@
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
-            <button pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
+            <button style="margin: 10px;" pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
+            <button style="margin: 10px;" pButton pRipple label="New technology" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewTechnologyForm()"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
@@ -43,17 +44,17 @@
             <th>Komentaras</th>
             <th>
                 Technologijos
-                <p-columnFilter field="technologies" matchMode="in"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                <p-columnFilter [matchMode]="techFilter" field="technologies"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                     <ng-template pTemplate="header">
                         <div style="padding: 10px; font-weight: bold;">
                             Technologijos
                         </div>
                     </ng-template>
                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)" optionLabel="name">
-                            <ng-template let-option pTemplate="item">
+                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)"  [options]="technologies" optionLabel="title" >
+                            <ng-template let-option pTemplate="tech">
                                 <div>
-                                    <span >{{option.technologies.title}}</span>
+                                    <span >{{option.title}}</span>
                                 </div>
                             </ng-template>
                         </p-multiSelect>
@@ -77,7 +78,7 @@
             <td>{{candidate.datesOfPastCallsDisplay}}</td>
             <td>{{candidate.firstName}}</td>
             <td>{{candidate.lastName}}</td>
-            <td>{{candidate.linkedIn}}</td>
+            <td><a href="{{candidate.linkedIn}}" target="_blank">{{candidate.linkedIn}}</a></td>
             <td>{{candidate.comment}}</td>
             <td>{{candidate.technologyDisplay}}</td>
             <td>{{candidate.dateOfFutureCall}}</td>
@@ -103,7 +104,7 @@
 
 <p-dialog [(visible)]="createCandidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <app-table-new-entry-page></app-table-new-entry-page>
+        <app-table-new-entry-page [existingCandidates]="candidates"></app-table-new-entry-page>
     </ng-template>
 </p-dialog>
 
@@ -112,6 +113,13 @@
         <app-table-new-entry-page [candidate]="candidateToEdit"></app-table-new-entry-page>
     </ng-template>
 </p-dialog>
+
+<p-dialog [(visible)]="createTechnologyDialog" [style]="{width: '450px'}" header="Technologija" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <app-new-technology></app-new-technology>
+    </ng-template>
+</p-dialog>
+
 
 <p-dialog [(visible)]="newUserDialog" [style]="{width: '450px'}" header="Create new user" [modal]="true" styleClass="p-fluid">
     <form #createForm="ngForm" (ngSubmit)="create(createForm)">

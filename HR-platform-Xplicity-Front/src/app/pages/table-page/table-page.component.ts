@@ -6,7 +6,7 @@ import { TechnologyService } from '../../Services/technology.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CallDate } from 'src/app/Models/callDate';
 
-import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, FilterService, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
@@ -24,13 +24,14 @@ type AOA = any[][];
 
 })
 
-export class TablePageComponent implements OnInit {
+export default class TablePageComponent implements OnInit {
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
   candidates: Candidate[] = [];
   candidateToEdit: Candidate = new Candidate();
   technologies: Technology[] = [];
   createCandidateDialog: boolean = false;
   updateCandidateDialog: boolean = false;
+  createTechnologyDialog: boolean = false;
   submitted: boolean = false;
   newUserDialog: boolean = false;
   deleteDialog: boolean = false;
@@ -39,27 +40,28 @@ export class TablePageComponent implements OnInit {
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
-  
+
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private candidateService: CandidateService, 
+    private candidateService: CandidateService,
     private technologyService: TechnologyService,
-    private confirmationService: ConfirmationService, 
-    private http: HttpClient, 
+    private confirmationService: ConfirmationService,
+    private filtreService: FilterService,
+    private http: HttpClient,
     private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.candidateService.getCandidate()
-      .subscribe(
-        items => {
-          this.candidates = items;
-        });
+  .subscribe(
+    items => {
+      this.candidates = items;
+    });
 
-    this.technologyService.getTechnologies()
-      .subscribe(
-        items => {
-          this.technologies = items;
-        });
+this.technologyService.getTechnologies()
+  .subscribe(
+    items => {
+      this.technologies = items;
+    });
 
   }
 
@@ -181,25 +183,35 @@ export class TablePageComponent implements OnInit {
   showMessage(message: string, severity: string, summary: string) {
     this.messageService.add({severity: severity, summary: summary, detail: message});
   }
+
+
 }
-function formatJson(value: any): Candidate{
+function formatJson(value: any): Candidate {
   let JsonCandidate = new Candidate();
-  JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
+  if (value[0] == null) {
+    JsonCandidate.pastCallDates = [];
+  } else {
+    JsonCandidate.pastCallDates = [{ dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD') }];
+  }
   JsonCandidate.firstName = value[1];
   JsonCandidate.lastName = value[2];
   JsonCandidate.linkedIn = value[3];
   JsonCandidate.comment = value[4];
-  JsonCandidate.technologies = [{title: value[5]}];
-  JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
-  if(value[7] == "v"){
+  JsonCandidate.technologies = [{ title: value[5] }];
+  if (value[6] == null) {
+    JsonCandidate.dateOfFutureCall = "";
+  } else {
+    JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
+  }
+  if (value[7] == "v") {
     JsonCandidate.openForSuggestions = true;
-  } else{
+  } else {
     JsonCandidate.openForSuggestions = false;
   }
   return JsonCandidate;
 }
 function getJsDateFromExcel(excelDate: any) {
-	return new Date((excelDate - (25567 + 1))*86400*1000);
+  return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
 }
 
 
