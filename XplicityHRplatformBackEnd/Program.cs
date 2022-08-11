@@ -25,6 +25,14 @@ builder.Services.AddDbContext<HRplatformDbContext>(options => options.UseSqlServ
 builder.Services.AddIdentity<User, IdentityRole>()
 .AddEntityFrameworkStores<HRplatformDbContext>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 5;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+});
+
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
