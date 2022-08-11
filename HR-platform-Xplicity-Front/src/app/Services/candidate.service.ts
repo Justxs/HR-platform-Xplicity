@@ -26,6 +26,12 @@ export class CandidateService {
     return this.http.delete<Candidate[]>(`${this.candidateApi}/${candidate.id}`);
   }
 
+  public generateOffer(firstname: string, lastName: string) {
+    return this.http.get(`${environment.webApiUrl}/offer/${firstname}/${lastName}`,
+    {observe:'response', 
+    responseType:'blob'});
+  }
+
   public initCandidateTech(Candidates: Candidate[]){
     Candidates.forEach(candidate => {
       candidate.technologyDisplay = candidate.technologies.map(t => t.title).join(", ");

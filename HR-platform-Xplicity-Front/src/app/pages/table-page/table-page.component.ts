@@ -8,7 +8,7 @@ import { CallDate } from 'src/app/Models/callDate';
 
 import { ConfirmationService, ConfirmEventType, FilterService, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import * as moment from 'moment';
 import { ToastModule } from 'primeng/toast';
@@ -89,6 +89,20 @@ this.technologyService.getTechnologies()
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       setTimeout(()=>{this.wait()},2000);
     this.showMessage("Kandidatas sėkmingai ištrintas", "success", "pavyko");
+  }
+
+  generateOffer(candidate: Candidate){
+    this.candidateService.generateOffer(candidate.firstName,candidate.lastName)
+      .subscribe(response =>{
+        let fileName: any = response.headers.get('content-disposition')
+          ?.split(';')[1].split('=')[1];
+          let blob:Blob=response.body as Blob;
+          let a = document.createElement('a');
+          a.download = fileName;
+          a.href =window.URL.createObjectURL(blob);
+          a.click();
+          this.showMessage("Kandidatas sėkmingas įtrauktas", "success", "pavyko");
+      });
   }
 
   createCandidate(candidates: Candidate[]) {
