@@ -6,12 +6,12 @@ import { TechnologyService } from '../../Services/technology.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CallDate } from 'src/app/Models/callDate';
 
-import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, FilterService, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import * as moment from 'moment';
-
+import { ToastModule } from 'primeng/toast';
 
 type AOA = any[][];
 
@@ -23,7 +23,7 @@ type AOA = any[][];
 
 })
 
-export class TablePageComponent implements OnInit {
+export default class TablePageComponent implements OnInit {
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
   candidates: Candidate[] = [];
   candidateToEdit: Candidate = new Candidate();
@@ -39,205 +39,190 @@ export class TablePageComponent implements OnInit {
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
-  hid?: boolean;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private candidateService: CandidateService, 
+    private candidateService: CandidateService,
     private technologyService: TechnologyService,
-    private confirmationService: ConfirmationService, 
-    private http: HttpClient, 
+    private confirmationService: ConfirmationService,
+    private filtreService: FilterService,
+    private http: HttpClient,
     private messageService: MessageService) { }
 
   ngOnInit(): void {
+    const customFilterName = "techFilter";
+     this.filterService.register(customFilterName, (value, filter): boolean => { 
+      if (filter === undefined || filter === null || filter.trim() === “”) { return true; } 
+      if (value === undefined || value === null) { return false; } 
+      return value.toString() === filter.toString();
+  });
     this.candidateService.getCandidate()
-      .subscribe(
-        items => {
-          this.candidates = items;
-          this.hid = true;
-        });
+  .subscribe(
+    items => {
+      this.candidates = items;
+    });
 
-    this.technologyService.getTechnologies()
-      .subscribe(
-        items => {
-          this.technologies = items;
-        });
-    
-  }
-  deleteCandidate(candidate: Candidate) {
-    this.hid = false;
-    this.candidateService.deleteCandidate(candidate)
-      .subscribe(
-        (candidates: Candidate[]) => {this.candidatesUpdated.emit(candidates)}
-      );
-      setTimeout(()=>{this.wait()},2000);
-      
-    this.showSuccess("Kandidatas sėkmingai ištrintas");
+this.technologyService.getTechnologies()
+  .subscribe(
+    items => {
+      this.technologies = items;
+    });
+
   }
 
-  createCandidate(candidates: Candidate[]) {
-    this.hid = false;
-    this.candidateService.createCandidate(candidates)
-      .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-    setTimeout(()=>{this.wait()},3000);
-    this.showSuccess("Kandidatas sėkmingas įtrauktas");
-  }
-  wait(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate(['./'], {relativeTo: this.route});
-  }
-  openNewCandidateForm() {
-    this.submitted = false;
-    this.createCandidateDialog = true;
-  }
+deleteCandidate(candidate: Candidate) {
+  this.candidateService.deleteCandidate(candidate)
+    .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+  setTimeout(() => { this.wait() }, 2000);
 
-  updateCandidateForm(candidate: Candidate) {
-    this.submitted = false;
-    this.updateCandidateDialog = true;
-    this.candidateToEdit = candidate;
-  }
-  openNewTechnologyForm() {
-    this.createTechnologyDialog = true;
-  }
+  this.showSuccess("Kandidatas sėkmingai ištrintas");
+}
 
-  createNewUser() {
-    this.submitted = false;
-    this.newUserDialog = true;
-  }
+createCandidate(candidates: Candidate[]) {
+  this.candidateService.createCandidate(candidates)
+    .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+  setTimeout(() => { this.wait() }, 3000);
+  this.showSuccess("Kandidatas sėkmingas įtrauktas");
+}
+wait(): void {
+  this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  this.router.onSameUrlNavigation = 'reload';
+  this.router.navigate(['./'], { relativeTo: this.route });
+}
+openNewCandidateForm() {
+  this.submitted = false;
+  this.createCandidateDialog = true;
+}
 
-  deleteUser() {
-    this.submitted = false;
-    this.deleteDialog = true;
-  }
+updateCandidateForm(candidate: Candidate) {
+  this.submitted = false;
+  this.updateCandidateDialog = true;
+  this.candidateToEdit = candidate;
+}
+openNewTechnologyForm() {
+  this.createTechnologyDialog = true;
+}
 
-  logout() {
-    localStorage.removeItem("jwt"),
-      this.router.navigate([""])
-  }
+createNewUser() {
+  this.submitted = false;
+  this.newUserDialog = true;
+}
 
-  myUploader(event: any) {
-    const target: DataTransfer = <DataTransfer>(event);
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+deleteUser() {
+  this.submitted = false;
+  this.deleteDialog = true;
+}
 
-      const wsname: string = wb.SheetNames[0];
-      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+logout() {
+  localStorage.removeItem("jwt"),
+    this.router.navigate([""])
+}
+
+myUploader(event: any) {
+  const target: DataTransfer = <DataTransfer>(event);
+  const reader: FileReader = new FileReader();
+  reader.onload = (e: any) => {
+    const bstr: string = e.target.result;
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
 
-      this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-      let json: Candidate[] = [];
-      this.data.forEach(function (value) {
-        if (value[1] == null || value[2] == null || value[3] == null || value[5] == null) {
-          return;
-        }
-        json.push(formatJson(value));
-      });
-      json.splice(0, 1);
-      this.createCandidate(json);
-    };
-    reader.readAsBinaryString(target.files[0]);
+    this.data = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+    let json: Candidate[] = [];
+    this.data.forEach(function (value) {
+      if (value[1] == null || value[2] == null || value[3] == null || value[5] == null) {
+        return;
+      }
+      json.push(formatJson(value));
+    });
+    json.splice(0, 1);
+    this.createCandidate(json)
   };
-  
-  create(form: NgForm) {
-    const credentials = {
-      'email': form.value.email,
-      'password': form.value.password,
-    }
-    this.http.post("https://localhost:7241/api/auth/create", credentials)
-      .subscribe(response => {
-        const token = (<any>response).token;
-        localStorage.setItem("Jwt", token);
-        this.invalidLogin = false;
-        this.router.navigate(["/table"])
-        console.log()
-      }, err => {
-        this.invalidLogin = true;
-      })
-      setTimeout(()=>{this.wait()},1000);
-  }
-  
-  delete(form: NgForm) {
-    const credentials = {
-      'email': form.value.email
-    }
-    this.http.delete("https://localhost:7241/api/auth/" + credentials.email)
-      .subscribe({
-        next: data => {
-          this.status = 'Delete successful';
-        },
-        error: error => {
-          this.invalidLogin = true;
-        }
-      });
-      setTimeout(()=>{this.wait()},1000);
-  }
-  showSuccess(message: string) {
-    this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
-  }
+  reader.readAsBinaryString(target.files[0]);
+};
 
-//   const customFilterName = “custom-equals”;
-// this.filterService.register(
-// customFilterName,
-// (value, filter): boolean => {
-// if (filter === undefined || filter === null || filter.trim() === “”) {
-// return true;
-// }
-// if (value === undefined || value === null) {
-// return false;
-// }
-// return value.toString() === filter.toString();
-// }
-// );
+create(form: NgForm) {
+  const credentials = {
+    'email': form.value.email,
+    'password': form.value.password,
+  }
+  this.http.post("https://localhost:7241/api/auth/create", credentials)
+    .subscribe(response => {
+      const token = (<any>response).token;
+      localStorage.setItem("Jwt", token);
+      this.invalidLogin = false;
+      this.router.navigate(["/table"])
+      console.log()
+    }, err => {
+      this.invalidLogin = true;
+    })
+  setTimeout(() => { this.wait() }, 1000);
+}
+
+delete (form: NgForm) {
+  const credentials = {
+    'email': form.value.email
+  }
+  this.http.delete("https://localhost:7241/api/auth/" + credentials.email)
+    .subscribe({
+      next: data => {
+        this.status = 'Delete successful';
+      },
+      error: error => {
+        this.invalidLogin = true;
+      }
+
+
+    });
+  setTimeout(() => { this.wait() }, 1000);
+}
+showSuccess(message: string) {
+  this.messageService.add({ severity: 'success', summary: 'Pavyko', detail: message });
+}
+
+const techFilter = "techFilter";
+this.filtreService.register(techFilter, (value, filter): boolean => {
+  if (filter === undefined || filter === null || filter.trim() === '') {
+    return true;
+  }
+  if (value === undefined || value === null) {
+    return false;
+  }
+  return value.toString() === filter.toString();
+}
+);
 
 
 
 }
-function formatJson(value: string[]): Candidate{
+function formatJson(value: any): Candidate {
   let JsonCandidate = new Candidate();
-  JsonCandidate.pastCallDates = [];
-  if(value[0] == null){
-    JsonCandidate.pastCallDates = [{dateOfCall: ""}];
-  } else{
-    let str = value[0].toString().split(/\r?\n/)
-    if(str.length == 1){
-      JsonCandidate.pastCallDates.push({dateOfCall: moment(getJsDateFromExcel(value[0])).format('YYYY-MM-DD')});
-    } else{
-      str.forEach(element => {
-        JsonCandidate.pastCallDates.push({dateOfCall: moment(element).format('YYYY-MM-DD')});
-      });
-    }
+  if (value[0] == null) {
+    JsonCandidate.pastCallDates = [];
+  } else {
+    JsonCandidate.pastCallDates = [{ dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD') }];
   }
-
   JsonCandidate.firstName = value[1];
   JsonCandidate.lastName = value[2];
   JsonCandidate.linkedIn = value[3];
   JsonCandidate.comment = value[4];
-
-  JsonCandidate.technologies = [];
-  let str: string[] = value[5].split(/\r?\n/);
-  str.forEach(element => {
-    JsonCandidate.technologies.push({title: element});
-  });
-
-  if(value[6] == null){
+  JsonCandidate.technologies = [{ title: value[5] }];
+  if (value[6] == null) {
     JsonCandidate.dateOfFutureCall = "";
-  } else{
+  } else {
     JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
   }
-
-  if(value[7] == "v"){
+  if (value[7] == "v") {
     JsonCandidate.openForSuggestions = true;
-  } else{
+  } else {
     JsonCandidate.openForSuggestions = false;
   }
-
   return JsonCandidate;
 }
-
 function getJsDateFromExcel(excelDate: any) {
-	return new Date((excelDate - (25567 + 1))*86400*1000);
+  return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
 }
 
 
