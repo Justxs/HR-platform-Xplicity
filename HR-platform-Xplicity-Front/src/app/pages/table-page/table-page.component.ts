@@ -40,7 +40,7 @@ export default class TablePageComponent implements OnInit {
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
-
+  hid: boolean = true;
   constructor(private router: Router,
     private route: ActivatedRoute,
     private candidateService: CandidateService,
@@ -51,10 +51,12 @@ export default class TablePageComponent implements OnInit {
     private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.hid = false;
     this.candidateService.getCandidate()
   .subscribe(
     items => {
       this.candidates = items;
+      this.hid = true;
     });
 
 this.technologyService.getTechnologies()
@@ -66,14 +68,15 @@ this.technologyService.getTechnologies()
   }
 
   deleteCandidate(candidate: Candidate) {
+    this.hid = false;
     this.candidateService.deleteCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       setTimeout(()=>{this.wait()},2000);
-      
     this.showMessage("Kandidatas sėkmingai ištrintas", "success", "pavyko");
   }
 
   createCandidate(candidates: Candidate[]) {
+    this.hid = false;
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
     setTimeout(()=>{this.wait()},2000);
