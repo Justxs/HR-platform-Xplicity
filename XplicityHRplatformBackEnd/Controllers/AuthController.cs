@@ -65,16 +65,15 @@ namespace XplicityHRplatformBackEnd.Controllers
 
 
 
-        [HttpDelete, Route("{{id}}/delete")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete, Route("{email}")]
+        public async Task<IActionResult> Delete(string email)
         {
-            var userId = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(userId);
+            var user = await _userManager.FindByEmailAsync(email);
+            await _userManager.DeleteAsync(user);
             return Ok("user deleted");
         }
 
-
-        private JwtSecurityToken GenerateJWT(User login)
+            private JwtSecurityToken GenerateJWT(User login)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha512);
