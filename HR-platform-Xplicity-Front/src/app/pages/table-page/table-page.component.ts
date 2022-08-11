@@ -131,8 +131,7 @@ export class TablePageComponent implements OnInit {
     };
     reader.readAsBinaryString(target.files[0]);
   };
-
-
+  
   create(form: NgForm) {
     const credentials = {
       'email': form.value.email,
@@ -173,13 +172,21 @@ export class TablePageComponent implements OnInit {
 }
 function formatJson(value: any): Candidate{
   let JsonCandidate = new Candidate();
-  JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
+  if(value[0] == null){
+    JsonCandidate.pastCallDates = [];
+  }else{
+    JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
+  }
   JsonCandidate.firstName = value[1];
   JsonCandidate.lastName = value[2];
   JsonCandidate.linkedIn = value[3];
   JsonCandidate.comment = value[4];
   JsonCandidate.technologies = [{title: value[5]}];
-  JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
+  if(value[6] == null){
+    JsonCandidate.dateOfFutureCall = "";
+  }else{
+    JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
+  }
   if(value[7] == "v"){
     JsonCandidate.openForSuggestions = true;
   } else{
