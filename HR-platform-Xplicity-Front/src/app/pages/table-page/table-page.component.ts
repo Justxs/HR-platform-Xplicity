@@ -174,6 +174,23 @@ export class TablePageComponent implements OnInit {
   showSuccess(message: string) {
     this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
   }
+
+//   const customFilterName = “custom-equals”;
+// this.filterService.register(
+// customFilterName,
+// (value, filter): boolean => {
+// if (filter === undefined || filter === null || filter.trim() === “”) {
+// return true;
+// }
+// if (value === undefined || value === null) {
+// return false;
+// }
+// return value.toString() === filter.toString();
+// }
+// );
+
+
+
 }
 function formatJson(value: any): Candidate{
   let JsonCandidate = new Candidate();

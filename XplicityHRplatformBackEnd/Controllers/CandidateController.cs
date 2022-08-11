@@ -66,8 +66,21 @@ namespace XplicityHRplatformBackEnd.Controllers
         {
             foreach (CandidateDto request in requests)
             {
-                var newCandidate = new Candidate(request);
+                bool exists = false;
+                var candidates = await _dataUtilities.GetAll(_dbContext.Candidates);
+                foreach (Candidate candidate in candidates)
+                {
+                    if ( candidate.FirstName == request.FirstName 
+                        && candidate.LastName == request.LastName
+                        && candidate.LinkedIn == request.LinkedIn)
+                    {
+                        exists = true; 
+                        break;
+                    }
+                }
+                if (exists) break;
 
+                var newCandidate = new Candidate(request);
                 Guid newCandidateId = await _dataUtilities.AddEntry(_dbContext.Candidates, newCandidate);
 
                 await AddCallDateRelations(request.PastCallDates, newCandidateId);

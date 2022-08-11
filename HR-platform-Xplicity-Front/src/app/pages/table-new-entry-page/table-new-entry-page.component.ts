@@ -16,9 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   ]
 })
 export class TableNewEntryPageComponent implements OnInit {
-  @Input() 
-  candidate: Candidate = new Candidate;
-  update: boolean = false;
+  @Input() candidate: Candidate = new Candidate;
+  @Input() existingCandidates: Candidate[] = [];
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
 
   technologies: Technology[] = [];
@@ -44,21 +43,37 @@ export class TableNewEntryPageComponent implements OnInit {
   }
 
   createCandidate(candidate: Candidate) {
+    if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
+      this.showToast("Ne visi privalomi laukai užpildyti",'error','Klaida');
+      return;
+    }
+
+    var exists = false;
+    this.existingCandidates.forEach(c => {
+      if (candidate.firstName == c.firstName
+        && candidate.lastName == c.lastName
+        && candidate.linkedIn == c.linkedIn) {
+          exists = true;
+        }
+    });
+
+    if (exists) {
+      this.showToast('Kandidatas jau egzistuoja', 'error', 'Klaida');
+      return;
+    }
+
     this.dates.forEach(date => {
       date = moment(date).format('YYYY-MM-DD');
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
+
     var candidates: Candidate[] = [];
-    candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
-    if(candidate.firstName == "" || candidate.lastName == "" || candidate.linkedIn == ""){
-      this.showToast("Ne visi privalomi laukai užpildyti",'error','Klaida');
-      return;
-    }
+
     candidates.push(candidate);
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-    setTimeout(()=>{this.wait()},2000);
+    setTimeout(()=>{this.wait()},1500);
     this.showToast("Pavyko pridėti kandidatą", 'success', 'Pavyko');
   }
   

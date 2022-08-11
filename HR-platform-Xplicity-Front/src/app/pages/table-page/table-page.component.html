@@ -43,22 +43,39 @@
             <th>Komentaras</th>
             <th>
                 Technologijos
-                <p-columnFilter field="technologies" matchMode="in"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                <!-- <p-columnFilter [matchMode]="techFilter()" field="technologies"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                     <ng-template pTemplate="header">
                         <div style="padding: 10px; font-weight: bold;">
                             Technologijos
                         </div>
                     </ng-template>
                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)" optionLabel="name">
-                            <ng-template let-option pTemplate="item">
+                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)"  [options]="technologies" optionLabel="title" >
+                            <ng-template let-option pTemplate="tech">
                                 <div>
-                                    <span >{{option.technologies.title}}</span>
+                                    <span >{{option.title}}</span>
                                 </div>
                             </ng-template>
                         </p-multiSelect>
                     </ng-template>
-                </p-columnFilter>
+                </p-columnFilter> -->
+                <!-- <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                    <ng-template pTemplate="header">
+                        <div class="px-3 pt-3 pb-0">
+                            <span class="font-bold">Agent Picker</span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
+                            <ng-template let-option pTemplate="item">
+                                <div class="p-multiselect-representative-option">
+                                    <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.image}}" width="32" style="vertical-align: middle" />
+                                    <span class="ml-1">{{option.name}}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </ng-template>
+                </p-columnFilter> -->
             </th>
             <th>Kada reikia susisiekti?</th>
             <th style="width: 8rem">
@@ -103,7 +120,7 @@
 
 <p-dialog [(visible)]="createCandidateDialog" [style]="{width: '450px'}" header="Kandidato duomenys" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <app-table-new-entry-page></app-table-new-entry-page>
+        <app-table-new-entry-page [existingCandidates]="candidates"></app-table-new-entry-page>
     </ng-template>
 </p-dialog>
 
