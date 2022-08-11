@@ -162,7 +162,10 @@ export class TablePageComponent implements OnInit {
         error: error => {
           this.invalidLogin = true;
         }
-      })
+
+       
+      });
+      setTimeout(()=>{this.wait()},2000);
   }
   showSuccess(message: string) {
     this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
