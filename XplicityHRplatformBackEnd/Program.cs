@@ -22,16 +22,16 @@ builder.Services.AddScoped<DatabaseUtilities>();
 builder.Services.AddMvc();
 builder.Services.AddDbContext<HRplatformDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRplatformDbContext")));
 
-builder.Services.AddIdentity<User, IdentityRole>()
-.AddEntityFrameworkStores<HRplatformDbContext>();
-
-builder.Services.Configure<IdentityOptions>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 5;
-    options.Password.RequireLowercase = true;
+    options.Password.RequiredLength = 4;
+    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-});
+    options.Password.RequireLowercase = false;
+})
+
+.AddEntityFrameworkStores<HRplatformDbContext>();
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -52,6 +52,7 @@ builder.Services.AddAuthentication(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"))
     };
 });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -69,6 +70,35 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// init roles and admin user creation
+var serviceProvider = app.Services.CreateScope().ServiceProvider;
+
+
+var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+if (!roleManager.RoleExistsAsync("User").Result)
+{
+    var role = new IdentityRole { Name = "User" };
+    roleManager.CreateAsync(role).Wait();
+}
+if (!roleManager.RoleExistsAsync("Admin").Result)
+{
+    var role = new IdentityRole { Name = "Admin" };
+    roleManager.CreateAsync(role).Wait();
+}
+
+
+var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+if (!userManager.Users.Any(x => x.Id == InitAdminConstants.Id))
+{
+    var user = new User
+    {
+        UserName = InitAdminConstants.Email,
+        Email = InitAdminConstants.Email
+    };
+    userManager.CreateAsync(user, InitAdminConstants.Password).Wait();
+    userManager.AddToRoleAsync(user, "Admin");
+}
 
 app.Run();
 

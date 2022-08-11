@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import * as moment from 'moment';
 import { ToastModule } from 'primeng/toast';
+import { tokenGetter } from 'src/app/app.module';
 
 type AOA = any[][];
 
@@ -67,14 +68,14 @@ export class TablePageComponent implements OnInit {
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
       setTimeout(()=>{this.wait()},2000);
       
-    this.showSuccess("Kandidatas sėkmingai ištrintas");
+    this.showMessage("Kandidatas sėkmingai ištrintas", "success", "pavyko");
   }
 
   createCandidate(candidates: Candidate[]) {
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
     setTimeout(()=>{this.wait()},2000);
-    this.showSuccess("Kandidatas sėkmingas įtrauktas");
+    this.showMessage("Kandidatas sėkmingas įtrauktas", "success", "pavyko");
   }
   wait(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -103,9 +104,10 @@ export class TablePageComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem("jwt"),
+    localStorage.removeItem("Jwt"),
       this.router.navigate([""])
   }
+  
 
   myUploader(event: any) {
     const target: DataTransfer = <DataTransfer>(event);
@@ -132,6 +134,12 @@ export class TablePageComponent implements OnInit {
     reader.readAsBinaryString(target.files[0]);
   };
 
+  // adminCheck(){
+  //   const jwt = tokenGetter()!;
+  //   const claims = atob(jwt.split('.')[1])
+  //   console.log(claims)
+  //   if(claims.)
+  // }
 
   create(form: NgForm) {
     const credentials = {
@@ -145,9 +153,12 @@ export class TablePageComponent implements OnInit {
         this.invalidLogin = false;
         this.router.navigate(["/table"])
         console.log()
+        setTimeout(()=>{this.wait()},1000);
+        this.showMessage("Vartotojas sėkmingai pridetas", "success", "pavyko");
       }, err => {
         this.invalidLogin = true;
       })
+ 
   }
   
   delete(form: NgForm) {
@@ -158,14 +169,17 @@ export class TablePageComponent implements OnInit {
       .subscribe({
         next: data => {
           this.status = 'Delete successful';
+          setTimeout(()=>{this.wait()},1000);
+          this.showMessage("Vartotojas sėkmingai ištrintas", "success", "pavyko");
         },
         error: error => {
           this.invalidLogin = true;
         }
       })
+
   }
-  showSuccess(message: string) {
-    this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
+  showMessage(message: string, severity: string, summary: string) {
+    this.messageService.add({severity: severity, summary: summary, detail: message});
   }
 }
 function formatJson(value: any): Candidate{
@@ -187,5 +201,7 @@ function formatJson(value: any): Candidate{
 function getJsDateFromExcel(excelDate: any) {
 	return new Date((excelDate - (25567 + 1))*86400*1000);
 }
+
+
 
 

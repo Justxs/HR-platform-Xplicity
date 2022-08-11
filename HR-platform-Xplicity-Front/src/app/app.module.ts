@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; 
@@ -25,6 +25,7 @@ import {DialogModule} from 'primeng/dialog';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import {MenubarModule} from 'primeng/menubar';
 import { ToastModule } from 'primeng/toast';
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 export function tokenGetter() {
   return localStorage.getItem("Jwt")
@@ -60,7 +61,11 @@ export function tokenGetter() {
     MenubarModule,
     ToastModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

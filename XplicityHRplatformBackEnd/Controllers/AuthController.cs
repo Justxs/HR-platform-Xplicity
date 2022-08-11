@@ -24,15 +24,18 @@ namespace XplicityHRplatformBackEnd.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost, Route("create")]
         public async Task<IActionResult> Register([FromBody] UserCreateDto userCreate)
         {
+            var x = HttpContext.User;
             var user = new User
             {
                 UserName = userCreate.Email,
                 Email = userCreate.Email
             };
-            var result =  await _userManager.CreateAsync(user, userCreate.Password);
+            var result = await _userManager.CreateAsync(user, userCreate.Password);
+            await _userManager.AddToRoleAsync(user, "User");
             if (!result.Succeeded)
             {
                 return BadRequest("Password has to contain alphanumeric symbols");
@@ -42,7 +45,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             {
                 return Ok("user created");
             }
-          
+
         }
 
         [HttpPost, Route("login")]
@@ -57,14 +60,15 @@ namespace XplicityHRplatformBackEnd.Controllers
             }
             if (passwordCorrect)
             {
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(GenerateJWT(user));
+                var token = await GenerateJWT(user);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
                 return Ok(new { Token = tokenString });
             }
             return Unauthorized();
         }
 
 
-
+        [Authorize(Roles ="Admin")]
         [HttpDelete, Route("{email}")]
         public async Task<IActionResult> Delete(string email)
         {
@@ -73,15 +77,20 @@ namespace XplicityHRplatformBackEnd.Controllers
             return Ok("user deleted");
         }
 
-            private JwtSecurityToken GenerateJWT(User login)
+            private async Task<JwtSecurityToken> GenerateJWT(User user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
+
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyUltraSecretKeyForHrApp"));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha512);
 
             var tokenOptions = new JwtSecurityToken(
                 issuer: "https://localhost:7241",
                 audience: "https://localhost:7241",
-                claims: new List<Claim>(),
+                claims: new List<Claim> 
+                { 
+                new Claim (ClaimTypes.Role, roles.First())
+                },
                 expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: signingCredentials
                 );

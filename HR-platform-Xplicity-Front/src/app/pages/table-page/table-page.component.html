@@ -6,6 +6,7 @@
         <button class="addnew" style="margin: 10px;" pButton pRipple label="Create new user" icon="pi pi-user-plus" (click)="createNewUser()"></button>
         <button class="logout" style="margin: 10px;" pButton pRipple label="Delete existing user" icon="pi pi-user-plus" (click)="deleteUser()"></button>
         <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Logout" (click)="logout()"  ></button>
+        <!-- <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="check" (click)="adminCheck()"  ></button> -->
     </ng-template>
 </p-menubar>
 <p-toast></p-toast> 
@@ -115,8 +116,6 @@
 <p-dialog [(visible)]="newUserDialog" [style]="{width: '450px'}" header="Create new user" [modal]="true" styleClass="p-fluid">
     <form #createForm="ngForm" (ngSubmit)="create(createForm)">
         <div>
-            <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password</div>
-            <br>
             <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>  
             <br>
             <br>
@@ -131,7 +130,6 @@
 <p-dialog [(visible)]="deleteDialog" [style]="{width: '450px'}" header="Delete existing user" [modal]="true" styleClass="p-fluid">
     <form #deleteForm="ngForm" (ngSubmit)="delete(deleteForm)">
         <div>
-            <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password</div>
             <br>
             <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>  
             <br>
