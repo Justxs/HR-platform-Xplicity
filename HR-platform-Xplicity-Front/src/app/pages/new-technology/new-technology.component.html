@@ -1,7 +1,7 @@
 
 <div class="center">
     <div class="center-box">
-            <input [(ngModel)]="newTechnology.title"  pInputText class="p-inputtext-sm" placeholder="technology title" required #techInput="ngModel">  
+            <input [(ngModel)]="newTechnology.title"  pInputText class="p-inputtext-sm" placeholder="Technologijos pavadinimas" required #techInput="ngModel">  
             <div *ngIf="techInput.invalid && (techInput.dirty || techInput.touched)" class="error">
                 <p *ngIf="techInput.errors?.['required']">Įveskite galimą technologijos pavadinimą.</p>
             </div>

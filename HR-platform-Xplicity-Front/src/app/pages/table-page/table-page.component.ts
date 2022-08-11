@@ -96,12 +96,12 @@ this.technologyService.getTechnologies()
       .subscribe(response =>{
         let fileName: any = response.headers.get('content-disposition')
           ?.split(';')[1].split('=')[1];
-          let blob:Blob=response.body as Blob;
+          let blob:Blob = response.body as Blob;
           let a = document.createElement('a');
           a.download = fileName;
-          a.href =window.URL.createObjectURL(blob);
+          a.href = window.URL.createObjectURL(blob);
           a.click();
-          this.showMessage("Kandidatas sėkmingas įtrauktas", "success", "pavyko");
+          this.showMessage("Darbo pasiūlymas sugeneruotas", "success", "pavyko");
       });
   }
 

@@ -3,9 +3,9 @@
         <img style="margin: 10px;" src="/assets/pictures/xpl_rgb-normal2x.png" height="40" class="mr-2">
     </ng-template>
     <ng-template pTemplate="end">
-        <button class="addnew" style="margin: 10px;" pButton pRipple label="Create new user" icon="pi pi-user-plus" (click)="createNewUser()"></button>
-        <button class="logout" style="margin: 10px;" pButton pRipple label="Delete existing user" icon="pi pi-trash" (click)="deleteUser()"></button>
-        <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Logout" (click)="logout()"  ></button>
+        <button class="addnew" style="margin: 10px;" pButton pRipple label="Sukurti naują vartotoją" icon="pi pi-user-plus" (click)="createNewUser()"></button>
+        <button class="logout" style="margin: 10px;" pButton pRipple label="Ištrinti egzistuojanti vartotoją" icon="pi pi-trash" (click)="deleteUser()"></button>
+        <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Atsijungti" (click)="logout()"  ></button>
         <!-- <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="check" (click)="menuDisplay()"  ></button> -->
     </ng-template>
 </p-menubar>
@@ -13,11 +13,11 @@
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
-            <button style="margin: 10px;" pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
-            <button style="margin: 10px;" pButton pRipple label="New technology" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewTechnologyForm()"></button>
+            <button style="margin: 10px;" pButton pRipple label="Naujas kandidatas" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
+            <button style="margin: 10px;" pButton pRipple label="Nauja technologija" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewTechnologyForm()"></button>
         </ng-template>
         <ng-template pTemplate="right">
-            <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
+            <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Importuoti" [customUpload]="true"
             accept=".xlsx" [maxFileSize]="1000000" (uploadHandler)="myUploader($event)"></p-fileUpload>
         </ng-template>
     </p-toolbar>
@@ -25,7 +25,7 @@
     <p-table [value]="candidates"
     [paginator]="true"
     [rows]="10" [showCurrentPageReport]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    currentPageReportTemplate="Rodomas {first} lapas iš {last} lapų. Iš viso duomenų: {totalRecords}"
     [rowsPerPageOptions]="[10,25,50]">
     <ng-template  pTemplate="header">
         <tr>

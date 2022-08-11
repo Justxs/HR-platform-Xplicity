@@ -13,28 +13,28 @@
     </div>
 </div>
 <div class="margin">
-    <input type="text" class="p-inputtext-lg" name="linkedIn" placeholder="LinkedIn url*"
+    <input type="text" class="p-inputtext-lg" name="linkedIn" placeholder="LinkedIn nuoroda*"
         [(ngModel)]="candidate.linkedIn" #linkedInInput="ngModel" pInputText />
     <div *ngIf="linkedInInput.invalid && (linkedInInput.dirty || linkedInInput.touched)" class="error">
         <p *ngIf="linkedInInput.errors?.['required']">Įveskite galimą kandidato linkedIn nuorodą.</p>
     </div>
 </div>
 <div class="margin">
-    <textarea rows="5" cols="23" class="p-inputtext-lg" name="comment" placeholder="Komentaras*" [autoResize]="true"
+    <textarea rows="5" cols="23" class="p-inputtext-lg" name="comment" placeholder="Komentaras" [autoResize]="true"
         [(ngModel)]="candidate.comment" #commentInput="ngModel" pInputTextarea></textarea>
     <div *ngIf="commentInput.invalid && (commentInput.dirty || commentInput.touched)" class="error">
         <p *ngIf="commentInput.errors?.['required']">Įveskite galimą komentarą.</p>
     </div>
 </div>
 <div class="margin">
-    <p-calendar [readonlyInput]="true" [showIcon]="true" name="contactDate" placeholder="Kada reikia susisiekti"
+    <p-calendar [readonlyInput]="true" [showIcon]="true" name="contactDate" placeholder="Kada reikia susisiekti?"
         [(ngModel)]="candidate.dateOfFutureCall" #contactInput="ngModel"></p-calendar>
     <div *ngIf="contactInput.invalid && (contactInput.dirty || contactInput.touched)" class="error">
         <p *ngIf="contactInput.errors?.['required']">Privaloma pasirinkti susisiekimo datą.</p>
     </div>
     <div style="margin-top: 10px; margin-bottom: 10px;">
         <p-calendar selectionMode="multiple" [readonlyInput]="true" [showIcon]="true" name="contactedDates"
-            [(ngModel)]="dates" placeholder="Kada buvo susisiekta"></p-calendar>
+            [(ngModel)]="dates" placeholder="Kada buvo susisiekta?"></p-calendar>
     </div>
     <div class="field-checkbox">
         <p-checkbox [binary]="true" inputId="binary" name="available" [(ngModel)]="candidate.openForSuggestions">
@@ -44,10 +44,9 @@
 </div>
 <div class="margin">
     <p-multiSelect [options]="technologies" optionLabel="title" [(ngModel)]="candidate.technologies"
-        defaultLabel="Select technologies" display="chip" required #techInput="ngModel"></p-multiSelect>
+        defaultLabel="Pasirinkite technologijas*" display="chip" required #techInput="ngModel"></p-multiSelect>
     <div *ngIf="techInput.invalid && (techInput.dirty || techInput.touched)" class="error">
-        <p *ngIf="techInput.errors?.['required']">Pasirinkite bent vieną technologiją, kurią gali naudoti
-            kandidatas.</p>
+        <p style="color: red;" *ngIf="techInput.errors?.['required']">Pasirinkite bent vieną technologiją, kurią gali naudoti kandidatas.</p>
     </div>
 </div>
 
