@@ -8,7 +8,7 @@ export class CallDate {
     //    this.dateOfCall =  "";
     //}
 
-    constructor(theName: string) {
-        this.dateOfCall = theName;
+    constructor(theDate: string) {
+        this.dateOfCall = theDate;
     }
 }
