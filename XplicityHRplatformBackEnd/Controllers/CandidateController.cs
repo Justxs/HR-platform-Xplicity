@@ -72,6 +72,7 @@ namespace XplicityHRplatformBackEnd.Controllers
 
                 await AddCallDateRelations(request.PastCallDates, newCandidateId);
                 await AddTechnologyRelations(request.Technologies, newCandidateId);
+                await _dbContext.SaveChangesAsync();
             }
             return Ok();
         }
@@ -94,7 +95,6 @@ namespace XplicityHRplatformBackEnd.Controllers
             await SaveToDbAsync();
             return Ok();
         }
-
 
         [HttpDelete]
         [Route("{IdToRemove}")]
@@ -131,9 +131,7 @@ namespace XplicityHRplatformBackEnd.Controllers
                     }
 
                     await _dbContext.Calldates.AddAsync(date);
-                    var newCallDateId = date.Id;
-
-                    CandidateCallDate candidateCall = new() { CallDateId = newCallDateId, CandidateId = CandidateId };
+                    CandidateCallDate candidateCall = new() { CallDateId = date.Id, CandidateId = CandidateId };
                     await _dbContext.CandidateCalldates.AddAsync(candidateCall);
                 }
                 return true;
@@ -149,8 +147,19 @@ namespace XplicityHRplatformBackEnd.Controllers
             {
                 foreach (Technology tech in Technologies)
                 {
-                    CandidateTechnology candidateTechnology = new() { TechnologyId = tech.Id, CandidateId = CandidateId };
-                    await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology);
+                    var existingTechnology = await _dbContext.Technologies
+                        .Where(t => t.Title == tech.Title)
+                        .SingleOrDefaultAsync();
+                    if (existingTechnology != null)
+                    {
+                        CandidateTechnology candidateTechnology = new() { TechnologyId = existingTechnology.Id, CandidateId = CandidateId };
+                        await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology);
+                        continue;
+                    }
+
+                    await _dbContext.Technologies.AddAsync(tech);
+                    CandidateTechnology candidateTechnology1 = new() { TechnologyId = tech.Id, CandidateId = CandidateId };
+                    await _dbContext.CandidateTechnologies.AddAsync(candidateTechnology1);
                 }
                 return true;
             }
@@ -220,7 +229,7 @@ namespace XplicityHRplatformBackEnd.Controllers
                             foreach (var property in proposedValues.Properties)
                             {
                                 var proposedValue = proposedValues[property];
-                                var databaseValue = databaseValues[property];
+                                //var databaseValue = databaseValues[property];
                             }
 
                             // Refresh original values to bypass next concurrency check

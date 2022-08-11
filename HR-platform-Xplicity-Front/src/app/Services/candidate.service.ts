@@ -18,6 +18,10 @@ export class CandidateService {
   public createCandidate(candidate: Candidate[]): Observable<Candidate[]> {
     return this.http.post<Candidate[]>(this.candidateApi, candidate);
   }
+  public updateCandidate(candidate: Candidate): Observable<Candidate[]> {
+    return this.http.put<Candidate[]>(this.candidateApi, candidate);
+  }
+
   public deleteCandidate(candidate: Candidate): Observable<Candidate[]> {
     return this.http.delete<Candidate[]>(`${this.candidateApi}/${candidate.id}`);
   }
