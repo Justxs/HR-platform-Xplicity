@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace XplicityHRplatformBackEnd.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/download/offer")]
     [ApiController]
     public class DownloadController : ControllerBase
     {
 
-        [HttpPost("export")]
+        [HttpPost]
         public async Task<IActionResult> DownloadOffer(string name, string lastName)
         {
             DateTime date = DateTime.Today;
@@ -36,7 +36,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             return File(
                 fileContents: System.IO.File.ReadAllBytes(path),
                 contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                fileDownloadName: "$Job_offer_Xplicity_{ name}_{ lastName}.docx");
+                fileDownloadName: $"Job_offer_Xplicity_{ name}_{ lastName}.docx");
 
 
         }
