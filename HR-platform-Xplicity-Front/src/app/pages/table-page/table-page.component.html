@@ -9,7 +9,7 @@
         <!-- <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="check" (click)="adminCheck()"  ></button> -->
     </ng-template>
 </p-menubar>
-<p-toast></p-toast> 
+<p-toast></p-toast>
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
@@ -23,9 +23,9 @@
     </p-toolbar>
 
     <p-table [value]="candidates"
-    [paginator]="true" 
-    [rows]="10" [showCurrentPageReport]="true" 
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+    [paginator]="true"
+    [rows]="10" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[10,25,50]">
     <ng-template  pTemplate="header">
         <tr>
@@ -44,14 +44,14 @@
             <th>Komentaras</th>
             <th>
                 Technologijos
-                <p-columnFilter [matchMode]="techFilter" field="technologies"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                <p-columnFilter matchMode="contains" field="technologies"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                     <ng-template pTemplate="header">
                         <div style="padding: 10px; font-weight: bold;">
                             Technologijos
                         </div>
                     </ng-template>
                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)"  [options]="technologies" optionLabel="title" >
+                        <p-multiSelect [ngModel]="value" [options]="technologies" (onChange)="filter($event.value)" optionLabel="title" >
                             <ng-template let-option pTemplate="tech">
                                 <div>
                                     <span >{{option.title}}</span>
@@ -64,7 +64,7 @@
             <th>Kada reikia susisiekti?</th>
             <th style="width: 8rem">
                 <div >
-                    Atviras pasiūlymams? 
+                    Atviras pasiūlymams?
                     <div style="padding: 5px;">
                         <p-columnFilter type="boolean" field="openForSuggestions"></p-columnFilter>
                     </div>
@@ -124,10 +124,10 @@
 <p-dialog [(visible)]="newUserDialog" [style]="{width: '450px'}" header="Create new user" [modal]="true" styleClass="p-fluid">
     <form #createForm="ngForm" (ngSubmit)="create(createForm)">
         <div>
-            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>  
+            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>
             <br>
             <br>
-            <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Password" required>  
+            <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Password" required>
             <br>
             <br>
             <p-button type="submit" class="button-split" label="Create" styleClass="p-button-sm"></p-button>
@@ -139,7 +139,7 @@
     <form #deleteForm="ngForm" (ngSubmit)="delete(deleteForm)">
         <div>
             <br>
-            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>  
+            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>
             <br>
             <br>
             <p-button type="submit" class="button-split" label="Delete" styleClass="p-button-sm"></p-button>
