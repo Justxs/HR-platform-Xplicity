@@ -25,8 +25,8 @@ import {DialogModule} from 'primeng/dialog';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import {MenubarModule} from 'primeng/menubar';
 import { ToastModule } from 'primeng/toast';
-import { TokenInterceptorService } from './services/token-interceptor.service';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { TokenInterceptorService } from './Services/token-interceptor.service';
 
 export function tokenGetter() {
   return localStorage.getItem("Jwt")
@@ -64,11 +64,13 @@ export function tokenGetter() {
     ProgressSpinnerModule,
 
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptorService,
-    multi: true
-  }],
+  providers: [
+      {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+      }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
