@@ -4,7 +4,6 @@ export class Technology {
 
     constructor()
     {
-        this.id = 0;
         this.title = "";
     }
 }

@@ -81,7 +81,7 @@ export class TableNewEntryPageComponent implements OnInit {
     candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
     this.candidateService.updateCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-      setTimeout(()=>{this.wait()},2000);
+      //setTimeout(()=>{this.wait()},2000);
       this.showToast("Pavyko pakeisti kandidato duomenis", 'success', 'Pavyko');
   }
   showToast(message: string, severity: any, summary: any) {

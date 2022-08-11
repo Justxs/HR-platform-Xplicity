@@ -12,7 +12,8 @@
 <div class="center-box"style="padding: 1%;">
     <p-toolbar>
         <ng-template pTemplate="left">
-            <button pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
+            <button style="margin: 10px;" pButton pRipple label="New candidate" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCandidateForm()"></button>
+            <button style="margin: 10px;" pButton pRipple label="New technology" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewTechnologyForm()"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <p-fileUpload  #form name="myfile[]" mode="basic" chooseLabel="Import" [customUpload]="true"
@@ -111,6 +112,13 @@
         <app-table-new-entry-page [candidate]="candidateToEdit"></app-table-new-entry-page>
     </ng-template>
 </p-dialog>
+
+<p-dialog [(visible)]="createTechnologyDialog" [style]="{width: '450px'}" header="Technologija" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <app-new-technology></app-new-technology>
+    </ng-template>
+</p-dialog>
+
 
 <p-dialog [(visible)]="newUserDialog" [style]="{width: '450px'}" header="Create new user" [modal]="true" styleClass="p-fluid">
     <form #createForm="ngForm" (ngSubmit)="create(createForm)">
