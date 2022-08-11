@@ -13,6 +13,7 @@ import * as XLSX from 'XLSX';
 import * as moment from 'moment';
 import { ToastModule } from 'primeng/toast';
 import { tokenGetter } from 'src/app/app.module';
+import { UserService } from 'src/app/Services/user.service';
 
 type AOA = any[][];
 
@@ -34,8 +35,11 @@ export default class TablePageComponent implements OnInit {
   createTechnologyDialog: boolean = false;
   submitted: boolean = false;
   newUserDialog: boolean = false;
+  displayMenu: boolean = false;
   deleteDialog: boolean = false;
+  showButton: boolean = false;
   status: string = "";
+  currentRole:any;
 
   data: AOA = [[]];
   dates: string[] = [];
@@ -45,6 +49,7 @@ export default class TablePageComponent implements OnInit {
     private route: ActivatedRoute,
     private candidateService: CandidateService,
     private technologyService: TechnologyService,
+    private userService: UserService,
     private confirmationService: ConfirmationService,
     private filtreService: FilterService,
     private http: HttpClient,
@@ -64,7 +69,18 @@ this.technologyService.getTechnologies()
     items => {
       this.technologies = items;
     });
+  }
 
+  menuDisplay(){
+    if(tokenGetter()!='') {
+      this.currentRole = this.userService.GetRoleByToken(tokenGetter())
+      if(this.currentRole.includes()){
+        this.displayMenu = true;
+      }
+      else{
+        this.displayMenu = false;
+      }
+    }
   }
 
   deleteCandidate(candidate: Candidate) {
@@ -143,12 +159,7 @@ this.technologyService.getTechnologies()
     reader.readAsBinaryString(target.files[0]);
   };
 
-  // adminCheck(){
-  //   const jwt = tokenGetter()!;
-  //   const claims = atob(jwt.split('.')[1])
-  //   console.log(claims)
-  //   if(claims.)
-  // }
+
 
   create(form: NgForm) {
     const credentials = {
