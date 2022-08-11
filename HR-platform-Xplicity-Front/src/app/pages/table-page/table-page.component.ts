@@ -30,6 +30,7 @@ export class TablePageComponent implements OnInit {
   technologies: Technology[] = [];
   createCandidateDialog: boolean = false;
   updateCandidateDialog: boolean = false;
+  createTechnologyDialog: boolean = false;
   submitted: boolean = false;
   newUserDialog: boolean = false;
   deleteDialog: boolean = false;
@@ -73,7 +74,7 @@ export class TablePageComponent implements OnInit {
   createCandidate(candidates: Candidate[]) {
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-    setTimeout(()=>{this.wait()},2000);
+    setTimeout(()=>{this.wait()},3000);
     this.showSuccess("Kandidatas sėkmingas įtrauktas");
   }
   wait(): void {
@@ -90,6 +91,9 @@ export class TablePageComponent implements OnInit {
     this.submitted = false;
     this.updateCandidateDialog = true;
     this.candidateToEdit = candidate;
+  }
+  openNewTechnologyForm() {
+    this.createTechnologyDialog = true;
   }
 
   createNewUser() {
@@ -148,6 +152,7 @@ export class TablePageComponent implements OnInit {
       }, err => {
         this.invalidLogin = true;
       })
+      setTimeout(()=>{this.wait()},1000);
   }
   
   delete(form: NgForm) {
@@ -165,7 +170,7 @@ export class TablePageComponent implements OnInit {
 
        
       });
-      setTimeout(()=>{this.wait()},2000);
+      setTimeout(()=>{this.wait()},1000);
   }
   showSuccess(message: string) {
     this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
