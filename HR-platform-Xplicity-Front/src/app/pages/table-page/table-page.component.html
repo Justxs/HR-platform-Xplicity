@@ -90,6 +90,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-candidate>
+        <td colspan="9"><p-progressBar [hidden]="hid" mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
         <tr>
             <td>{{candidate.datesOfPastCallsDisplay}}</td>
             <td>{{candidate.firstName}}</td>
@@ -109,10 +110,9 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
-        <td colspan="9"><p-progressBar mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
+        <td colspan="9"><p-progressBar [hidden]="hid" mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
         <tr>
-            <td colspan="9"><h1 style="text-align: Center;">Loading or empty data</h1>
-                <p style="text-align: Center;">(No data when loading longer than 2 seconds)</p></td>
+            <td colspan="9"><h1 style="text-align: Center;">No data :(</h1></td>
         </tr>
     </ng-template>
 </p-table>
