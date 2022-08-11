@@ -45,7 +45,11 @@ export class TableNewEntryPageComponent implements OnInit {
 
   createCandidate(candidate: Candidate) {
     this.dates.forEach(date => {
-      date = moment(date).format('YYYY-MM-DD');
+      if(date == null){
+        date = "";
+      }else{
+        date = moment(date).format('YYYY-MM-DD');
+      }
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
@@ -58,7 +62,7 @@ export class TableNewEntryPageComponent implements OnInit {
     candidates.push(candidate);
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-    setTimeout(()=>{this.wait()},2000);
+    setTimeout(()=>{this.wait()},1000);
     this.showToast("Pavyko pridėti kandidatą", 'success', 'Pavyko');
   }
   
@@ -70,7 +74,11 @@ export class TableNewEntryPageComponent implements OnInit {
 
   updateCandidate(candidate: Candidate) {
     this.dates.forEach(date => {
-      date = moment(date).format('YYYY-MM-DD');
+      if(date == null){
+        date = "";
+      }else{
+        date = moment(date).format('YYYY-MM-DD');
+      }
       var callDate = new CallDate(date);
       candidate.pastCallDates.push(callDate);
     });
@@ -81,7 +89,7 @@ export class TableNewEntryPageComponent implements OnInit {
     candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
     this.candidateService.updateCandidate(candidate)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
-      //setTimeout(()=>{this.wait()},2000);
+      setTimeout(()=>{this.wait()},1000);
       this.showToast("Pavyko pakeisti kandidato duomenis", 'success', 'Pavyko');
   }
   showToast(message: string, severity: any, summary: any) {

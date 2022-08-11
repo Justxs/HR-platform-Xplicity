@@ -11,7 +11,7 @@ import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'XLSX';
 import * as moment from 'moment';
-import { ToastModule } from 'primeng/toast';
+
 
 type AOA = any[][];
 
@@ -39,7 +39,7 @@ export class TablePageComponent implements OnInit {
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
-  
+  hid?: boolean;
   constructor(private router: Router,
     private route: ActivatedRoute,
     private candidateService: CandidateService, 
@@ -53,6 +53,7 @@ export class TablePageComponent implements OnInit {
       .subscribe(
         items => {
           this.candidates = items;
+          this.hid = true;
         });
 
     this.technologyService.getTechnologies()
@@ -60,18 +61,21 @@ export class TablePageComponent implements OnInit {
         items => {
           this.technologies = items;
         });
-
+    
   }
-
   deleteCandidate(candidate: Candidate) {
+    this.hid = false;
     this.candidateService.deleteCandidate(candidate)
-      .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
+      .subscribe(
+        (candidates: Candidate[]) => {this.candidatesUpdated.emit(candidates)}
+      );
       setTimeout(()=>{this.wait()},2000);
       
     this.showSuccess("Kandidatas sėkmingai ištrintas");
   }
 
   createCandidate(candidates: Candidate[]) {
+    this.hid = false;
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));
     setTimeout(()=>{this.wait()},3000);
@@ -131,7 +135,7 @@ export class TablePageComponent implements OnInit {
         json.push(formatJson(value));
       });
       json.splice(0, 1);
-      this.createCandidate(json)
+      this.createCandidate(json);
     };
     reader.readAsBinaryString(target.files[0]);
   };
@@ -166,8 +170,6 @@ export class TablePageComponent implements OnInit {
         error: error => {
           this.invalidLogin = true;
         }
-
-       
       });
       setTimeout(()=>{this.wait()},1000);
   }
@@ -175,30 +177,48 @@ export class TablePageComponent implements OnInit {
     this.messageService.add({severity:'success', summary: 'Pavyko', detail: message});
   }
 }
-function formatJson(value: any): Candidate{
+function formatJson(value: string[]): Candidate{
   let JsonCandidate = new Candidate();
+  JsonCandidate.pastCallDates = [];
   if(value[0] == null){
-    JsonCandidate.pastCallDates = [];
-  }else{
-    JsonCandidate.pastCallDates = [{dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD')}];
+    JsonCandidate.pastCallDates = [{dateOfCall: ""}];
+  } else{
+    let str = value[0].toString().split(/\r?\n/)
+    if(str.length == 1){
+      JsonCandidate.pastCallDates.push({dateOfCall: moment(getJsDateFromExcel(value[0])).format('YYYY-MM-DD')});
+    } else{
+      str.forEach(element => {
+        JsonCandidate.pastCallDates.push({dateOfCall: moment(element).format('YYYY-MM-DD')});
+      });
+    }
   }
+
   JsonCandidate.firstName = value[1];
   JsonCandidate.lastName = value[2];
   JsonCandidate.linkedIn = value[3];
   JsonCandidate.comment = value[4];
-  JsonCandidate.technologies = [{title: value[5]}];
+
+  JsonCandidate.technologies = [];
+  let str: string[] = value[5].split(/\r?\n/);
+  str.forEach(element => {
+    JsonCandidate.technologies.push({title: element});
+  });
+
   if(value[6] == null){
     JsonCandidate.dateOfFutureCall = "";
-  }else{
+  } else{
     JsonCandidate.dateOfFutureCall = moment(getJsDateFromExcel(value[6])).format('YYYY-MM-DD');
   }
+
   if(value[7] == "v"){
     JsonCandidate.openForSuggestions = true;
   } else{
     JsonCandidate.openForSuggestions = false;
   }
+
   return JsonCandidate;
 }
+
 function getJsDateFromExcel(excelDate: any) {
 	return new Date((excelDate - (25567 + 1))*86400*1000);
 }

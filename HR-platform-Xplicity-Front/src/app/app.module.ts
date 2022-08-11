@@ -25,6 +25,7 @@ import {DialogModule} from 'primeng/dialog';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import {MenubarModule} from 'primeng/menubar';
 import { ToastModule } from 'primeng/toast';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 export function tokenGetter() {
   return localStorage.getItem("Jwt")
@@ -58,7 +59,8 @@ export function tokenGetter() {
     FileUploadModule,
     DialogModule,
     MenubarModule,
-    ToastModule
+    ToastModule,
+    ProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
