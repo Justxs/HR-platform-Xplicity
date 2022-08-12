@@ -3,8 +3,8 @@
         <img style="margin: 10px;" src="/assets/pictures/xpl_rgb-normal2x.png" height="40" class="mr-2">
     </ng-template>
     <ng-template pTemplate="end">
-        <button class="addnew" style="margin: 10px;" pButton pRipple label="Sukurti naują vartotoją" icon="pi pi-user-plus" (click)="createNewUser()"></button>
-        <button class="logout" style="margin: 10px;" pButton pRipple label="Ištrinti egzistuojanti vartotoją" icon="pi pi-trash" (click)="deleteUser()"></button>
+        <button class="addnew" style="margin: 10px;" *ngIf="displayMenu" pButton pRipple label="Sukurti naują vartotoją" icon="pi pi-user-plus" (click)="createNewUser()"></button>
+        <button class="logout" style="margin: 10px;" *ngIf="displayMenu" pButton pRipple label="Ištrinti egzistuojanti vartotoją" icon="pi pi-trash" (click)="deleteUser()"></button>
         <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="Atsijungti" (click)="logout()"  ></button>
         <!-- <button class="logout" style="margin: 10px;" pButton icon="pi pi-power-off" label="check" (click)="menuDisplay()"  ></button> -->
     </ng-template>l

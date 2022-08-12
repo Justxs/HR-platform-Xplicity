@@ -4,7 +4,7 @@ import { Candidate } from '../../Models/candidate';
 import { CandidateService } from '../../Services/candidate.service';
 import { TechnologyService } from '../../Services/technology.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CallDate } from 'src/app/Models/callDate';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { ConfirmationService, ConfirmEventType, FilterService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
@@ -94,12 +94,14 @@ export default class TablePageComponent implements OnInit {
         items => {
           this.technologies = items;
       });
+      this.menuDisplay();
   }
 
   menuDisplay(){
-    if(tokenGetter()!='') {
-      this.currentRole = this.userService.GetRoleByToken(tokenGetter())
-      if(this.currentRole.includes()){
+    const token = tokenGetter() ?? "";
+    if(token) {
+      this.currentRole = this.userService.GetRoleByToken(token)
+      if(this.currentRole.includes("Admin")){
         this.displayMenu = true;
       }
       else{

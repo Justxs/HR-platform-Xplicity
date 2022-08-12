@@ -1,9 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
+import { tokenGetter } from '../app.module';
 import { User } from '../models/user';
+import { TokenConstants } from './token-claim-string';
 
 
 @Injectable({
@@ -20,11 +23,14 @@ export class UserService {
     return this.http.post<User[]>(this.authApi, user);
   }
 
-  GetRoleByToken(token:any){
-    let _token=token.split('.')[1];
-    this.tokenresp=JSON.parse(atob(_token))
-    console.log(this.tokenresp.role)
-    return this.tokenresp.role
+  GetRoleByToken(token:string){
+    const helper = new JwtHelperService();
+    const decodedToken = helper.decodeToken(token);
+    console.log(decodedToken[TokenConstants.roleType])
+    return decodedToken[TokenConstants.roleType];
   }
+
+
 }
+
   
