@@ -72,8 +72,13 @@ export class TableNewEntryPageComponent implements OnInit {
       candidate.pastCallDates.push(callDate);
     });
 
-    var candidates: Candidate[] = [];
+    if(candidate.dateOfFutureCall == ""){
+      candidate.dateOfFutureCall= "";
+    }else{
+      candidate.dateOfFutureCall = moment(candidate.dateOfFutureCall).format('YYYY-MM-DD');
+    }
 
+    var candidates: Candidate[] = [];
     candidates.push(candidate);
     this.candidateService.createCandidate(candidates)
       .subscribe((candidates: Candidate[]) => this.candidatesUpdated.emit(candidates));

@@ -6,7 +6,7 @@ import { TechnologyService } from '../../Services/technology.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CallDate } from 'src/app/Models/callDate';
 
-import { ConfirmationService, ConfirmEventType, FilterService, MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, FilterService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { NgForm } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import * as XLSX from 'XLSX';
@@ -40,35 +40,59 @@ export default class TablePageComponent implements OnInit {
   showButton: boolean = false;
   status: string = "";
   currentRole:any;
-
   data: AOA = [[]];
   dates: string[] = [];
   invalidLogin: boolean | undefined;
   hid: boolean = true;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private candidateService: CandidateService,
     private technologyService: TechnologyService,
     private userService: UserService,
     private confirmationService: ConfirmationService,
-    private filtreService: FilterService,
+    private filterService: FilterService,
     private http: HttpClient,
     private messageService: MessageService) { }
 
   ngOnInit(): void {
+    const customFilterName = 'custom-filter';
+    this.filterService.register(customFilterName, (value: any[], filter: any[]): boolean => {
+      if (filter === undefined || filter === null) {
+          return true;
+      }
+      if (value === undefined || value === null) {
+          return false;
+      }
+      let count: number = 0;
+      filter.forEach(fil => {
+        value.forEach(val => {
+          if(val.title == fil.title){
+            count += 1;
+
+          }
+        })
+      });
+      if(count == filter.length){
+        return true;
+      }else{
+        return false;
+      }
+  });
+
     this.hid = false;
     this.candidateService.getCandidate()
-  .subscribe(
+      .subscribe(
     items => {
       this.candidates = items;
       this.hid = true;
     });
 
-this.technologyService.getTechnologies()
-  .subscribe(
-    items => {
-      this.technologies = items;
-    });
+    this.technologyService.getTechnologies()
+      .subscribe(
+        items => {
+          this.technologies = items;
+      });
   }
 
   menuDisplay(){
@@ -92,6 +116,7 @@ this.technologyService.getTechnologies()
   }
 
   generateOffer(candidate: Candidate){
+    this.hid = false;
     this.candidateService.generateOffer(candidate.firstName,candidate.lastName)
       .subscribe(response =>{
         let fileName: any = response.headers.get('content-disposition')
@@ -101,6 +126,7 @@ this.technologyService.getTechnologies()
           a.download = fileName;
           a.href = window.URL.createObjectURL(blob);
           a.click();
+          this.hid = true;
           this.showMessage("Darbo pasiūlymas sugeneruotas", "success", "pavyko");
       });
   }

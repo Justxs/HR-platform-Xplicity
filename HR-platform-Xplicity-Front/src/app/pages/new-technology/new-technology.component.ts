@@ -28,7 +28,7 @@ export class NewTechnologyComponent implements OnInit {
       .subscribe((technologies: Technology[]) => {
         return this.technologiesUpdated.emit(technologies);
       });
-      setTimeout(()=>{this.wait()},1000);
+      setTimeout(()=>{this.wait()},500);
   }
   wait(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

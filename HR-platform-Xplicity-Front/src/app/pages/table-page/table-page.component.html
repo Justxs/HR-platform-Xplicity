@@ -23,11 +23,12 @@
     </p-toolbar>
 
     <p-table [value]="candidates"
-    [paginator]="true"
-    [rows]="10" [showCurrentPageReport]="true"
+    [paginator]="true" 
+    [rows]="10" [showCurrentPageReport]="true" 
     currentPageReportTemplate="Rodomas {first} lapas iš {last} lapų. Iš viso duomenų: {totalRecords}"
     [rowsPerPageOptions]="[10,25,50]">
     <ng-template  pTemplate="header">
+        <td colspan="9"><p-progressBar [hidden]="hid" mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
         <tr>
             <th>Kada buvo paskutini kartą susisiekta?</th>
             <th>
@@ -44,7 +45,7 @@
             <th>Komentaras</th>
             <th>
                 Technologijos
-                <p-columnFilter matchMode="contains" field="technologies"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                <p-columnFilter matchMode="custom-filter" field="technologies"  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                     <ng-template pTemplate="header">
                         <div style="padding: 10px; font-weight: bold;">
                             Technologijos
@@ -74,7 +75,6 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-candidate>
-        <td colspan="9"><p-progressBar [hidden]="hid" mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
         <tr>
             <td>{{candidate.datesOfPastCallsDisplay}}</td>
             <td>{{candidate.firstName}}</td>
@@ -94,7 +94,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
-        <td colspan="9"><p-progressBar [hidden]="hid" mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
+        
         <tr>
             <td colspan="9"><h1 style="text-align: Center;">Nėra duomenų :(</h1></td>
         </tr>
