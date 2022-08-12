@@ -93,12 +93,13 @@ this.technologyService.getTechnologies()
 
   generateOffer(candidate: Candidate){
     this.candidateService.generateOffer(candidate.firstName,candidate.lastName)
-      .subscribe(response =>{
-        let fileName: any = response.headers.get('content-disposition')
-          ?.split(';')[1].split('=')[1];
-          let blob:Blob = response.body as Blob;
+      .subscribe((response: Blob) =>{
+       // let fileName: any = response.get('content-disposition')
+          //?.split(';')[1].split('=')[1];
+          let blob = new Blob([response], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+          //let blob:Blob = response.body as Blob;
           let a = document.createElement('a');
-          a.download = fileName;
+         //. a.download = fileName;
           a.href = window.URL.createObjectURL(blob);
           a.click();
           this.showMessage("Darbo pasiūlymas sugeneruotas", "success", "pavyko");

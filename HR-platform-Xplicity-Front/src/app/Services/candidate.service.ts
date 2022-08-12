@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Candidate } from '../Models/candidate';
 import { CallDate } from '../Models/callDate';
+import { Person } from '../Models/person';
 
 
 @Injectable({
@@ -26,10 +27,18 @@ export class CandidateService {
     return this.http.delete<Candidate[]>(`${this.candidateApi}/${candidate.id}`);
   }
 
-  public generateOffer(firstname: string, lastName: string) {
-    return this.http.get(`${environment.webApiUrl}/offer/${firstname}/${lastName}`,
-    {observe:'response', 
-    responseType:'blob'});
+  public generateOffer(firstname: string, lastName: string): Observable<any> {
+    var body = new Person();
+    body.name = firstname;
+    body.lastName = lastName;
+    const requestOptions : any = {
+        observe: "response",
+        responseType: "blob",           
+        headers: new HttpHeaders({
+          "Accept": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        })
+    };
+    return this.http.post(`${environment.webApiUrl}/offer`, body, requestOptions);
   }
 
   public initCandidateTech(Candidates: Candidate[]){
