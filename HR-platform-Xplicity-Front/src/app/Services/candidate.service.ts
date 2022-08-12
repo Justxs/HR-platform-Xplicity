@@ -42,7 +42,13 @@ export class CandidateService {
     };
     return this.http.post(`${environment.webApiUrl}/offer`, body, requestOptions);
   }
-
+  public sendEmails(candidates: Candidate[]){
+    let emailText: String = "Kandidatai, su kuriais, šiandien turite susiskambinti: ";
+    candidates.forEach(candidate =>{
+      emailText = emailText + " " + `${candidate.firstName} ${candidate.firstName}`;
+    })
+    return this.http.post(`${environment.webApiUrl}/Email`, emailText);
+  }
   public initCandidateTech(Candidates: Candidate[]){
     Candidates.forEach(candidate => {
       candidate.technologyDisplay = candidate.technologies.map(t => t.title).join(", ");

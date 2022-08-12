@@ -58,9 +58,7 @@ export default class TablePageComponent implements OnInit {
     private messageService: MessageService) { }
 
   ngOnInit(): void {
-    let body: string = "2022-08-30";
-    this.getCandidateByDate(body);
-
+    this.sendEmails();
     const customFilterName = 'custom-filter';
     this.filterService.register(customFilterName, (value: any[], filter: any[]): boolean => {
       if (filter === undefined || filter === null) {
@@ -100,7 +98,15 @@ export default class TablePageComponent implements OnInit {
       });
       this.menuDisplay();
   }
-
+  sendEmails(){
+    let body: string = moment().format('YYYY-MM-DD');
+    this.getCandidateByDate(body);
+    console.log(this.candidatesOffers);
+    if(this.candidatesOffers == null){
+      return;
+    }
+    this.candidateService.sendEmails(this.candidatesOffers);
+  }
   menuDisplay(){
     const token = tokenGetter() ?? "";
     if(token) {
@@ -127,7 +133,6 @@ export default class TablePageComponent implements OnInit {
     items => {
       this.candidatesOffers = items;
     });
-     console.log(this.candidatesOffers);
   }
 
 
