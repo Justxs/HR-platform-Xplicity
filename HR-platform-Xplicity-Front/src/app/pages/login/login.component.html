@@ -2,15 +2,15 @@
     <img class="logo"  src="/assets/pictures/xpl_rgb-normal2x.png" alt="">
     <form class="form-signin" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
         <div class="center-box">
-            <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password</div>
+            <div *ngIf="invalidLogin" style="color: red;">Neteisingas el. paštas arba slaptažodis</div>
             <br>
-            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required autofocus>  
-            <br>
-            <br>
-            <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Password" required>  
+            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="El. paštas" required autofocus>  
             <br>
             <br>
-            <p-button type="submit" class="button-split" label="Login" styleClass="p-button-sm"></p-button>
+            <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Slaptažodis" required>  
+            <br>
+            <br>
+            <p-button type="submit" class="button-split" label="Prisijungti" styleClass="p-button-sm"></p-button>
             <!-- <a routerLink="/register"><p-button class="button-split" label="Register" styleClass="p-button-sm"></p-button></a> -->
         </div>
     </form>

@@ -4,13 +4,13 @@
         <div class="center-box">
             <div *ngIf="invalidLogin" style="color: red;">Neteisingas el. paštas arba slaptažodis</div>
             <br>
-            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="e-mail" required>  
+            <input id="email" name="email" type="email" ngModel pInputText class="p-inputtext-sm" placeholder="El. paštas" required>  
             <br>
             <br>
-            <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Password" required>  
+            <input id="password" name="password" type="password" ngModel pInputText class="p-inputtext-sm" placeholder="Slaptažodis" required>  
             <br>
             <br>
-            <p-button type="submit" class="button-split" label="Submit" styleClass="p-button-sm"></p-button>
+            <p-button type="submit" class="button-split" label="Sukurti vartotoją" styleClass="p-button-sm"></p-button>
             <a routerLink=""><p-button class="button-split" label="back" styleClass="p-button-sm"></p-button></a>
         </div>
     </form>

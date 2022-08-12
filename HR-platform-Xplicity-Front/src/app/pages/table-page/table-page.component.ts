@@ -238,7 +238,7 @@ export default class TablePageComponent implements OnInit {
         this.invalidLogin = true;
       })
       setTimeout(()=>{this.wait()},200);
-      this.showMessage("Vartotojas sėkmingai pridetas", "success", "pavyko");
+      this.showMessage("Vartotojas sėkmingai pridetas", "success", "Pavyko");
  
   }
   
@@ -256,7 +256,7 @@ export default class TablePageComponent implements OnInit {
         }
       })
       setTimeout(()=>{this.wait()},200);
-      this.showMessage("Vartotojas sėkmingai ištrintas", "success", "pavyko");
+      this.showMessage("Vartotojas sėkmingai ištrintas", "success", "Pavyko");
 
   }
   showMessage(message: string, severity: string, summary: string) {
