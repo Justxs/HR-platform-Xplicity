@@ -250,13 +250,26 @@ function formatJson(value: any): Candidate {
   if (value[0] == null) {
     JsonCandidate.pastCallDates = [];
   } else {
-    JsonCandidate.pastCallDates = [{ dateOfCall: moment(getJsDateFromExcel(value[0]).toLocaleString()).format('YYYY-MM-DD') }];
+    let val: string[] = value[0].toString().split(/\r?\n/);
+    JsonCandidate.pastCallDates = [];
+    if(val.length > 1){
+      val.forEach(va => {
+        JsonCandidate.pastCallDates.push({ dateOfCall: va});
+      });
+    }else{
+      JsonCandidate.pastCallDates.push({ dateOfCall: moment(getJsDateFromExcel(value[0])).format('YYYY-MM-DD')});
+    }
   }
   JsonCandidate.firstName = value[1];
   JsonCandidate.lastName = value[2];
   JsonCandidate.linkedIn = value[3];
   JsonCandidate.comment = value[4];
-  JsonCandidate.technologies = [{ title: value[5] }];
+  JsonCandidate.technologies = [];
+  let val: string[] = value[5].split(/\r?\n/);
+  val.forEach(va => {
+    JsonCandidate.technologies.push({ title: va });
+  });
+
   if (value[6] == null) {
     JsonCandidate.dateOfFutureCall = "";
   } else {
