@@ -129,8 +129,9 @@ export default class TablePageComponent implements OnInit {
         a.download = fileName;
         a.href =window.URL.createObjectURL(blob);
         a.click();
-        this.showMessage("Kandidatas sėkmingas įtrauktas", "success", "pavyko");
-    });
+        this.hid = true;
+        this.showMessage("Kandidato darbo pasiūlymas sugeneruotas", "success", "pavyko");
+      });
   }
 
   createCandidate(candidates: Candidate[]) {
