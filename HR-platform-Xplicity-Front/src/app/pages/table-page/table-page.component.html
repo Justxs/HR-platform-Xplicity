@@ -25,7 +25,7 @@
     <p-table [value]="candidates"
     [paginator]="true" 
     [rows]="10" [showCurrentPageReport]="true" 
-    currentPageReportTemplate="Rodomas {first} lapas iš {last} lapų. Iš viso duomenų: {totalRecords}"
+    currentPageReportTemplate="Rodomas {first} lapas iš {last} lapų. Iš viso kandidatų: {totalRecords}"
     [rowsPerPageOptions]="[10,25,50]">
     <ng-template  pTemplate="header">
         <td colspan="9"><p-progressBar [hidden]="hid" mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar></td>
