@@ -38,7 +38,7 @@ export class CandidateService {
           "Accept": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         })
     };
-    return this.http.post(`https://localhost:7241/offer`, body, requestOptions);
+    return this.http.post(`${environment.webApiUrl}/offer`, body, requestOptions);
   }
 
   public initCandidateTech(Candidates: Candidate[]){

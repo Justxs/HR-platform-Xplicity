@@ -18,7 +18,7 @@ namespace XplicityHRplatformBackEnd.Controllers
     {
 
         [HttpPost]
-        [Route("/offer")]
+        [Route("/api/offer")]
         public async Task<IActionResult> DownloadOffer([FromBody] Person p)
         {
             DateTime date = DateTime.Today;

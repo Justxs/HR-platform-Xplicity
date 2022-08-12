@@ -89,7 +89,7 @@
             <td>
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="updateCandidateForm(candidate)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCandidate(candidate)"></button>
-                <button pButton pRipple icon="pi pi-briefcase" class="p-button-rounded p-button-info" (click)="generateOffer(candidate)"></button>
+                <button pButton pRipple icon="pi pi-briefcase" *ngIf="displayMenu" class="p-button-rounded p-button-info" (click)="generateOffer(candidate)"></button>
             </td>
         </tr>
     </ng-template>
