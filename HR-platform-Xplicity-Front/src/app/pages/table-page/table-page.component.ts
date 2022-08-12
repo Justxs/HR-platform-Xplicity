@@ -210,11 +210,11 @@ export default class TablePageComponent implements OnInit {
         this.invalidLogin = false;
         this.router.navigate(["/table"])
         console.log()
-        setTimeout(()=>{this.wait()},1000);
-        this.showMessage("Vartotojas sėkmingai pridetas", "success", "pavyko");
       }, err => {
         this.invalidLogin = true;
       })
+      setTimeout(()=>{this.wait()},200);
+      this.showMessage("Vartotojas sėkmingai pridetas", "success", "pavyko");
  
   }
   
@@ -226,13 +226,13 @@ export default class TablePageComponent implements OnInit {
       .subscribe({
         next: data => {
           this.status = 'Delete successful';
-          setTimeout(()=>{this.wait()},1000);
-          this.showMessage("Vartotojas sėkmingai ištrintas", "success", "pavyko");
         },
         error: error => {
           this.invalidLogin = true;
         }
       })
+      setTimeout(()=>{this.wait()},200);
+      this.showMessage("Vartotojas sėkmingai ištrintas", "success", "pavyko");
 
   }
   showMessage(message: string, severity: string, summary: string) {

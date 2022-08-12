@@ -8,7 +8,8 @@ import { ResetPasswordPageComponent } from './pages/reset-password-page/reset-pa
 import { NewTechnologyComponent } from './pages/new-technology/new-technology.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
-import { AuthGuard } from './Services/auth.guard';
+import { AuthGuard } from './services/auth.guard';
+
 
 const routes: Routes = [
   {path: '', component: LoginComponent},

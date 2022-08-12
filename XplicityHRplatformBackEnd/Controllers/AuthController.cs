@@ -11,6 +11,7 @@ using XplicityHRplatformBackEnd.Models;
 
 namespace XplicityHRplatformBackEnd.Controllers
 {
+    [Authorize]
     [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -47,7 +48,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             }
 
         }
-
+        [AllowAnonymous]
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLogin)
         {
