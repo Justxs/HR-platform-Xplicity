@@ -19,6 +19,51 @@ namespace XplicityHRplatformBackEnd.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpPost]
+        [Route("/date")]
+        public async Task<IEnumerable<CandidateDto>> GetByDate([FromBody] string date)
+        {
+            var response = await _dbContext.Candidates
+                .Where(c => c.DateOfFutureCall == date)
+                .ToListAsync();
+            var candidates = new List<CandidateDto>();
+            foreach (var candidate in response)
+            {
+                List<Guid> technologyIds = await _dbContext.CandidateTechnologies
+                    .Where(t => t.CandidateId == candidate.Id)
+                    .Select(t => t.TechnologyId)
+                    .ToListAsync();
+                var technologies = new List<Technology>();
+                foreach (var technologyId in technologyIds)
+                {
+                    var technology = await _dbContext.Technologies
+                   .Where(t => t.Id == technologyId)
+                   .Select(te => te)
+                   .FirstOrDefaultAsync();
+                    technologies.Add(technology);
+                }
+
+                List<Guid> CallDateIds = await _dbContext.CandidateCalldates
+                    .Where(t => t.CandidateId == candidate.Id)
+                    .Select(t => t.CallDateId)
+                    .ToListAsync();
+                var callDates = new List<CallDate>();
+                foreach (var callDateId in CallDateIds)
+                {
+                    var callDate = await _dbContext.Calldates
+                   .Where(c => c.Id == callDateId)
+                   .Select(c => c)
+                   .FirstOrDefaultAsync();
+                    callDates.Add(callDate);
+                }
+
+                var newCandidate = new CandidateDto(callDates, technologies, candidate);
+
+                candidates.Add(newCandidate);
+            }
+            return candidates;
+        }
+
         [HttpGet]
         public async Task<IEnumerable<CandidateDto>> Get()
         {
