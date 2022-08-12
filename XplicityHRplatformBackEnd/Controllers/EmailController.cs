@@ -17,7 +17,7 @@ namespace XplicityHRplatformBackEnd.Controllers
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse("sister11@ethereal.email"));
             email.To.Add(MailboxAddress.Parse("hr@xplicity.com"));
-            email.Subject = "Test Email";
+            email.Subject = "Priminimas dėl susisiekimo su kandidatu!";
             email.Body = new TextPart(TextFormat.Html) { Text = body };
 
             using var smtp = new SmtpClient();

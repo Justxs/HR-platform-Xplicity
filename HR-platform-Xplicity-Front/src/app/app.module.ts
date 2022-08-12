@@ -26,7 +26,7 @@ import { RegisterPageComponent } from './pages/register-page/register-page.compo
 import {MenubarModule} from 'primeng/menubar';
 import { ToastModule } from 'primeng/toast';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
-import { TokenInterceptorService } from './Services/token-interceptor.service';
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 export function tokenGetter() {
   return localStorage.getItem("Jwt")
