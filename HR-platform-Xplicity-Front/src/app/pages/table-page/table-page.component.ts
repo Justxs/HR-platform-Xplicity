@@ -119,12 +119,8 @@ export default class TablePageComponent implements OnInit {
     this.hid = false;
     this.candidateService.generateOffer(candidate.firstName,candidate.lastName)
       .subscribe((response: Blob) =>{
-       // let fileName: any = response.get('content-disposition')
-          //?.split(';')[1].split('=')[1];
           let blob = new Blob([response], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
-          //let blob:Blob = response.body as Blob;
           let a = document.createElement('a');
-         //. a.download = fileName;
           a.href = window.URL.createObjectURL(blob);
           a.click();
           this.hid = true;
