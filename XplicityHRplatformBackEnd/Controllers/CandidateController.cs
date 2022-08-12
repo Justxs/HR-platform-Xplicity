@@ -19,9 +19,9 @@ namespace XplicityHRplatformBackEnd.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpPost]
-        [Route("/date")]
-        public async Task<IEnumerable<CandidateDto>> GetByDate([FromBody] string date)
+        [HttpGet]
+        [Route("{date}")]
+        public async Task<IEnumerable<CandidateDto>> GetByDate([FromRoute] string date)
         {
             var response = await _dbContext.Candidates
                 .Where(c => c.DateOfFutureCall == date)

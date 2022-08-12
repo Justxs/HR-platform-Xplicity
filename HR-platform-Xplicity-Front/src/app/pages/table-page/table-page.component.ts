@@ -29,6 +29,7 @@ type AOA = any[][];
 export default class TablePageComponent implements OnInit {
   @Output() candidatesUpdated = new EventEmitter<Candidate[]>();
   candidates: Candidate[] = [];
+  candidatesOffers: Candidate[] = [];
   candidateToEdit: Candidate = new Candidate();
   technologies: Technology[] = [];
   createCandidateDialog: boolean = false;
@@ -57,6 +58,9 @@ export default class TablePageComponent implements OnInit {
     private messageService: MessageService) { }
 
   ngOnInit(): void {
+    let body: string = "2022-08-30";
+    this.getCandidateByDate(body);
+
     const customFilterName = 'custom-filter';
     this.filterService.register(customFilterName, (value: any[], filter: any[]): boolean => {
       if (filter === undefined || filter === null) {
@@ -117,6 +121,15 @@ export default class TablePageComponent implements OnInit {
       setTimeout(()=>{this.wait()},2000);
     this.showMessage("Kandidatas sėkmingai ištrintas", "success", "pavyko");
   }
+  getCandidateByDate(date: string) {
+    this.candidateService.getCandidateByDate(date)
+      .subscribe(
+    items => {
+      this.candidatesOffers = items;
+    });
+     console.log(this.candidatesOffers);
+  }
+
 
   generateOffer(candidate: Candidate){
     this.hid = false;
