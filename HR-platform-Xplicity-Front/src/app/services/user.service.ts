@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
 import { tokenGetter } from '../app.module';
-import { User } from '../models/user';
+import { User } from '../Models/user';
 import { TokenConstants } from './token-claim-string';
 
 
