@@ -13,7 +13,7 @@ import * as XLSX from 'XLSX';
 import * as moment from 'moment';
 import { ToastModule } from 'primeng/toast';
 import { tokenGetter } from 'src/app/app.module';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/Services/user.service';
 
 
 type AOA = any[][];
